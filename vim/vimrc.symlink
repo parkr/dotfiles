@@ -96,6 +96,9 @@ set ignorecase               " ignore case when searching
 set nohlsearch               " don't highlight searches
 set visualbell               " shut the fuck up
 
+let g:Powerline_symbols = 'fancy'
+let g:Powerline_cache_enabled = 1
+
 " ---------------------------------------------------------------------------
 "  Strip all trailing whitespace in file
 " ---------------------------------------------------------------------------
