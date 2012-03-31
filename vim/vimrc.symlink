@@ -82,7 +82,7 @@ set nostartofline            " don't jump to the start of line when scrolling
 
 syntax on
 set background=light
-colorscheme badwolf
+colorscheme molokai
 
 " ----------------------------------------------------------------------------
 " Visual Cues
@@ -96,8 +96,8 @@ set ignorecase               " ignore case when searching
 set nohlsearch               " don't highlight searches
 set visualbell               " shut the fuck up
 
-let g:Powerline_symbols = 'fancy'
 let g:Powerline_cache_enabled = 1
+let g:Powerline_symbols = 'fancy'
 
 " ---------------------------------------------------------------------------
 "  Strip all trailing whitespace in file
