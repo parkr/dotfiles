@@ -39,3 +39,7 @@
 
 [format]
   pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
+
+[github]
+  user = tombell
+  token = b1788a4050a0d2d5dbdedb826ed6e424
