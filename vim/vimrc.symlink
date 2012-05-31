@@ -60,8 +60,6 @@ function! MyFoldText() " {{{
 endfunction " }}}
 set foldtext=MyFoldText()
 
-au BufNewFile,BufReadPost *.coffee setl foldmethod=indent
-
 " ----------------------------------------------------------------------------
 "  Remapping
 " ----------------------------------------------------------------------------
