@@ -1,4 +1,4 @@
-# tombell does dotfiles
+# parkr does dotfiles, courtesy of tombell
 
 ## ~ is where the ♥ is
 
@@ -17,7 +17,7 @@ more information about dotfiles and @holman's specifically check out his
 
 ## Install
 
-* `git clone https://github.com/tombell/dotfiles ~/.dotfiles`
+* `git clone git://github.com/parkr/dotfiles ~/.dotfiles`
 * `cd ~/.dotfiles`
 * `rake install`
 
@@ -57,5 +57,5 @@ Just open an issue and/or pull request.
 
 ## Thanks
 
-I originally forked @holamn's dotfiles, who originally forked @ryanb's dotfiles.
-So thanks to them both.
+I originally forked @tombell's dotfiles, who originally forked @holamn's dotfiles, who originally forked @ryanb's dotfiles.
+So thanks to them.
