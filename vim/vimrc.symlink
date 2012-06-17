@@ -106,9 +106,10 @@ set shortmess=filtIoOA       " shorten messages
 set report=0                 " tell us about changes
 set nostartofline            " don't jump to the start of line when scrolling
 
+let g:solarized_termcolors=256
 syntax on
 set background=light
-colorscheme molokai
+colorscheme solarized
 
 " ----------------------------------------------------------------------------
 " Visual Cues
