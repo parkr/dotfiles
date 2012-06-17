@@ -2,14 +2,14 @@
 
 ## ~ is where the ♥ is
 
-My dotfiles were originally a fork of @holman's dotfiles. So I'll include a crap
-free version of the `README` from his repository, rewritten by me.
+My dotfiles were originally a fork of @tombell's dotfiles, which were originally
+a fork of @holman's dotfiles.
 
 Your dotfiles are you personalised configuration files for UNIX-like systems,
 they usually reside in your home (`~`) directory.
 
-Like @holman's my dotfiles are organised into topics (ruby, git, zsh etc). For
-more information about dotfiles and @holman's specifically check out his
+Like @tombell's and @holman's, my dotfiles are organised into topics (ruby, git, 
+zsh etc). For more information about dotfiles and @holman's specifically check out his
 [repo][holman-repo] and [blog post][holman-post] on the subject.
 
 [holman-repo]: https://github.com/holman/dotfiles
