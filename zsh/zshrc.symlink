@@ -8,7 +8,7 @@ export PROJECTS=$HOME/Development
 for config_file ($ZSH/**/*.zsh) source $config_file
 
 # use .localrc for SUPER SECRET CRAP that you don't
-# want in yoru public, versioned repo
+# want in your public, versioned repo
 if [[ -a $HOME/.localrc ]]
 then
   source $HOME/.localrc
