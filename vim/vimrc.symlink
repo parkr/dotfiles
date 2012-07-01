@@ -21,7 +21,7 @@ set autoindent             " automatic indent new lines
 set smartindent            " be smart about it
 inoremap # X<BS>#
 set nowrap                 " do not wrap lines
-set textwidth=85
+"set textwidth=85          " this is nice, but I'm not that excited about the interface.
 set colorcolumn=+1
 set softtabstop=2          " yep, two
 set shiftwidth=2           " ..
