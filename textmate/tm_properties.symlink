@@ -1,0 +1,62 @@
+# Basic Settings
+#
+# NEVER SET THE fontName ATTRIBUTE. EVER.
+fontSize	= 10
+theme 		= "Resesif"
+
+# Extra files to include
+#
+myExtraIncludes	= ".tm_properties,.htaccess,.gitignore,.env"
+fileBrowserGlob	= "{*,$myExtraIncludes}"
+include			= "{$include,$myExtraIncludes}"
+
+# Hide log, vendor and tmp directories from search popups.
+#
+myExtraExcludes			= "log,vendor,tmp"
+excludeInFileChooser	= "{$excludeInFileChooser,$myExtraExcludes}" 
+excludeInFolderSearch	= "{$excludeInFolderSearch,$myExtraExcludes}" 
+
+# If you also want to hide them from your project manager pane, add
+# the following line to your project's local .tm_properties.
+#
+# excludeInBrowser      = "{$excludeInBrowser,log,vendor,tmp}" 
+
+# Configure git
+#
+TM_GIT = "/usr/bin/git"
+
+# Default editing configuration
+#
+softWrap	= true
+softTabs	= true
+tabSize		= 4
+
+# File type specific configuration
+#
+[ text ]
+showInvisibles   = true
+
+[ .git/COMMIT_EDITMSG ]
+spellChecking    = true
+spellingLanguage = 'en'
+
+[ *.{icns,ico,jpg,jpeg,m4v,nib,pdf,png,psd,pyc,rtf,tif,tiff,xib} ]
+binary           = true
+
+[ source.ruby ]
+tabSize          = 2
+
+[ source.yaml ]
+tabSize          = 2
+
+[ source.coffee ]
+tabSize          = 2
+
+[ source.scss ]
+tabSize          = 2
+
+[ text.html.erb.rails ]
+tabSize          = 2
+
+[ "{README,INSTALL,LICENSE,TODO}" ]
+fileType         = "text.plain"
