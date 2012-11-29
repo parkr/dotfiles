@@ -2,7 +2,7 @@
 #
 # NEVER SET THE fontName ATTRIBUTE. EVER.
 fontSize	= 10
-theme 		= "Resesif"
+# theme 		= "Resesif"
 
 # Extra files to include
 #
