@@ -1,0 +1,9 @@
+# Customize terminal prompt
+export PS1="[\u@mac \W]$ "
+
+# Set new PATH
+PATH="/usr/bin:/bin:/usr/sbin:/sbin"
+PATH="/usr/local/bin:$PATH"
+PATH="$HOME/.bin:$PATH"
+[[ -s "$HOME/.rvm/bin" ]] && PATH="$PATH:$HOME/.rvm/bin"
+export PATH
