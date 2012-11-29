@@ -1,5 +1,5 @@
 # Customize terminal prompt
-export PS1="[\u@mac \W]$ "
+export PS1="\w$ "
 
 # Set new PATH
 PATH="/usr/bin:/bin:/usr/sbin:/sbin"
