@@ -6,7 +6,6 @@ if [ -f ~/.bashrc ]; then
 fi
 
 # User specific environment and startup programs
-
-PATH=$PATH:$HOME/bin
-
+HOME_BIN_PATH="$HOME/bin"
+PATH=$HOME_BIN_PATH:$PATH
 export PATH
