@@ -7,7 +7,7 @@ fi
 
 # User specific aliases and functions
 
-export LD_LIBRARY_PATH="/usr/local/rvm/usr/lib"
 if [ -f /usr/local/rvm/scripts/rvm ]; then
-	. /usr/local/rvm/scripts/rvm
+  export LD_LIBRARY_PATH="/usr/local/rvm/usr/lib"
+  . /usr/local/rvm/scripts/rvm
 fi
