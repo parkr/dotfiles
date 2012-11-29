@@ -48,7 +48,13 @@ urls = []
 ARGV.each do |x|
   CloudApp.authenticate(email,password)
   puts "Attempting to upload #{x}"
-  url = CloudApp::Item.create(:upload, {:file => x}).url
+  
+  begin
+    url = CloudApp::Item.create(:upload, {:file => x}).url
+  rescue MultiJson::DecodeError => e
+    puts "Your login info sucks."
+    exit(1)
+  end
 
   # Say it for good measure.
   puts "Uploaded #{x} to #{url}"
