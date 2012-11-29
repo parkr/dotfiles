@@ -1,6 +1,7 @@
 # Basic Settings
 #
 # NEVER SET THE fontName ATTRIBUTE. EVER.
+fontName="Monaco"
 fontSize	= 10
 # theme 		= "Resesif"
 
