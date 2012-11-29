@@ -7,3 +7,33 @@ PATH="/usr/local/bin:$PATH"
 PATH="$HOME/.bin:$PATH"
 [[ -s "$HOME/.rvm/bin" ]] && PATH="$PATH:$HOME/.rvm/bin"
 export PATH
+
+# Dropbox aliases will stay the same between computers
+export DROPBOX="$HOME/Dropbox"
+export CORNELL="$DROPBOX/Cornell"
+export WORK="$DROPBOX/Work"
+
+alias dropbox="cd $DROPBOX"
+alias cornell="cd $CORNELL"
+alias work="cd $WORK"
+
+# CORNELL
+
+# Groups
+alias cuarchive="cd $CORNELL/Archive"
+alias cn="cd $CORNELL/Class\ Notes"
+alias gc="cd $CORNELL/Glee\ Club"
+
+# Classes: Fall 2012
+alias aem3220="cd $CORNELL/AEM\ 3220"
+alias biomi1120="cd $CORNELL/BIOMI\ 1120"
+alias ilrlr2300="cd $CORNELL/ILRLR\ 2300"
+alias info4300="cd $CORNELL/INFO\ 4300"
+alias math2310="cd $CORNELL/MATH\ 2310"
+
+# WORK
+alias cals="cd $WORK/CALSComm"
+alias choral="cd $WORK/Cornell-Choral-Music"
+alias hec="cd $WORK/HEC"
+alias leaw="cd $WORK/Leacock\'s"
+alias pendleton="cd $WORK/Pendleton"
