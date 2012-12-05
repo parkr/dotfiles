@@ -1,3 +1,12 @@
+[submodule "emacs/emacs.d.symlink/vendor/coffee-mode"]
+    path = emacs/emacs.d.symlink/vendor/coffee-mode
+    url = git://github.com/defunkt/coffee-mode.git
+[submodule "emacs/emacs.d.symlink/vendor/textmate.el"]
+    path = emacs/emacs.d.symlink/vendor/textmate.el
+    url = git://github.com/defunkt/textmate.el.git
+[submodule "vim/vim.symlink/bundle/vim-colors-solarized"]
+    path = vim/vim.symlink/bundle/vim-colors-solarized
+    url = git://github.com/altercation/vim-colors-solarized.git
 [submodule "vim/vim.symlink/bundle/vim-coffee-script"]
 	path = vim/vim.symlink/bundle/vim-coffee-script
 	url = https://github.com/kchmck/vim-coffee-script.git
