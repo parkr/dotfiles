@@ -19,6 +19,8 @@ zsh etc). For more information about dotfiles and @holman's specifically check o
 
 * `git clone git://github.com/parkr/dotfiles ~/.dotfiles`
 * `cd ~/.dotfiles`
+* `git submodule init`
+* `git submodule update`
 * `rake install`
 
 The install rake task will symlink all the correct files from `~/.dotfiles` to
