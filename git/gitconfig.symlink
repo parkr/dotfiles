@@ -53,6 +53,7 @@
 # Useful aliases
 #
 [alias]
+    undo = reset --soft HEAD^
     co = checkout
     ci = commit
     st = status
