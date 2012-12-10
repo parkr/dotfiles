@@ -1,5 +1,6 @@
 # Customize terminal prompt
 export PS1="\w$ "
+export CLICOLOR=1
 
 # Set new PATH
 PATH="/usr/bin:/bin:/usr/sbin:/sbin"
