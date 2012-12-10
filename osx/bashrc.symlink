@@ -11,6 +11,12 @@ PATH="$HOME/.dotfiles/bin:$PATH"
 [[ -s "$HOME/.rvm/bin" ]] && PATH="$PATH:$HOME/.rvm/bin"
 export PATH
 
+# Aliases for frequently-used commands
+alias h="heroku"
+alias b="bundle"
+alias be="bundle exec"
+alias numfiles="ls -1 | wc -l"
+
 # Dropbox aliases will stay the same between computers
 export DROPBOX="$HOME/Dropbox"
 export CORNELL="$DROPBOX/Cornell"
