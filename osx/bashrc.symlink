@@ -11,6 +11,18 @@ PATH="$HOME/.dotfiles/bin:$PATH"
 [[ -s "$HOME/.rvm/bin" ]] && PATH="$PATH:$HOME/.rvm/bin"
 export PATH
 
+# Open source
+export CODE_PATH="$HOME/code"
+export OCTO_URL="git@github.com:imathis/octopress.git"
+export JEKYLL_URL="git://github.com/mojombo/jekyll.git"
+
+clean_octo(){
+  cd $CODE_PATH
+  rm -rf ./octopress
+  git clone $OCTO_URL octopress
+  cd octopress
+}
+
 # Aliases for frequently-used commands
 alias h="heroku"
 alias b="bundle"
