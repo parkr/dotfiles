@@ -14,13 +14,13 @@ export PATH
 # Open source
 export CODE_PATH="$HOME/code"
 export OCTO_URL="git@github.com:imathis/octopress.git"
-export JEKYLL_URL="git://github.com/mojombo/jekyll.git"
+export JEKYLL_URL="git@github.com:mojombo/jekyll.git"
 
-clean_octo(){
+clean_jekyll(){
   cd $CODE_PATH
-  rm -rf ./octopress
-  git clone $OCTO_URL octopress
-  cd octopress
+  rm -rf ./jekyll
+  git clone $JEKYLL_URL jekyll
+  cd jekyll
 }
 
 # Aliases for frequently-used commands
