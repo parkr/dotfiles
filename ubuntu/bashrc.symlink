@@ -1,0 +1,31 @@
+# Customize terminal prompt
+export PS1="\w$ "
+export CLICOLOR=1
+
+alias ls="ls --color"
+
+# Set new PATH
+PATH="$HOME/.bin:$PATH"
+[[ -n "$(which npm)" ]] && PATH="/usr/local/share/npm/bin:$PATH"
+PATH="$HOME/.dotfiles/bin:$PATH"
+[[ -z "$(which rbenv)" ]] && PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)" && alias r="rbenv" && alias re="rbenv exec"
+[[ -s "$HOME/code/o"   ]] && PATH="$HOME/code/o/bin:$PATH"
+export PATH
+
+# Open source
+export CODE_PATH="$HOME/code"
+export OCTO_URL="git@github.com:imathis/octopress.git"
+export JEKYLL_URL="git://github.com/mojombo/jekyll.git"
+
+clean_octo(){
+  cd $CODE_PATH
+  rm -rf ./octopress
+  git clone $OCTO_URL octopress
+  cd octopress
+}
+
+# Aliases for frequently-used commands
+alias b="bundle"
+alias be="bundle exec"
+alias numfiles="ls -1 | wc -l"
+

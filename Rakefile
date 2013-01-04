@@ -20,7 +20,7 @@ end
 desc "Install OS-specific config files"
 task :installforos do
   linkables = Dir.glob('*/**{.symlink}')
-  operating_systems = ['centos', 'osx']
+  operating_systems = ['centos', 'osx', 'ubuntu']
   skip_all = false
   overwrite_all = false
   backup_all = false
@@ -60,7 +60,7 @@ task :install do
   skip_all = false
   overwrite_all = false
   backup_all = false
-  operating_systems = ['centos', 'osx']
+  operating_systems = ['centos', 'osx', 'ubuntu']
 
   linkables.not_contain(operating_systems).each do |linkable|
     overwrite = false
