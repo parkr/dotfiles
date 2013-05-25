@@ -108,7 +108,7 @@ set nostartofline            " don't jump to the start of line when scrolling
 
 let g:solarized_termcolors=256
 syntax on
-set background=light
+set background=dark
 colorscheme solarized
 
 " ----------------------------------------------------------------------------
