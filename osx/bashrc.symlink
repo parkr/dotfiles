@@ -8,6 +8,8 @@ PATH="/usr/local/bin:$PATH"
 PATH="$HOME/.bin:$PATH"
 [[ -n "$(which npm)" ]] && PATH="/usr/local/share/npm/bin:$PATH"
 PATH="$HOME/.dotfiles/bin:$PATH"
+PATH="$HOME/bin:$PATH"
+PATH="/usr/local/share/python:$PATH"
 [[ -n "$(which rbenv)" ]] && PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)" && alias r="rbenv" && alias re="rbenv exec"
 export PATH
 
