@@ -13,6 +13,11 @@ PATH="/usr/local/share/python:$PATH"
 [[ -n "$(which rbenv)" ]] && PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)" && alias r="rbenv" && alias re="rbenv exec"
 export PATH
 
+# History modification
+shopt -s histappend
+export HISTSIZE=1000
+export HISTFILESIZE=2000
+
 # Open source
 export CODE_PATH="$HOME/code"
 export OCTO_URL="git@github.com:imathis/octopress.git"
