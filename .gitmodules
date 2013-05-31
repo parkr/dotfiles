@@ -31,3 +31,6 @@
 [submodule "vim/vim.symlink/bundle/vundle"]
 	path = vim/vim.symlink/bundle/vundle
 	url = https://github.com/gmarik/vundle.git
+[submodule "vim/vim.symlink/bundle/vim-gitgutter"]
+	path = vim/vim.symlink/bundle/vim-gitgutter
+	url = git://github.com/airblade/vim-gitgutter.git
