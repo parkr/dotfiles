@@ -30,6 +30,24 @@ clean_jekyll(){
   cd jekyll
 }
 
+rconsole(){
+  if [ -z "$1" ]; then
+    environment="development"
+  else
+    environment="${1}"
+  fi
+  RAILS_ENV="$environment" bash -c "bundle exec rails c"
+}
+
+rserver(){
+  if [ -z "$1" ]; then
+    environment="development"
+  else
+    environment="${1}"
+  fi
+  RAILS_ENV="$environment" bash -c "bundle exec rails s"
+}
+
 # Aliases for frequently-used commands
 alias h="heroku"
 alias b="bundle"
