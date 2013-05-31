@@ -65,6 +65,7 @@
     type = cat-file -t
     dump = cat-file -p
     amend = commit --amend
+    pyll = pull
     hist = "log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short"
     lol = log --graph --decorate --pretty=oneline --abbrev-commit
     lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
