@@ -1,7 +1,7 @@
 # User information. Replace with your own data, obviously.
 #
 [user]
-    name = Parker Moore
+	name = Parker Moore
     email = parkrmoore@gmail.com
 
 # Automatically track branches with the same name
