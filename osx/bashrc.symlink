@@ -5,10 +5,10 @@ export CLICOLOR=1
 # Set new PATH
 PATH="/usr/bin:/bin:/usr/sbin:/sbin"
 PATH="/usr/local/bin:$PATH"
-PATH="$HOME/.bin:$PATH"
-[[ -n "$(which npm)" ]] && PATH="/usr/local/share/npm/bin:$PATH"
-PATH="$HOME/.dotfiles/bin:$PATH"
-[[ -n "$(which rbenv)" ]] && PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)" && alias r="rbenv" && alias re="rbenv exec"
+[[ -d "$HOME/.rbenv" ]]    && PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)" && alias r="rbenv" && alias re="rbenv exec"
+[[ -n "$(which npm)" ]]    && PATH="/usr/local/share/npm/bin:$PATH"
+[[ -d "$HOME/.dotfiles" ]] && PATH="$HOME/.dotfiles/bin:$PATH"
+[[ -z "$(which cn)" ]]     && eval "$($HOME/code/cn/bin/cn init -)"
 export PATH
 
 # Open source
@@ -42,7 +42,7 @@ alias work="cd $WORK"
 
 # Groups
 alias cuarchive="cd $CORNELL/Archive"
-alias cn="cd $CORNELL/Class\ Notes"
+alias classnotes="cd $CORNELL/Class\ Notes"
 alias gc="cd $CORNELL/Glee\ Club"
 
 # Classes: Fall 2012
