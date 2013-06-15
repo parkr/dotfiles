@@ -1,7 +1,7 @@
 # User information. Replace with your own data, obviously.
 #
 [user]
-    name = Parker Moore
+	name = Parker Moore
     email = parkrmoore@gmail.com
 
 # Automatically track branches with the same name
@@ -11,8 +11,8 @@
 
 # Pretty format
 #
-[format]
-    pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
+# [format]
+#     pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
 
 # Push the current branch as the default behaviour
 #
@@ -46,7 +46,7 @@
 # Whitespace handling, editor config, global excludes
 #
 [core]
-    editor = mate -w
+    editor = vim
     whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
     excludesfile = ~/.dotfiles/global.gitignore
 
@@ -80,3 +80,4 @@
     user = parkr
 [ghi]
     user = parkr
+	token = 57fe439cb67dbf92ab7fad407399fed4caf4f37a

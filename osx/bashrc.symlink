@@ -46,6 +46,10 @@ export CODE_PATH="$HOME/code"
 export OCTO_URL="git@github.com:imathis/octopress.git"
 export JEKYLL_URL="git@github.com:mojombo/jekyll.git"
 
+tunnel_to_america() {
+    sshuttle -r parker@parkermoo.re 0.0.0.0/0 -vv
+}
+
 clean_jekyll(){
   cd $CODE_PATH
   rm -rf ./jekyll
