@@ -1,6 +1,29 @@
 # Customize terminal prompt
-export PS1="\w$ "
+# Set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color) color_prompt=yes;;
+    xterm-256color) color_prompt=yes;;
+    screen-256color) color_prompt=yes;;
+esac
 export CLICOLOR=1
+if [ "$color_prompt" = yes ]; then
+    export PS1='\[\033[01;35m\]\w\[\033[00m\]\[\033[01;32m\]\$\[\033[00m\] '
+else
+    export PS1='\w\$ '
+fi
+unset color_prompt
+
+# Enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
 
 # Set new PATH
 PATH="/usr/bin:/bin:/usr/sbin:/sbin"
@@ -9,7 +32,15 @@ PATH="/usr/local/bin:$PATH"
 [[ -n "$(which npm)" ]]    && PATH="/usr/local/share/npm/bin:$PATH"
 [[ -d "$HOME/.dotfiles" ]] && PATH="$HOME/.dotfiles/bin:$PATH"
 [[ -z "$(which cn)" ]]     && eval "$($HOME/code/cn/bin/cn init -)"
+PATH="$HOME/.bin:$PATH"
+PATH="$HOME/bin:$PATH"
+PATH="/usr/local/share/python:$PATH"
 export PATH
+
+# History modification
+shopt -s histappend
+export HISTSIZE=1000
+export HISTFILESIZE=2000
 
 # Open source
 export CODE_PATH="$HOME/code"
@@ -21,6 +52,36 @@ clean_jekyll(){
   rm -rf ./jekyll
   git clone $JEKYLL_URL jekyll
   cd jekyll
+}
+
+gmail(){
+  VMAIL_HOME=$HOME/.vmail/Gmail vmail
+}
+
+cmail(){
+  VMAIL_HOME=$HOME/.vmail/Cmail vmail
+}
+
+sixdub(){
+  VMAIL_HOME=$HOME/.vmail/6Wunderkinder vmail
+}
+
+rconsole(){
+  if [ -z "$1" ]; then
+    environment="development"
+  else
+    environment="${1}"
+  fi
+  RAILS_ENV="$environment" bash -c "bundle exec rails c"
+}
+
+rserver(){
+  if [ -z "$1" ]; then
+    environment="development"
+  else
+    environment="${1}"
+  fi
+  RAILS_ENV="$environment" bash -c "bundle exec rails s"
 }
 
 # Aliases for frequently-used commands
@@ -58,3 +119,6 @@ alias choral="cd $WORK/Cornell-Choral-Music"
 alias hec="cd $WORK/HEC"
 alias leaw="cd $WORK/Leacock\'s"
 alias pendleton="cd $WORK/Pendleton"
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"

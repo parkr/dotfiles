@@ -11,8 +11,8 @@
 
 # Pretty format
 #
-#[format]
-#    pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
+# [format]
+#     pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
 
 # Push the current branch as the default behaviour
 #
@@ -46,7 +46,7 @@
 # Whitespace handling, editor config, global excludes
 #
 [core]
-    editor = mate -w
+    editor = vim
     whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
     excludesfile = ~/.dotfiles/global.gitignore
 
@@ -65,6 +65,7 @@
     type = cat-file -t
     dump = cat-file -p
     amend = commit --amend
+    pyll = pull
     hist = "log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short"
     lol = log --graph --decorate --pretty=oneline --abbrev-commit
     lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
