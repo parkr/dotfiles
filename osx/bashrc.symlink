@@ -28,12 +28,13 @@ fi
 # Set new PATH
 PATH="/usr/bin:/bin:/usr/sbin:/sbin"
 PATH="/usr/local/bin:$PATH"
+[[ -d "$HOME/.rbenv" ]]    && PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)" && alias r="rbenv" && alias re="rbenv exec"
+[[ -n "$(which npm)" ]]    && PATH="/usr/local/share/npm/bin:$PATH"
+[[ -d "$HOME/.dotfiles" ]] && PATH="$HOME/.dotfiles/bin:$PATH"
+[[ -z "$(which cn)" ]]     && eval "$($HOME/code/cn/bin/cn init -)"
 PATH="$HOME/.bin:$PATH"
-[[ -n "$(which npm)" ]] && PATH="/usr/local/share/npm/bin:$PATH"
-PATH="$HOME/.dotfiles/bin:$PATH"
 PATH="$HOME/bin:$PATH"
 PATH="/usr/local/share/python:$PATH"
-[[ -n "$(which rbenv)" ]] && PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)" && alias r="rbenv" && alias re="rbenv exec"
 export PATH
 
 # History modification
@@ -41,14 +42,14 @@ shopt -s histappend
 export HISTSIZE=1000
 export HISTFILESIZE=2000
 
+if [ -f "$HOME/.localrc" ]; then
+  source $HOME/.localrc
+fi
+
 # Open source
 export CODE_PATH="$HOME/code"
 export OCTO_URL="git@github.com:imathis/octopress.git"
 export JEKYLL_URL="git@github.com:mojombo/jekyll.git"
-
-tunnel_to_america() {
-    sshuttle -r parker@parkermoo.re 0.0.0.0/0 -vv
-}
 
 clean_jekyll(){
   cd $CODE_PATH
@@ -106,7 +107,7 @@ alias work="cd $WORK"
 
 # Groups
 alias cuarchive="cd $CORNELL/Archive"
-alias cn="cd $CORNELL/Class\ Notes"
+alias classnotes="cd $CORNELL/Class\ Notes"
 alias gc="cd $CORNELL/Glee\ Club"
 
 # Classes: Fall 2012
