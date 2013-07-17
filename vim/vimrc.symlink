@@ -1,5 +1,5 @@
 filetype off
-call pathogen#runtime_append_all_bundles()
+call pathogen#infect()
 filetype plugin indent on
 set nocompatible
 
@@ -126,8 +126,8 @@ set ignorecase               " ignore case when searching
 set nohlsearch               " don't highlight searches
 set visualbell               " shut the fuck up
 
-let g:Powerline_cache_enabled = 1
 let g:Powerline_symbols = 'fancy'
+let g:Powerline_cache_enabled = 1
 
 " ---------------------------------------------------------------------------
 "  Strip all trailing whitespace in file
@@ -152,3 +152,59 @@ function! InsertTabWrapper()
 endfunction
 inoremap <tab> <c-r>=InsertTabWrapper()<cr>
 inoremap <s-tab> <c-n>
+
+"--------------
+" RUNNING TESTS
+"--------------
+function! RunTests(filename)
+    " Write the file and run tests for the given filename
+    :w
+    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
+    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
+    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
+    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
+    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
+    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
+    if match(a:filename, '\.feature') != -1
+      exec ":!bundle exec spinach " . a:filename
+    else
+      if filereadable("script/test")
+        exec ":!script/test " . a:filename
+      elseif match(a:filename, '_test\.rb') != -1
+        exec ":!ruby -I'lib:test' " . a:filename
+      elseif match(a:filename, '_spec\.rb') != -1
+        exec ":!rspec --color --drb " . a:filename
+      end
+    end
+endfunction
+
+function! SetTestFile()
+    " Set the spec file that tests will be run for.
+    let t:grb_test_file=@%
+endfunction
+
+function! RunTestFile(...)
+    if a:0
+        let command_suffix = a:1
+    else
+        let command_suffix = ""
+    endif
+
+    " Run the tests for the previously-marked file.
+    let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\|_test.rb\|test_\)$') != -1
+    if in_test_file
+        call SetTestFile()
+    elseif !exists("t:grb_test_file")
+        return
+    end
+    call RunTests(t:grb_test_file . command_suffix)
+endfunction
+
+function! RunNearestTest()
+    let spec_line_number = line('.')
+
+    call RunTestFile(":" . spec_line_number)
+endfunction
+
+map <leader>r :call RunTestFile()<CR>
+map <leader>T :call RunNearestTest()<CR>

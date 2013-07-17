@@ -28,13 +28,12 @@ fi
 # Set new PATH
 PATH="/usr/bin:/bin:/usr/sbin:/sbin"
 PATH="/usr/local/bin:$PATH"
-[[ -d "$HOME/.rbenv" ]]    && PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)" && alias r="rbenv" && alias re="rbenv exec"
 [[ -n "$(which npm)" ]]    && PATH="/usr/local/share/npm/bin:$PATH"
 [[ -d "$HOME/.dotfiles" ]] && PATH="$HOME/.dotfiles/bin:$PATH"
-[[ -z "$(which cn)" ]]     && eval "$($HOME/code/cn/bin/cn init -)"
+[[ -z "$(which cn)" ]]     && [[ -d "$HOME/code/cn" ]] && eval "$($HOME/code/cn/bin/cn init -)"
 PATH="$HOME/.bin:$PATH"
 PATH="$HOME/bin:$PATH"
-PATH="/usr/local/share/python:$PATH"
+[[ -d "$HOME/.rbenv" ]]    && PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)" && alias r="rbenv" && alias re="rbenv exec"
 export PATH
 
 # History modification

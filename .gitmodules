@@ -43,3 +43,15 @@
 [submodule "vim/vim.symlink/bundle/vim-golang"]
 	path = vim/vim.symlink/bundle/vim-golang
 	url = git://github.com/jnwhiteh/vim-golang.git
+[submodule "vim/vim.symlink/bundle/vim-javascript"]
+	path = vim/vim.symlink/bundle/vim-javascript
+	url = https://github.com/pangloss/vim-javascript.git
+[submodule "vim/vim.symlink/bundle/vim-slim"]
+	path = vim/vim.symlink/bundle/vim-slim
+	url = https://github.com/slim-template/vim-slim.git
+[submodule "vim/vim.symlink/bundle/vim-tcomment"]
+	path = vim/vim.symlink/bundle/vim-tcomment
+	url = https://github.com/jmartindf/vim-tcomment.git
+[submodule "vim/vim.symlink/bundle/vim-jekyll"]
+	path = vim/vim.symlink/bundle/vim-jekyll
+	url = git@github.com:parkr/vim-jekyll.git
