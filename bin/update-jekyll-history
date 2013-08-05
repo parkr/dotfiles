@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+# update-jekyll-history
+#   Creates a commit that indicates that the history file has been updated to reflect
+#   the merge of a pull request on mojombo/jekyll or a similarly-configured repo.
+#
+# Author: mattr-
+# Source: https://github.com/mattr-/dotfiles/blob/master/bin/update-jekyll-history
+
+set -e
+
+[[ $# -eq 0 ]] && echo "Specify the PR number" && exit 1
+
+PULL=$1
+git add History.markdown
+git commit -m "Update history to reflect merge of #${PULL}"
+git pull --rebase
+git push origin master
