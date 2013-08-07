@@ -1,0 +1,3 @@
+#! /bin/bash
+
+ps auxw | grep -v grep | grep "$@" -i --color=auto
