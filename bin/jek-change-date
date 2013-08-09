@@ -1,0 +1,21 @@
+#! /usr/bin/env ruby
+
+abort if ARGV.size == 0
+
+require "fileutils"
+
+old_filename = ARGV.first
+
+puts "Modifying the filename date of #{old_filename}."
+puts "What would you like the new date to be?"
+print "Enter a new YYYY-MM-DD: "
+new_date = STDIN.gets.chomp
+
+new_filename = old_filename.sub(/\d{4}-\d{2}-\d{2}-/, "#{new_date}-")
+
+if new_filename == old_filename
+  abort "Whoa, that's the same date. Aborting."
+else
+  FileUtils.mv(old_filename, new_filename)
+  puts "Moved #{old_filename} to #{new_filename}"
+end
