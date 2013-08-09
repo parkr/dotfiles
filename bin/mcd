@@ -1,0 +1,8 @@
+#! /bin/bash
+#
+# Script: mcd
+# Desc:   Make a directory and cd into it
+# Credit: http://mmb.pcb.ub.es/~carlesfe/unix/tricks.txt
+#
+
+mkdir $1 && cd $1

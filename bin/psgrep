@@ -1,0 +1,8 @@
+#! /bin/bash
+#
+# Script: psgrep
+# Desc:   Search your processes
+# Credit: http://mmb.pcb.ub.es/~carlesfe/unix/tricks.txt
+#
+
+ps auxw | grep -v grep | grep "$@" -i --color=auto

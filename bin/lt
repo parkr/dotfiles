@@ -1,0 +1,8 @@
+#! /bin/bash
+#
+# Script: lt
+# Desc:   `tail` your long ls
+# Credit: http://mmb.pcb.ub.es/~carlesfe/unix/tricks.txt
+#
+
+ls -ltrsa "$@" | tail

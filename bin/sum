@@ -1,0 +1,9 @@
+#! /bin/bash
+#
+# Script: sum
+# Desc:   Add input to each other
+# Usage:  echo 1 2 3 | sum #=> 6
+# Credit: http://mmb.pcb.ub.es/~carlesfe/unix/tricks.txt
+#
+
+xargs | tr ' ' '+' | bc
