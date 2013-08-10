@@ -64,3 +64,6 @@
 [submodule "vim/vim.symlink/bundle/ooc.vim"]
 	path = vim/vim.symlink/bundle/ooc.vim
 	url = https://github.com/programble/ooc.vim.git
+[submodule "vim/vim.symlink/bundle/vim-liquid"]
+	path = vim/vim.symlink/bundle/vim-liquid
+	url = https://github.com/tpope/vim-liquid.git
