@@ -61,3 +61,6 @@
 [submodule "vim/vim.symlink/bundle/vim-ack"]
 	path = vim/vim.symlink/bundle/vim-ack
 	url = git://github.com/mileszs/ack.vim.git
+[submodule "vim/vim.symlink/bundle/ooc.vim"]
+	path = vim/vim.symlink/bundle/ooc.vim
+	url = https://github.com/programble/ooc.vim.git
