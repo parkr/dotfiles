@@ -1,0 +1,12 @@
+#! /bin/bash
+# Workflow for what to do after a PR has been merged to mojombo/jekyll
+# Usage:
+#   merge-pr <PRnum>
+
+set -e
+
+[[ $# -eq 0 ]] && echo "Specify the PR number" && exit 1
+
+git pull
+vim History.markdown
+update-jekyll-history $1
