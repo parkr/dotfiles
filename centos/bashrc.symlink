@@ -6,8 +6,3 @@ if [ -f /etc/bashrc ]; then
 fi
 
 # User specific aliases and functions
-
-if [ -f /usr/local/rvm/scripts/rvm ]; then
-  export LD_LIBRARY_PATH="/usr/local/rvm/usr/lib"
-  . /usr/local/rvm/scripts/rvm
-fi
