@@ -11,5 +11,5 @@ set -e
 [[ $# -eq 0 ]] && echo "Specify the project name" && exit 1
 [[ -z "$REMOTE_GIT_SERVER" ]] && echo "You must specify the REMOTE_GIT_SERVER env variable." && exit 1
 
-ssh git@$REMOTE_GIT_SERVER -t "mkdir $1.git && cd $1.git && git init --bare --shared=group"
+ssh -q git@$REMOTE_GIT_SERVER -t "mkdir $1.git && cd $1.git && git init --quiet --bare --shared=group"
 echo git@$REMOTE_GIT_SERVER:$1.git
