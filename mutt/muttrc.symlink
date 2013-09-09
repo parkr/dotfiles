@@ -11,18 +11,4 @@ set realname = 'Parker M' # default: '(empty)'
 set sendmail = '/usr/sbin/sendmail -oem -oi ' # default: '/usr/sbin/sendmail -oem -oi'
 set signature = '~/.mutt/signature' # default: '~/.signature'
 
-# Colors
-
-color attachment brightmagenta default
-color error      brightred    default
-color hdrdefault red          default
-color indicator  brightyellow red
-color markers    brightcyan   default
-color message    brightcyan   default
-color normal     default      default
-color quoted     brightblue   default
-color search     default      green
-color signature  red          default
-color status     yellow       blue
-color tilde      magenta      default
-color tree       magenta      default
+source ~/.mutt/colors
