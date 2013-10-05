@@ -1,0 +1,18 @@
+#! /bin/bash
+
+if [ ! -d .git ]; then
+  git init
+fi
+
+mkdir script
+cat >> script/bootstrap <<EOF
+#! /bin/bash
+
+
+EOF
+chmod 755 script/bootstrap
+
+basename `pwd` > README.md
+
+git add script/bootstrap README.md
+git commit -m "Initial import."
