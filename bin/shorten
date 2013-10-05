@@ -1,4 +1,18 @@
 #! /usr/bin/env ruby
+#
+# Shorten a URL at parkr.me
+#
+# USAGE:
+#
+#   $ shorten http://google.com
+#   # => http://parkr.me/afno21r
+#
+#   $ shorten http://google.com google
+#   # => http://parkr.me/google
+#
+# AUTHOR:
+#
+#   Parker Moore (@parkr)
 
 ARGV.empty? && abort("Provide the URL at least. Gosh.")
 

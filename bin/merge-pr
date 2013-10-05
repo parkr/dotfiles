@@ -2,6 +2,8 @@
 # Workflow for what to do after a PR has been merged to mojombo/jekyll
 # Usage:
 #   merge-pr <PRnum>
+# Author:
+#   Parker Moore @parkr
 
 set -e
 
