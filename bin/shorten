@@ -1,0 +1,16 @@
+#! /usr/bin/env ruby
+
+ARGV.empty? && abort("Provide the URL at least. Gosh.")
+
+HOST = 'http://parkr.me'
+
+args = ['url', 'code'].zip(ARGV)
+args.reject! { |_,v| v.nil? || v.empty? }
+curl_args = args.map {|pair| "-F \"#{pair.join("=")}\""}.join(" ")
+
+resp = `curl #{HOST} -si #{curl_args}`
+matchdata = /^Location:\s+(.+)$/.match(resp)
+
+if matchdata && matchdata[1]
+  puts matchdata[1].strip
+end
