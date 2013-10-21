@@ -18,8 +18,20 @@ do
   shift
 done
 
-OWNER=$(ruby -e "puts \`git remote -v\`.match(/git@github.com:([0-9a-z\-]+)\/[0-9a-z\-_.]+/)[1]")
-BRANCH=$(ruby -e "puts \`git branch\`.match(/\n\*\ ([a-z0-9\-_]+)/)[1]")
+if [ $VERBOSE -eq 1 ]; then
+  ruby -e "p \`git remote -v\`"
+  ruby -e "p \`git remote -v\`.match(/git@github.com:/)"
+  ruby -e "p \`git remote -v\`.match(/git@github.com:([a-z0-9\-]+)\/[a-z0-9_.\-]+/)"
+fi
+
+OWNER=$(ruby -e "puts \`git remote -v\`.match(/git@github.com:([a-z0-9\-]+)\/[a-z0-9_.\-]+/)[1]")
+
+if [ $VERBOSE -eq 1 ]; then
+  ruby -e "p \`git branch\`"
+  ruby -e "p \`git branch\`.match(/^\n\*\ ([a-z0-9]+)/)"
+fi
+
+BRANCH=$(ruby -e "puts \`git branch\`.match(/\n?\*\ ([a-z0-9\-_.]+)/)[1]")
 
 [[ VERBOSE -eq 1 ]] && echo "hub pull-request -h ${OWNER}:${BRANCH}"
 hub pull-request -h ${OWNER}:${BRANCH}

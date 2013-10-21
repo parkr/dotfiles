@@ -1,0 +1,16 @@
+#! /bin/bash
+#
+# local-jekyll
+#   Runs my local version of `jekyll' (mojombo:master)
+#
+# Author: parkr
+# Source: https://github.com/parkr/dotfiles/blob/master/bin/local-jekyll
+
+set -e
+
+[[ $# -eq 0 ]] && echo "Jekyll needs arguments :)" && exit 1
+
+JEKYLL="$HOME/code/jekyll/bin/jekyll"
+
+echo "Executing '$JEKYLL $@'..."
+$JEKYLL $@

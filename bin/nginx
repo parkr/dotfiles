@@ -1,0 +1,42 @@
+#! /bin/bash
+#
+# nginx
+#   enable: enables site
+#   disable: disables site
+#   edit: edits a site
+#   restart: restarts nginx using the init.d script
+#
+# Author: parkr
+# Source: https://github.com/parkr/dotfiles/blob/master/bin/nginx
+
+set -e
+
+[[ $# -lt 1 ]] && echo "Specify the subcommand" && exit 1
+
+if [[ "$1" == "restart" ]]; then
+  sudo service nginx restart
+  exit 0
+fi
+
+[[ $# -lt 2 ]] && echo "Specify the subcommand and site name" && exit 1
+
+NGINX_CONF=/opt/nginx/conf
+
+if [[ "$1" == "enable" ]]; then
+  if [ -f "$NGINX_CONF/sites-enabled/$2" ]; then
+    echo "'$2' is already enabled."
+  else
+    sudo ln -s $NGINX_CONF/sites-available/$2 $NGINX_CONF/sites-enabled/$2
+    echo "Enabled '$2'."
+  fi
+fi
+
+if [[ "$1" == "disable" ]]; then
+  sudo rm $NGINX_CONF/sites-enabled/$2
+  echo "Disabled '$2'."
+fi
+
+if [[ "$1" == "edit" ]]; then
+  $EDITOR $NGINX_CONF/sites-available/$2
+  echo "$NGINX_CONF/sites-enabled/$2 successfully saved."
+fi
