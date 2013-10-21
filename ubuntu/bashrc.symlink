@@ -1,8 +1,11 @@
-# Customize terminal prompt
-export PS1="\w$ "
+if [ -f "$HOME/.bashrc.backup" ]; then
+  source $HOME/.bashrc.backup
+fi
+
+#export PS1="\w$ "
 export CLICOLOR=1
-export LANG="en_US"
-export LC_ALL="en_US"
+#export LANG="en_US"
+#export LC_ALL="en_US"
 
 alias ls="ls --color"
 
@@ -10,8 +13,6 @@ alias ls="ls --color"
 PATH="$HOME/.bin:$PATH"
 [[ -n "$(which npm)" ]] && PATH="/usr/local/share/npm/bin:$PATH"
 PATH="$HOME/.dotfiles/bin:$PATH"
-[[ -z "$(which rbenv)" ]] && PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)" && alias r="rbenv" && alias re="rbenv exec"
-[[ -s "$HOME/code/o"   ]] && PATH="$HOME/code/o/bin:$PATH"
 export PATH
 
 # Open source

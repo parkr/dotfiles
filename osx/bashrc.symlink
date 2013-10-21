@@ -40,7 +40,7 @@ export PATH
 # History modification
 shopt -s histappend
 export HISTSIZE=1000
-export HISTFILESIZE=2000
+export HISTFILESIZE=5000
 
 if [ -f "$HOME/.localrc" ]; then
   source $HOME/.localrc
@@ -126,3 +126,13 @@ alias pendleton="cd $WORK/Pendleton"
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
+
+# Handle the fact that this file will be used with multiple OSs
+platform=`uname`
+if [[ $platform == 'Linux' ]]; then
+  alias a='ls -lrth --color'
+elif [[ $platform == 'Darwin' ]]; then
+  alias a='ls -lrthG'
+fi
+
+alias most="history|awk '{a[\$2]++}END{for(i in a){print a[i] \" \" i }}'|sort -rn|head -20"
