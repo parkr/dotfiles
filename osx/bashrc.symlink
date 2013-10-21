@@ -40,7 +40,7 @@ export PATH
 # History modification
 shopt -s histappend
 export HISTSIZE=1000
-export HISTFILESIZE=2000
+export HISTFILESIZE=5000
 
 if [ -f "$HOME/.localrc" ]; then
   source $HOME/.localrc
