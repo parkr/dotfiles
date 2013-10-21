@@ -5,6 +5,8 @@ if [ -f ~/.bashrc ]; then
 	. ~/.bashrc
 fi
 
+export PATH="/usr/local/go/bin:$PATH"
+
 # User specific environment and startup programs
 HOME_BIN_PATH="$HOME/.dotfiles/bin"
 PATH=$HOME_BIN_PATH:$PATH
