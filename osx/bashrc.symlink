@@ -34,6 +34,7 @@ PATH="/usr/local/bin:$PATH"
 PATH="$HOME/.bin:$PATH"
 PATH="$HOME/bin:$PATH"
 [[ -d "$HOME/.rbenv" ]]    && PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)" && alias r="rbenv" && alias re="rbenv exec"
+[[ -d "$HOME/.pyenv" ]]    && PATH="$HOME/.pyenv/bin:$PATH" && eval "$(pyenv init -)" && alias p="pyenv" && alias pe="pyenv exec"
 [[ -d "$HOME/.go"    ]]    && PATH="$HOME/.go/bin:$PATH" && export GOPATH="$HOME/.go"
 export PATH
 
