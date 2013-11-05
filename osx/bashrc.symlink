@@ -137,3 +137,4 @@ elif [[ $platform == 'Darwin' ]]; then
 fi
 
 alias most="history|awk '{a[\$2]++}END{for(i in a){print a[i] \" \" i }}'|sort -rn|head -20"
+alias deploy="bundle exec cap production deploy"
