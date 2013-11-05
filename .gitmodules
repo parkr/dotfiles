@@ -67,3 +67,6 @@
 [submodule "vim/vim.symlink/bundle/vim-liquid"]
 	path = vim/vim.symlink/bundle/vim-liquid
 	url = https://github.com/tpope/vim-liquid.git
+[submodule "vim/vim.symlink/bundle/vim-drake"]
+	path = vim/vim.symlink/bundle/vim-drake
+	url = https://bitbucket.org/larsyencken/vim-drake-syntax.git
