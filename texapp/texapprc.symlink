@@ -1,0 +1,23 @@
+# This sample config turns on automatic version checking, turns on ANSI color,
+# turns on readline mode, removes t.co posts from your timeline, sets your
+# default timeline to personal instead of global, allows posts in your timeline
+# from people you follow mentioning people you don't, displays all mentions
+# and replies to you, even from users who don't follow you, and tries to be
+# smart with newlines.
+
+# A full list of options can be found at:
+# http://www.floodgap.com/software/ttytter/copts.html
+# and
+# http://www.floodgap.com/software/texapp
+# under "Texapp-specific command line options"
+
+vcheck=1
+ansi=1
+readline=1
+notco=1
+personal=1
+allats=1
+mentions=1
+newline=1
+notifies=reply,pm,subthread,search
+urlopen=/usr/bin/open %U
