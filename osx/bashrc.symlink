@@ -43,10 +43,6 @@ shopt -s histappend
 export HISTSIZE=1000
 export HISTFILESIZE=5000
 
-if [ -f "$HOME/.localrc" ]; then
-  source $HOME/.localrc
-fi
-
 # Open source
 export CODE_PATH="$HOME/code"
 export OCTO_URL="git@github.com:imathis/octopress.git"
