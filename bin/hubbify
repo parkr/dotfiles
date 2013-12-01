@@ -4,15 +4,24 @@ if [ ! -d .git ]; then
   git init
 fi
 
-mkdir script
-cat >> script/bootstrap <<EOF
+if [ ! -d script ]; then
+  mkdir script
+fi
+
+if [ ! -f script/bootstrap ]; then
+  cat >> script/bootstrap <<EOF
 #! /bin/bash
 
 
 EOF
-chmod 755 script/bootstrap
+  chmod 755 script/bootstrap
+  git add script/bootstrap
+fi
 
-basename `pwd` > README.md
+if [ ! -f README.md ]; then
+  basename `pwd` > README.md
+  git add README.md
+fi
 
-git add script/bootstrap README.md
-git commit -m "Initial import."
+echo "GitHubbification complete."
+git commit -m "GitHubbification complete.."
