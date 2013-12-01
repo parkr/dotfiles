@@ -1,0 +1,10 @@
+#! /bin/bash
+#
+# Download a video and convert it to MP3 at the highest audio setting.
+
+youtube-dl \
+  --max-quality 1080p \
+  --extract-audio \
+  --audio-format mp3 \
+  --audio-quality 0 \
+  "$@"
