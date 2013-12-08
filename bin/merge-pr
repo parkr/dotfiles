@@ -9,6 +9,10 @@ set -e
 
 [[ $# -eq 0 ]] && echo "Specify the PR number" && exit 1
 
+# Merge pull request on GitHub.com
+git merge-pr $1
+
+# Add history
 git pull
 vim History.markdown
 update-jekyll-history $1
