@@ -5,4 +5,8 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
+if [ -f "$HOME/.localrc" ]; then
+    . "$HOME/.localrc"
+fi
+
 # User specific aliases and functions
