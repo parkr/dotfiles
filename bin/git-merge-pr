@@ -32,5 +32,7 @@ unless client.pull_merged?(repo, pr_num)
     abort "Got a 404 -- looks like #{repo}##{pr_num} doesn't exist."
   end
 else
-  abort "Pull request #{repo}##{pr_num} has already been merged. Aborting"
+  puts "Pull request #{repo}##{pr_num} has already been merged."
+  puts "Continue anyway? (y/n)"
+  abort unless STDIN.gets.chomp == "y"
 end
