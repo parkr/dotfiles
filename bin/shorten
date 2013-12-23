@@ -16,7 +16,7 @@
 
 ARGV.empty? && abort("Provide the URL at least. Gosh.")
 
-HOST = 'http://parkr.me'
+HOST = 'http://on.parkr.me'
 
 args = ['url', 'code'].zip(ARGV)
 args.reject! { |_,v| v.nil? || v.empty? }
@@ -27,4 +27,7 @@ matchdata = /^Location:\s+(.+)$/.match(resp)
 
 if matchdata && matchdata[1]
   puts matchdata[1].strip
+else
+  puts resp
+  abort "WHOA I GOT NOTHING"
 end
