@@ -16,7 +16,7 @@
 
 ARGV.empty? && abort("Provide the URL at least. Gosh.")
 
-HOST = 'http://on.parkr.me'
+HOST = ENV['SHORTEN_HOST'] || 'http://on.parkr.me'
 
 args = ['url', 'code'].zip(ARGV)
 args.reject! { |_,v| v.nil? || v.empty? }
