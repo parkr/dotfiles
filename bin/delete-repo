@@ -1,0 +1,33 @@
+#! /usr/bin/env ruby
+#
+# delete-repo(1)
+#
+# Summary:
+#   Delete a repository on GitHub.com
+#
+# Usage:
+#   delete-repo parkr/blah
+#
+# Author:
+#   Parker Moore (@parkr)
+#
+
+require 'octokit'
+
+abort "Provide a repo name." if ARGV.empty?
+
+repo_name = ARGV.first
+
+client = Octokit::Client.new(netrc: true)
+
+if client.repository?(repo_name)
+  puts "Attempting to delete '#{repo_name}'..."
+
+  if client.delete_repository(repo_name)
+    puts "SUCCESS"
+  else
+    puts "Whoooaaaa, that failed."
+  end
+else
+  abort "Sorry homie, '#{repo_name}' ain't no repo."
+end
