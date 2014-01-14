@@ -82,6 +82,7 @@ rserver(){
 
 # Aliases for frequently-used commands
 alias h="heroku"
+alias d="dokku"
 alias b="bundle"
 alias be="bundle exec"
 alias numfiles="ls -1 | wc -l"
