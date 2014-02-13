@@ -108,3 +108,11 @@ brew-up () {
   brew update -v
   brew upgrade -v
 }
+
+heroku-deploy () {
+  git checkout master && \
+    git pull origin master && \
+    git push origin master && \
+    git push heroku master && \
+    hk log
+}
