@@ -1,0 +1,40 @@
+#! /usr/bin/env python
+
+from libcloud.dns.types import Provider, RecordType
+from libcloud.dns.providers import get_driver
+import os
+import sys
+
+if len(sys.argv) == 1:
+  print "Please give me a command to work with!"
+  sys.exit(1)
+
+cls = get_driver(Provider.RACKSPACE)
+driver = cls(
+    os.environ['RACKSPACE_USERNAME'],
+    os.environ['RACKSPACE_API_KEY'],
+    region='us'
+)
+
+def records_for_domain(domain_name):
+  zones = driver.list_zones()
+  return [zone for zone in zones if zone.domain == domain_name]
+
+def list_records_for_domain(domain_name):
+  records = records_for_domain(domain_name)
+  print ", ".join(records)
+
+command = str(sys.argv[1])
+if command == "list":
+  domain = str(sys.argv[2])
+  list_records_for_domain(domain)
+elif command == "cname":
+  pass
+  record = zone.create_record(
+      name='blarg',
+      type=RecordType.CNAME,
+      data='parkr.github.io')
+  print record
+else:
+  print "Command %s is not recognized." % command
+  sys.exit(1)
