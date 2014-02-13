@@ -120,3 +120,7 @@ heroku-deploy () {
 octocat () {
   curl http://ihmage.com/octocat
 }
+
+# added by travis gem
+[ -f /Users/parker/.travis/travis.sh ] && source /Users/parker/.travis/travis.sh
+
