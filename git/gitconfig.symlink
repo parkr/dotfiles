@@ -83,3 +83,6 @@
 	token = 57fe439cb67dbf92ab7fad407399fed4caf4f37a
 [credential]
 	helper = osxkeychain
+[filter "media"]
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f
