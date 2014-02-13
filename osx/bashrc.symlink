@@ -116,3 +116,7 @@ heroku-deploy () {
     git push heroku master && \
     hk log
 }
+
+octocat () {
+  curl http://ihmage.com/octocat
+}
