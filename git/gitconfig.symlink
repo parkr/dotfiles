@@ -80,7 +80,7 @@
     user = parkr
 [ghi]
     user = parkr
-	token = 57fe439cb67dbf92ab7fad407399fed4caf4f37a
+	token = !security find-internet-password -a parkr -s github.com -l 'ghi token' -w
 [credential]
 	helper = osxkeychain
 [filter "media"]
