@@ -101,6 +101,7 @@ set ruler                    " show the cursor position all the time
 set noshowcmd                " don't display incomplete commands
 set nolazyredraw             " turn off lazy redraw
 set number                   " show line numbers
+set wildignore+=*/vendor/*   " ignore the vendor directory
 set wildmenu                 " turn on wild menu
 set wildmode=list:longest,full
 set ch=2                     " command line height
