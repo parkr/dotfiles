@@ -1,0 +1,52 @@
+set -g prefix `
+bind-key ` send-prefix
+
+set -g default-terminal "screen-256color"
+set-window-option -g utf8 on
+
+# Set that silly Esc-Wait off, so VI works again properly
+set-option -sg  escape-time 0
+
+# Dividers
+bind \ split-window -h
+bind - split-window -v
+ 
+# vim style window movement
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+
+# Allow mouse
+set -g mode-mouse on
+set -g mouse-select-pane on
+set -g mouse-resize-pane on
+set -g mouse-select-window on
+
+# Start windows with index 1... 0 is so far away
+set -g base-index 1
+
+# hit the prefix key twice to toggle between windows
+bind-key ` next-window
+
+# Highlight the current running window name
+set-window-option -g window-status-current-bg red
+
+# Exit on q
+bind q kill-session
+
+# Shift key is killer when moving around, remove shift
+#  requirement for switching between panes
+bind-key [ swap-pane -U
+bind-key ] swap-pane -D
+
+# reload config file with r
+unbind r
+bind r source-file ~/.tmux.conf
+
+set-option -g status on
+set-option -g status-interval 2
+set-option -g status-justify "centre"
+set-option -g status-utf8 on
+set-option -g status-left-length 60
+set-option -g status-right-length 90
