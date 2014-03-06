@@ -1,6 +1,7 @@
 #! /bin/bash
 #
 # nginx
+#   conf: edits the main configuraton file
 #   enable: enables site
 #   disable: disables site
 #   edit: edits a site
@@ -38,5 +39,5 @@ fi
 
 if [[ "$1" == "edit" ]]; then
   $EDITOR $NGINX_CONF/sites-available/$2
-  echo "$NGINX_CONF/sites-enabled/$2 successfully saved."
+  echo "$NGINX_CONF/sites-available/$2 successfully saved."
 fi
