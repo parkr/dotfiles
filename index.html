@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Dotfiles by parkr</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>Dotfiles</h1>
+        <p>my toolkit with which i will one day conquer the world</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/parkr/dotfiles" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/parkr/dotfiles/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/parkr/dotfiles/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h1>
+<a name="parkr-does-dotfiles-courtesy-of-tombell" class="anchor" href="#parkr-does-dotfiles-courtesy-of-tombell"><span class="octicon octicon-link"></span></a> parkr does dotfiles, courtesy of tombell</h1>
+
+<h2>
+<a name="-is-where-the--is" class="anchor" href="#-is-where-the--is"><span class="octicon octicon-link"></span></a>~ is where the ♥ is</h2>
+
+<p>My dotfiles were originally a fork of <a href="https://github.com/tombell" class="user-mention">@tombell</a>'s dotfiles, which were originally
+a fork of <a href="https://github.com/holman" class="user-mention">@holman</a>'s dotfiles.</p>
+
+<p>Your dotfiles are you personalised configuration files for UNIX-like systems,
+they usually reside in your home (<code>~</code>) directory.</p>
+
+<p>Like <a href="https://github.com/tombell" class="user-mention">@tombell</a>'s and <a href="https://github.com/holman" class="user-mention">@holman</a>'s, my dotfiles are organised into topics (ruby, git, 
+zsh etc). For more information about dotfiles and <a href="https://github.com/holman" class="user-mention">@holman</a>'s specifically check out his
+<a href="https://github.com/holman/dotfiles">repo</a> and <a href="http://zachholman.com/2010/08/dotfiles-are-meant-to-be-forked/">blog post</a> on the subject.</p>
+
+<h2>
+<a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Install</h2>
+
+<ul>
+<li><code>git clone git://github.com/parkr/dotfiles ~/.dotfiles</code></li>
+<li><code>cd ~/.dotfiles</code></li>
+<li><code>git submodule init</code></li>
+<li><code>git submodule update</code></li>
+<li><code>rake install</code></li>
+</ul><p>The install rake task will symlink all the correct files from <code>~/.dotfiles</code> to
+your home directory. You will want to configure and tweak everything inside the
+<code>~/.dotfiles</code> directory though.</p>
+
+<h2>
+<a name="components" class="anchor" href="#components"><span class="octicon octicon-link"></span></a>Components</h2>
+
+<p>Taken from <a href="https://github.com/holman" class="user-mention">@holman</a>'s, there are a few special files in the repository:</p>
+
+<ul>
+<li>
+<code>bin/</code>, anything in <code>bin/</code> will get added to your <code>$PATH</code> and made available
+everywhere</li>
+<li>
+<code>&lt;topic&gt;/*.zsh</code>, any files ending with <code>.zsh</code> will get loaded into your
+environment</li>
+<li>
+<code>&lt;topic&gt;/*.symlink</code>, any files ending with <code>.symlink</code> will get symlinked into
+your <code>$HOME</code>. This is so you can keep all of those versioned in your dotfiles
+but still keep those autoloaded in your home directory. These get symlinked
+when you run <code>rake install</code>
+</li>
+<li>
+<code>&lt;topic&gt;/*.completion.sh</code>, any files ended in <code>completion.sh</code> get loaded last
+so that they get loaded after we set up zsh autocomplete functions</li>
+</ul><h2>
+<a name="extras" class="anchor" href="#extras"><span class="octicon octicon-link"></span></a>Extras</h2>
+
+<p>There are a few things I use to make my life awesome. They're not a required
+dependency, but if you install them they'll make your life more awesome as
+well.</p>
+
+<ul>
+<li>If you want some more colours for things like <code>ls</code>, install <code>grc</code>:
+<code>brew install grc</code>
+</li>
+<li>If you want <code>rvm</code> or <code>rbenv</code> to manage your ruby installs, install either and
+you'll get the current ruby version in your prompt</li>
+</ul><h2>
+<a name="bug" class="anchor" href="#bug"><span class="octicon octicon-link"></span></a>Bug</h2>
+
+<p>Just open an issue and/or pull request.</p>
+
+<h2>
+<a name="thanks" class="anchor" href="#thanks"><span class="octicon octicon-link"></span></a>Thanks</h2>
+
+<p>I originally forked <a href="https://github.com/tombell" class="user-mention">@tombell</a>'s dotfiles, who originally forked @holamn's dotfiles, who originally forked <a href="https://github.com/ryanb" class="user-mention">@ryanb</a>'s dotfiles.
+So thanks to them.</p>
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/parkr">parkr</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
