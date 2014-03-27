@@ -73,3 +73,6 @@
 [submodule "tmux/tmux.symlink/tmux-powerline"]
 	path = tmux/tmux.symlink/tmux-powerline
 	url = git://github.com/erikw/tmux-powerline.git
+[submodule "vim/vim.symlink/bundle/vim-elixir"]
+	path = vim/vim.symlink/bundle/vim-elixir
+	url = https://github.com/elixir-lang/vim-elixir.git
