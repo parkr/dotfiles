@@ -110,6 +110,7 @@ alias deploy="bundle exec cap production deploy"
 brew-up () {
   brew update -v
   brew upgrade -v
+  brew cleanup
 }
 
 heroku-deploy () {
@@ -126,4 +127,3 @@ octocat () {
 
 # added by travis gem
 [ -f /Users/parker/.travis/travis.sh ] && source /Users/parker/.travis/travis.sh
-
