@@ -38,6 +38,8 @@ PATH="$HOME/bin:$PATH"
 [[ -d "$HOME/.go"    ]]    && PATH="$HOME/.go/bin:$PATH" && export GOPATH="$HOME/.go"
 export PATH
 
+export EDITOR="vim"
+
 # History modification
 shopt -s histappend
 export HISTSIZE=10000
