@@ -1,8 +1,8 @@
 # Basic Settings
 #
 # NEVER SET THE fontName ATTRIBUTE. EVER.
-fontName="Monaco"
-fontSize	= 10
+fontName    = "Consolas for Powerline"
+fontSize	= 14
 # theme 		= "Resesif"
 
 # Extra files to include
