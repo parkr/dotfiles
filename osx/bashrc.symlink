@@ -88,6 +88,7 @@ alias d="dokku"
 alias b="bundle"
 alias be="bundle exec"
 alias numfiles="ls -1 | wc -l"
+alias ack="ag"
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
