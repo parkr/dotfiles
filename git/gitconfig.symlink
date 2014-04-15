@@ -73,6 +73,7 @@
     l = log --graph --abbrev-commit --date=relative
     count = shortlog -sn
     ll = log --pretty=oneline --abbrev-commit --max-count=15
+	stats = shortlog -sn
 
 # Git Applications
 #
