@@ -28,6 +28,7 @@ fi
 # Set new PATH
 PATH="/usr/bin:/bin:/usr/sbin:/sbin"
 PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+PATH="/usr/local/lib/python2.7/site-packages:$PATH"
 [[ -n "$(which npm)" ]]    && PATH="/usr/local/share/npm/bin:$PATH"
 [[ -d "$HOME/.dotfiles" ]] && PATH="$HOME/.dotfiles/bin:$PATH"
 [[ -z "$(which cn)" ]]     && [[ -d "$HOME/code/cn" ]] && eval "$($HOME/code/cn/bin/cn init -)"
@@ -107,13 +108,13 @@ fi
 alias most="history|awk '{a[\$2]++}END{for(i in a){print a[i] \" \" i }}'|sort -rn|head -20"
 alias deploy="bundle exec cap production deploy"
 
-brew-up () {
+brew_up () {
   brew update -v
   brew upgrade -v
   brew cleanup
 }
 
-heroku-deploy () {
+heroku_deploy () {
   git checkout master && \
     git pull origin master && \
     git push origin master && \
@@ -123,6 +124,15 @@ heroku-deploy () {
 
 octocat () {
   curl http://ihmage.com/octocat
+}
+
+waterfall_noise () {
+  play \
+    -c 2 \
+    -n synth \
+    pinknoise band \
+    -n 250 3000 tremolo 0.05 30 reverb 20 \
+    gain -l
 }
 
 # added by travis gem
