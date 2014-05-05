@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#
+# Usage: git shortlog
+#        git shortlog v1.0.0...HEAD
+#
+# Gets a newline-delimited list of committer names.
+# Can optionally specify ref constraints
+#
+# Author: Matt Rogers (@mattr-)
+
+git shortlog -sn $1 | cut -d '	' -f2-
