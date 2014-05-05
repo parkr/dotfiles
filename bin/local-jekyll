@@ -8,8 +8,6 @@
 
 set -e
 
-[[ $# -eq 0 ]] && echo "Jekyll needs arguments :)" && exit 1
-
 JEKYLL="$HOME/jekyll/jekyll/bin/jekyll"
 
 echo "Executing '$JEKYLL $@'..."
