@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Special thanks to:
+# http://www.if-not-true-then-false.com/2009/google-search-from-linux-and-unix-command-line/
+
+function encode() {
+  echo -n $@ | perl -pe's/([^-_.~A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg'
+}
+
+URL="https://www.google.com/search?hl=en&ie=UTF-8&oe=UTF-8&q=$(encode $@)"
+echo "Searching '$@'..."
+open $URL
