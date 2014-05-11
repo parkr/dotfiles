@@ -12,16 +12,29 @@
 
 set -e
 
-[[ $# -lt 1 ]] && echo "Specify the subcommand" && exit 1
+NGINX_CONF=/opt/nginx/conf
+
+usage() {
+  echo "nginx <subcommand> <site_name>"
+  echo
+  echo "Subcommands: restart, conf, enable, disable, edit"
+  echo "Sites:"
+  ls -1 $NGINX_CONF/sites-available | gawk -F" " '{ print "   " $1 }'
+}
+
+[[ $# -lt 1 ]] && usage && exit 1
 
 if [[ "$1" == "restart" ]]; then
   sudo service nginx restart
   exit 0
 fi
 
-[[ $# -lt 2 ]] && echo "Specify the subcommand and site name" && exit 1
+if [[ "$1" == "conf" ]]; then
+  vim /opt/nginx/conf/nginx.conf
+  exit 0
+fi
 
-NGINX_CONF=/opt/nginx/conf
+[[ $# -lt 2 ]] && usage && exit 1
 
 if [[ "$1" == "enable" ]]; then
   if [ -f "$NGINX_CONF/sites-enabled/$2" ]; then
