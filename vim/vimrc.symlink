@@ -136,9 +136,10 @@ let g:Powerline_cache_enabled = 1
 " ---------------------------------------------------------------------------
 
 function! StripWhitespace ()
-  exec ':%s/ \+$//gc'
+  exec ':%s/ \+$//ge'
 endfunction
 map <leader>s :call StripWhitespace ()<CR>
+autocmd BufWritePre * :call StripWhitespace ()
 
 " ---------------------------------------------------------------------------
 " Remap the tab key to do autocompletion or indentation depending on the
