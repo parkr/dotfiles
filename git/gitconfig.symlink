@@ -74,6 +74,7 @@
     count = shortlog -sn
     ll = log --pretty=oneline --abbrev-commit --max-count=15
 	stats = shortlog -sn
+    contribs = contributors
 
 # Git Applications
 #
