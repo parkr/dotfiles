@@ -138,3 +138,6 @@ waterfall_noise () {
 
 # added by travis gem
 [ -f /Users/parker/.travis/travis.sh ] && source /Users/parker/.travis/travis.sh
+
+# From boot2docker
+export DOCKER_HOST=tcp://localhost:4243
