@@ -1,18 +1,16 @@
-require 'rake'
-
-class Array
+class Array < Ohai
   def not_contain(other_arr)
     unless other_arr.is_a? Array
       raise ArgumentError, "The argument must be an array"
     end
-    
+
     select { |s| !other_arr.any? { |o| s[o] } }
   end
   def contain(other_arr)
     unless other_arr.is_a? Array
       raise ArgumentError, "The argument must be an array"
     end
-    
+
     select { |s| other_arr.any? { |o| s[o] } }
   end
 end
@@ -24,15 +22,15 @@ task :installforos do
   skip_all = false
   overwrite_all = false
   backup_all = false
-  
+
   print "Which OS config files do you want to link? (#{operating_systems.join("/")}) "
   myos = STDIN.gets.chomp
-  
+
   linkables.contain([myos]).each do |linkable|
     overwrite = false
     backup = false
 
-    file = File.basename(linkable).split('.')[0...-1].join('.')
+    file = File.basename(linkable, '.*')
     target = "#{ENV["HOME"]}/.#{file}"
 
     if File.exists?(target) || File.symlink?(target)
@@ -66,7 +64,7 @@ task :install do
     overwrite = false
     backup = false
 
-    file = File.basename(linkable).split('.')[0...-1].join('.')
+    file = File.basename(linkable, '.*')
     target = "#{ENV["HOME"]}/.#{file}"
 
     if File.exists?(target) || File.symlink?(target)
@@ -98,10 +96,10 @@ task :uninstall do
     if File.symlink?(target)
       FileUtils.rm(target)
     end
-    
+
     # Replace any backups made during installation
     if File.exists?("#{ENV["HOME"]}/.#{file}.backup")
-      `mv "$HOME/.#{file}.backup" "$HOME/.#{file}"` 
+      `mv "$HOME/.#{file}.backup" "$HOME/.#{file}"`
     end
 
   end
