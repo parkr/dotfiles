@@ -112,6 +112,7 @@ brew_up () {
   brew update -v
   brew upgrade -v
   brew cleanup
+  rustup.sh
 }
 
 heroku_deploy () {
