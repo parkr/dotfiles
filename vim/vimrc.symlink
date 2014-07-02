@@ -89,7 +89,7 @@ nnoremap <Right> <nop>
 vnoremap <Down> <nop>
 vnoremap <Up> <nop>
 vnoremap <Left> <nop>
-vnoremap <Right> gk
+vnoremap <Right> <nop>
 inoremap <Down> <C-o>gj
 inoremap <Up> <C-o>gk
 
