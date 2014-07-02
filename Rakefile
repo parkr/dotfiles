@@ -1,4 +1,4 @@
-class Array < Ohai
+class Array
   def not_contain(other_arr)
     unless other_arr.is_a? Array
       raise ArgumentError, "The argument must be an array"
