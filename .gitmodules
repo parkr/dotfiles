@@ -82,7 +82,3 @@
 [submodule "vim/vim.symlink/bundle/vim-less"]
 	path = vim/vim.symlink/bundle/vim-less
 	url = git://github.com/groenewege/vim-less.git
-[submodule "vim/vim.symlink/bundle/vim-clojure"]
-	path = vim/vim.symlink/bundle/vim-clojure
-	url = https://github.com/kotarak/vimclojure.git
-	branch = bugfix
