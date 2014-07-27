@@ -145,6 +145,13 @@ autocmd BufWritePre * :call StripWhitespace ()
 " Remap the tab key to do autocompletion or indentation depending on the
 " context
 " ---------------------------------------------------------------------------
+
+function! RunMakefile ()
+  exec ":!make"
+endfunction
+map <leader>m :call RunMakefile ()<CR>
+
+" ---------------------------------------------------------------------------
 function! InsertTabWrapper()
   let col = col('.') - 1
   if !col || getline('.')[col - 1] !~ '\k'
