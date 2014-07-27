@@ -112,6 +112,7 @@ brew_up () {
   brew update -v
   brew upgrade -v
   brew cleanup
+  brew cask cleanup
 }
 
 heroku_deploy () {
@@ -139,4 +140,4 @@ waterfall_noise () {
 [ -f /Users/parker/.travis/travis.sh ] && source /Users/parker/.travis/travis.sh
 
 # From boot2docker
-export DOCKER_HOST=tcp://localhost:4243
+export DOCKER_HOST=tcp://192.168.59.103:2375
