@@ -3,6 +3,7 @@
 [user]
 	name = Parker Moore
     email = parkrmoore@gmail.com
+	signingkey = 80993F1C
 
 # Automatically track branches with the same name
 #
