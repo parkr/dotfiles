@@ -152,6 +152,9 @@ endfunction
 map <leader>m :call RunMakefile ()<CR>
 
 " ---------------------------------------------------------------------------
+" Remap the tab key to do autocompletion or indentation depending on the
+" context
+" ---------------------------------------------------------------------------
 function! InsertTabWrapper()
   let col = col('.') - 1
   if !col || getline('.')[col - 1] !~ '\k'
@@ -180,6 +183,8 @@ function! RunTests(filename)
     else
       if filereadable("script/test")
         exec ":!script/test " . a:filename
+      elseif match(a:filename, '\.go') != -1
+        exec ":!go test"
       elseif match(a:filename, '_test\.rb') != -1
         exec ":!ruby -I'lib:test' " . a:filename
       elseif match(a:filename, '_spec\.rb') != -1
@@ -201,7 +206,7 @@ function! RunTestFile(...)
     endif
 
     " Run the tests for the previously-marked file.
-    let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\|_test.rb\|test_\)$') != -1
+    let in_test_file = match(expand("%"), '\(.go\|.feature\|_spec.rb\|_test.rb\|test_\)$') != -1
     if in_test_file
         call SetTestFile()
     elseif !exists("t:grb_test_file")
