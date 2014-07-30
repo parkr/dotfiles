@@ -210,7 +210,8 @@ function! RunTestFile(...)
     if in_test_file
         call SetTestFile()
     elseif !exists("t:grb_test_file")
-        return
+        echo "No can do. You're not in a test file."
+        return "not in a test file"
     end
     call RunTests(t:grb_test_file . command_suffix)
 endfunction
