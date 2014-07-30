@@ -85,3 +85,6 @@
 [submodule "pkg/battery"]
 	path = pkg/battery
 	url = https://github.com/richo/battery.git
+[submodule "vim/vim.symlink/bundle/vimclojure"]
+	path = vim/vim.symlink/bundle/vimclojure
+	url = https://github.com/vim-scripts/VimClojure.git
