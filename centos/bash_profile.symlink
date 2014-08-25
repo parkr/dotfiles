@@ -5,17 +5,19 @@ if [ -f ~/.bashrc ]; then
 	. ~/.bashrc
 fi
 
-export PATH="/usr/local/go/bin:$PATH"
-
 # User specific environment and startup programs
-HOME_BIN_PATH="$HOME/.dotfiles/bin"
-PATH=$HOME_BIN_PATH:$PATH
+PATH="/usr/local/go/bin:$PATH"
+PATH="/usr/local/lib/python2.7/site-packages:$PATH"
+[[ -n "$(which npm)" ]]    && PATH="/usr/local/share/npm/bin:$PATH"
+[[ -d "$HOME/.dotfiles" ]] && PATH="$HOME/.dotfiles/bin:$PATH"
+PATH="$HOME/.bin:$PATH"
+PATH="$HOME/bin:$PATH"
+[[ -d "$HOME/.rbenv" ]]    && PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)" && alias r="rbenv" && alias re="rbenv exec"
+[[ -d "$HOME/.pyenv" ]]    && PATH="$HOME/.pyenv/bin:$PATH" && eval "$(pyenv init -)" && alias p="pyenv" && alias pe="pyenv exec"
+[[ -d "$HOME/.go"    ]]    && PATH="$HOME/.go/bin:$PATH" && export GOPATH="$HOME/.go"
 export PATH
 
 export EDITOR=`which vim`
-
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
 
 #
 # Colors
@@ -51,3 +53,6 @@ fi
 
 alias b='bundle'
 alias be='bundle exec'
+
+export HISTSIZE="1000000"
+export HISTFILESIZE="1000000"

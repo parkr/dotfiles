@@ -15,3 +15,10 @@ set sendmail = '/usr/sbin/sendmail -oem -oi ' # default: '/usr/sbin/sendmail -oe
 set signature = '~/.mutt/signature' # default: '~/.signature'
 
 source ~/.mutt/colors
+source ~/.gpgrc
+
+set pgp_use_gpg_agent = yes
+set pgp_sign_as = 80993F1C
+set pgp_timeout = 3600
+set crypt_autosign = yes
+set crypt_replyencrypt = yes

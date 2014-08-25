@@ -89,7 +89,7 @@ nnoremap <Right> <nop>
 vnoremap <Down> <nop>
 vnoremap <Up> <nop>
 vnoremap <Left> <nop>
-vnoremap <Right> gk
+vnoremap <Right> <nop>
 inoremap <Down> <C-o>gj
 inoremap <Up> <C-o>gk
 
@@ -145,6 +145,16 @@ autocmd BufWritePre * :call StripWhitespace ()
 " Remap the tab key to do autocompletion or indentation depending on the
 " context
 " ---------------------------------------------------------------------------
+
+function! RunMakefile ()
+  exec ":!make"
+endfunction
+map <leader>m :call RunMakefile ()<CR>
+
+" ---------------------------------------------------------------------------
+" Remap the tab key to do autocompletion or indentation depending on the
+" context
+" ---------------------------------------------------------------------------
 function! InsertTabWrapper()
   let col = col('.') - 1
   if !col || getline('.')[col - 1] !~ '\k'
@@ -169,10 +179,12 @@ function! RunTests(filename)
     :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
     :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
     if match(a:filename, '\.feature') != -1
-      exec ":!bundle exec spinach " . a:filename
+      exec ":!bundle exec cucumber " . a:filename
     else
       if filereadable("script/test")
         exec ":!script/test " . a:filename
+      elseif match(a:filename, '\.go') != -1
+        exec ":!go test"
       elseif match(a:filename, '_test\.rb') != -1
         exec ":!ruby -I'lib:test' " . a:filename
       elseif match(a:filename, '_spec\.rb') != -1
@@ -194,11 +206,12 @@ function! RunTestFile(...)
     endif
 
     " Run the tests for the previously-marked file.
-    let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\|_test.rb\|test_\)$') != -1
+    let in_test_file = match(expand("%"), '\(.go\|.feature\|_spec.rb\|_test.rb\|test_\)$') != -1
     if in_test_file
         call SetTestFile()
     elseif !exists("t:grb_test_file")
-        return
+        echo "No can do. You're not in a test file."
+        return "not in a test file"
     end
     call RunTests(t:grb_test_file . command_suffix)
 endfunction

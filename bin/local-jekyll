@@ -8,7 +8,10 @@
 
 set -e
 
-JEKYLL="$HOME/jekyll/jekyll/bin/jekyll"
+REPO_DIR="$HOME/jekyll/jekyll"
+GEMFILE="$REPO_DIR/Gemfile"
+JEKYLL="bundle exec $REPO_DIR/bin/jekyll"
 
 echo "Executing '$JEKYLL $@'..."
+export BUNDLE_GEMFILE="$GEMFILE"
 $JEKYLL $@
