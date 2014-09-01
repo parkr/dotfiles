@@ -14,5 +14,5 @@ git merge-pr $1
 
 # Add history
 git pull
-vim History.markdown
+vim `history-file`
 update-jekyll-history $1
