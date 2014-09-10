@@ -91,6 +91,7 @@ rserver(){
 }
 
 # Aliases for frequently-used commands
+alias t="ttytter"
 alias h="hk"
 alias d="dokku"
 alias b="bundle"
