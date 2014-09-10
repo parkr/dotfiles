@@ -3,7 +3,7 @@
 # NEVER SET THE fontName ATTRIBUTE. EVER.
 fontName    = "Consolas for Powerline"
 fontSize	= 14
-# theme 		= "Resesif"
+# theme 	= "Resesif"
 
 # Extra files to include
 #
@@ -13,14 +13,14 @@ include			= "{$include,$myExtraIncludes}"
 
 # Hide log, vendor and tmp directories from search popups.
 #
-myExtraExcludes			= "log,vendor,tmp"
-excludeInFileChooser	= "{$excludeInFileChooser,$myExtraExcludes}" 
-excludeInFolderSearch	= "{$excludeInFolderSearch,$myExtraExcludes}" 
+myExtraExcludes			= "log,vendor,tmp,node_modules"
+excludeInFileChooser	= "{$excludeInFileChooser,$myExtraExcludes}"
+excludeInFolderSearch	= "{$excludeInFolderSearch,$myExtraExcludes}"
 
 # If you also want to hide them from your project manager pane, add
 # the following line to your project's local .tm_properties.
 #
-# excludeInBrowser      = "{$excludeInBrowser,log,vendor,tmp}" 
+# excludeInBrowser      = "{$excludeInBrowser,log,vendor,tmp}"
 
 # Configure git
 #
