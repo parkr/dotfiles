@@ -185,6 +185,8 @@ function! RunTests(filename)
     else
       if filereadable("script/test")
         exec ":!script/test " . a:filename
+      elseif filereadable("script/cibuild")
+        exec ":!script/cibuild " . a:filename
       elseif match(a:filename, '\.go') != -1
         exec ":!go test"
       elseif match(a:filename, '\.js') != -1
