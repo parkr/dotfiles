@@ -97,19 +97,21 @@ inoremap <Up> <C-o>gk
 "  UI
 " ----------------------------------------------------------------------------
 
-set ruler                    " show the cursor position all the time
-set noshowcmd                " don't display incomplete commands
-set nolazyredraw             " turn off lazy redraw
-set number                   " show line numbers
-set wildignore+=*/vendor/*   " ignore the vendor directory
+set ruler                        " show the cursor position all the time
+set noshowcmd                    " don't display incomplete commands
+set nolazyredraw                 " turn off lazy redraw
+set number                       " show line numbers
+set wildmenu                     " turn on wild menu
+set wildignore+=*/vendor/*       " ignore the vendor directory
+set wildignore+=*/node_modules/* " ignore the node_modules directory
+set wildignore+=*/bower_components/*
 set wildignore+=*.png,*.jpg,*.otf,*.woff,*.jpeg,*.orig
-set wildmenu                 " turn on wild menu
 set wildmode=list:longest,full
-set ch=2                     " command line height
-set whichwrap+=<,>,h,l,[,]   " backspace and cursor keys wrap to
-set shortmess=filtIoOA       " shorten messages
-set report=0                 " tell us about changes
-set nostartofline            " don't jump to the start of line when scrolling
+set ch=2                         " command line height
+set whichwrap+=<,>,h,l,[,]       " backspace and cursor keys wrap to
+set shortmess=filtIoOA           " shorten messages
+set report=0                     " tell us about changes
+set nostartofline                " don't jump to the start of line when scrolling
 
 let g:solarized_termcolors=256
 syntax on
