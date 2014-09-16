@@ -17,9 +17,17 @@ require 'octokit'
 require 'rugged'
 
 pr_num = ARGV.first
-remote = Rugged::Repository.new(Rugged::Repository.discover(Dir.pwd)).remotes.first.url
-remote.sub!("git@github.com:", "https://github.com/")
-remote.sub!(/\.git$/, "")
+repo   = Rugged::Repository.new(Rugged::Repository.discover(Dir.pwd))
+remote = repo.remotes.first
+
+if remote.nil?
+  $stderr.puts "fatal: No remotes specified."
+  abort
+end
+
+remote_url = remote.url
+remote_url.sub!("git@github.com:", "https://github.com/")
+remote_url.sub!(/\.git$/, "")
 
 client = Octokit::Client.new(netrc: true)
 repo   = Octokit::Repository.from_url(remote)
