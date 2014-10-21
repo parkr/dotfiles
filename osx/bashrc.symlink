@@ -96,6 +96,7 @@ alias h="hk"
 alias d="dokku"
 alias b="bundle"
 alias be="bundle exec"
+alias hub="gh"
 alias numfiles="ls -1 | wc -l"
 alias ack="ag"
 
