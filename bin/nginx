@@ -36,7 +36,7 @@ if [[ "$1" == "stop" ]]; then
 fi
 
 if [[ "$1" == "conf" ]]; then
-  vim /opt/nginx/conf/nginx.conf
+  vim /opt/nginx/conf/nginx.conf -c "set syn=nginx"
   exit 0
 fi
 
@@ -57,6 +57,6 @@ if [[ "$1" == "disable" ]]; then
 fi
 
 if [[ "$1" == "edit" ]]; then
-  $EDITOR $NGINX_CONF/sites-available/$2
+  $EDITOR $NGINX_CONF/sites-available/$2 -c "set syn=nginx"
   echo "$NGINX_CONF/sites-available/$2 successfully saved."
 fi
