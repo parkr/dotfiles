@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+filename = (
+  %r{History.m(ar)?k?d(own)?}.match(%x{ls -1}) ||
+  %r{CHANGELOG.m(ar)?k?d(own)?}.match(%x{ls -1}) ||
+  'History.markdown'
+).to_s
+puts filename if filename

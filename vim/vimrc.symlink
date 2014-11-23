@@ -97,19 +97,21 @@ inoremap <Up> <C-o>gk
 "  UI
 " ----------------------------------------------------------------------------
 
-set ruler                    " show the cursor position all the time
-set noshowcmd                " don't display incomplete commands
-set nolazyredraw             " turn off lazy redraw
-set number                   " show line numbers
-set wildignore+=*/vendor/*   " ignore the vendor directory
+set ruler                        " show the cursor position all the time
+set noshowcmd                    " don't display incomplete commands
+set nolazyredraw                 " turn off lazy redraw
+set number                       " show line numbers
+set wildmenu                     " turn on wild menu
+set wildignore+=*/vendor/*       " ignore the vendor directory
+set wildignore+=*/node_modules/* " ignore the node_modules directory
+set wildignore+=*/bower_components/*
 set wildignore+=*.png,*.jpg,*.otf,*.woff,*.jpeg,*.orig
-set wildmenu                 " turn on wild menu
 set wildmode=list:longest,full
-set ch=2                     " command line height
-set whichwrap+=<,>,h,l,[,]   " backspace and cursor keys wrap to
-set shortmess=filtIoOA       " shorten messages
-set report=0                 " tell us about changes
-set nostartofline            " don't jump to the start of line when scrolling
+set ch=2                         " command line height
+set whichwrap+=<,>,h,l,[,]       " backspace and cursor keys wrap to
+set shortmess=filtIoOA           " shorten messages
+set report=0                     " tell us about changes
+set nostartofline                " don't jump to the start of line when scrolling
 
 let g:solarized_termcolors=256
 syntax on
@@ -183,8 +185,12 @@ function! RunTests(filename)
     else
       if filereadable("script/test")
         exec ":!script/test " . a:filename
+      elseif filereadable("script/cibuild")
+        exec ":!script/cibuild " . a:filename
       elseif match(a:filename, '\.go') != -1
         exec ":!go test"
+      elseif match(a:filename, '\.js') != -1
+        exec ":!npm test"
       elseif match(a:filename, '_test\.rb') != -1
         exec ":!ruby -I'lib:test' " . a:filename
       elseif match(a:filename, '_spec\.rb') != -1
@@ -206,7 +212,7 @@ function! RunTestFile(...)
     endif
 
     " Run the tests for the previously-marked file.
-    let in_test_file = match(expand("%"), '\(.go\|.feature\|_spec.rb\|_test.rb\|test_\)$') != -1
+    let in_test_file = match(expand("%"), '\(.js\|.go\|.feature\|_spec.rb\|_test.rb\|test_\)$') != -1
     if in_test_file
         call SetTestFile()
     elseif !exists("t:grb_test_file")

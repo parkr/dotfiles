@@ -2,47 +2,47 @@
 #
 [user]
 	name = Parker Moore
-    email = parkrmoore@gmail.com
+	email = parkrmoore@gmail.com
 	signingkey = 80993F1C
 
 # Automatically track branches with the same name
 #
 [branch]
-    autosetupmerge = true
+	autosetupmerge = true
 
 # Pretty format
 #
 # [format]
-#     pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
+#	pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
 
 # Push the current branch as the default behaviour
 #
 [push]
-    default = current
+	default = current
 
 # Include a summary of changes in merge commit messages.
 #
 [merge]
-    summary = true
+	summary = true
 
 # Color configuration.
 #
 [color]
-    ui = true
+	ui = true
 [color "branch"]
-    current = yellow reverse
-    local = yellow
-    remote = green
+	current = yellow reverse
+	local = yellow
+	remote = green
 [color "diff"]
-    meta = yellow bold
-    frag = magenta bold
-    old = red bold
-    new = green bold
-    whitespace = red reverse
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
 [color "status"]
-    added = yellow
-    changed = green
-    untracked = cyan
+	added = yellow
+	changed = green
+	untracked = cyan
 
 # Whitespace handling, editor config, global excludes
 #
@@ -50,42 +50,44 @@
 	editor = vim
 	whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
 	excludesfile = ~/.gitignore
+	precomposeunicode = false
 
 # Useful aliases
 #
 [alias]
-    undo = reset --soft HEAD^
-    co = checkout
-    ci = commit
-    st = status
-    br = branch
-    df = diff
-    dc = diff --cached
-    ls = ls-files
-    aa = add --all
-    type = cat-file -t
-    dump = cat-file -p
-    amend = commit --amend
-    pyll = pull
-    hist = "log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short"
-    lol = log --graph --decorate --pretty=oneline --abbrev-commit
-    lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
-    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)%Creset' --abbrev-commit
-    l = log --graph --abbrev-commit --date=relative
-    count = shortlog -sn
-    ll = log --pretty=oneline --abbrev-commit --max-count=15
+	undo = reset --soft HEAD^
+	co = checkout
+	ci = commit
+	st = status
+	br = branch
+	df = diff
+	dc = diff --cached
+	ls = ls-files
+	aa = add --all
+	type = cat-file -t
+	dump = cat-file -p
+	amend = commit --amend
+	pyll = pull
+	hist = "log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short"
+	lol = log --graph --decorate --pretty=oneline --abbrev-commit
+	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)%Creset' --abbrev-commit
+	l = log --graph --abbrev-commit --date=relative
+	count = shortlog -sn
+	ll = log --pretty=oneline --abbrev-commit --max-count=15
 	stats = shortlog -sn
-    contribs = contributors
+	contribs = contributors
 
 # Git Applications
 #
 [github]
-    user = parkr
+	user = parkr
 [ghi]
-    user = parkr
+	user = parkr
 	token = !security find-internet-password -a parkr -s github.com -l 'ghi token' -w
 [credential]
 	helper = osxkeychain
 [filter "media"]
-	clean = git-media-clean %f
-	smudge = git-media-smudge %f
+	required = true
+	clean = git media clean %f
+	smudge = git media smudge %f
