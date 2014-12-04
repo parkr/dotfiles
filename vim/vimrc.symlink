@@ -231,9 +231,6 @@ endfunction
 map <leader>r :call RunTestFile()<CR>
 map <leader>T :call RunNearestTest()<CR>
 
-if match(expand('%'), 'Capfile') != -1
-  set syntax=ruby
-endif
-
 autocmd Filetype python,go setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 au BufRead,BufNewFile Gomfile setlocal ft=gomfile syntax=ruby
+au BufRead,BufNewFile Capfile setlocal ft=capfile syntax=ruby
