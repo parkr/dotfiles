@@ -70,6 +70,7 @@
 	amend = commit --amend
 	pyll = pull
     psh = push
+    psuh = push
     puysh = push
 	hist = "log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short"
 	lol = log --graph --decorate --pretty=oneline --abbrev-commit
