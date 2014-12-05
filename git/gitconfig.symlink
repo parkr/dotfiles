@@ -55,6 +55,7 @@
 # Useful aliases
 #
 [alias]
+    ocmmit = commit
 	undo = reset --soft HEAD^
 	co = checkout
 	ci = commit
@@ -68,6 +69,9 @@
 	dump = cat-file -p
 	amend = commit --amend
 	pyll = pull
+    psh = push
+    psuh = push
+    puysh = push
 	hist = "log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short"
 	lol = log --graph --decorate --pretty=oneline --abbrev-commit
 	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
