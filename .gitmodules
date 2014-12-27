@@ -85,3 +85,6 @@
 [submodule "vim/vim.symlink/bundle/vimclojure"]
 	path = vim/vim.symlink/bundle/vimclojure
 	url = https://github.com/vim-scripts/VimClojure.git
+[submodule "vim/vim.symlink/bundle/vim-jekyll"]
+	path = vim/vim.symlink/bundle/vim-jekyll
+	url = git://github.com/parkr/vim-jekyll.git
