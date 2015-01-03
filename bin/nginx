@@ -17,7 +17,7 @@ NGINX_CONF=/opt/nginx/conf
 usage() {
   echo "nginx <subcommand> <site_name>"
   echo
-  echo "Subcommands: stop, restart, conf, enable, disable, edit"
+  echo "Subcommands: status, stop, restart, conf, enable, disable, edit"
   echo "Sites:"
   ls -1 $NGINX_CONF/sites-available | gawk -F" " '{ print "   " $1 }'
 }
@@ -26,6 +26,11 @@ usage() {
 
 if [[ "$1" == "restart" ]]; then
   sudo service nginx restart
+  exit 0
+fi
+
+if [[ "$1" == "status" ]]; then
+  sudo service nginx status
   exit 0
 fi
 
