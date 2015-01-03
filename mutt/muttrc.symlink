@@ -12,7 +12,7 @@ set from = 'parker@parkermoo.re' # default: '(empty)'
 set include = yes # default: ask-yes
 set realname = 'Parker M' # default: '(empty)'
 set sendmail = '/usr/sbin/sendmail -oem -oi ' # default: '/usr/sbin/sendmail -oem -oi'
-set signature = '~/.mutt/signature' # default: '~/.signature'
+set signature = null
 
 source ~/.mutt/colors
 source ~/.gpgrc
