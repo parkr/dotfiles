@@ -10,3 +10,4 @@ if [ -f "$HOME/.localrc" ]; then
 fi
 
 # User specific aliases and functions
+alias s="sudo su -"
