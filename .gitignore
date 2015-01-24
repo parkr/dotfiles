@@ -2,4 +2,6 @@
 *~
 *#*
 mutt/mutt.symlink/certificates
+mutt/mutt.symlink/accounts
+mutt/mutt.symlink/cache
 vim/vim.symlink/.netrwhist
