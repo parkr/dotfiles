@@ -2,12 +2,12 @@
 #
 # Create a tar.gz of a file/folder.
 
-test -z "$1" && {
+test -z "$@" && {
   echo "Specify a file or directory from which to create a tarball."
   exit 1
 }
 
-INPUT_FILE="${1}"
-TARBALL="${1}.tar.gz"
+INPUT_FILE="${@}"
+TARBALL="${@}.tar.gz"
 
-tar -czf $TARBALL $INPUT_FILE && echo "${TARBALL} successfully created."
+tar -czf "$TARBALL" "$INPUT_FILE" && echo "${TARBALL} successfully created."
