@@ -25,6 +25,7 @@ usage() {
 [[ $# -lt 1 ]] && usage && exit 1
 
 if [[ "$1" == "restart" ]]; then
+  sudo service nginx reload
   sudo service nginx restart
   exit 0
 fi
