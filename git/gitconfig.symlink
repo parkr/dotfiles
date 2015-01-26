@@ -55,7 +55,8 @@
 # Useful aliases
 #
 [alias]
-    ocmmit = commit
+	commti = commit
+	ocmmit = commit
 	undo = reset --soft HEAD^
 	co = checkout
 	ci = commit
