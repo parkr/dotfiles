@@ -153,3 +153,6 @@ waterfall_noise () {
 export DOCKER_HOST=tcp://192.168.59.103:2375
 alias pt='papertrail'
 alias ptf='pt -f -g'
+alias curly='curl -w "@$HOME/.curl_format" -o /dev/null -s -v'
+
+alias t='git ls-files | grep'
