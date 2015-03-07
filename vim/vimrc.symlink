@@ -234,3 +234,4 @@ map <leader>T :call RunNearestTest()<CR>
 autocmd Filetype python,go setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 au BufRead,BufNewFile Gomfile setlocal ft=gomfile syntax=ruby
 au BufRead,BufNewFile Capfile setlocal ft=capfile syntax=ruby
+au BufRead,BufNewFile *.rs setlocal ft=rust syntax=rust
