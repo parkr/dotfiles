@@ -1,9 +1,6 @@
-set guioptions=-e
-set guioptions=-g
-set guioptions=-m
-set guioptions=-r
-set guioptions=-t
-set guifont=Menlo\ Regular\ for\ Powerline:h11
+set guioptions=-egmrt
+set guifont=Menlo\ Regular\ for\ Powerline:h18
+set gfn=Menlo\ Regular\ for\ Powerline:h18
 
 " C-TAB and C-SHIFT-TAB cycle tabs forward and backward
 nmap <c-tab> :tabnext<cr>
