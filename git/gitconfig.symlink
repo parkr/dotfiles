@@ -70,6 +70,7 @@
 	dump = cat-file -p
 	amend = commit --amend
 	pyll = pull
+	pul = pull
     psh = push
     psuh = push
     puysh = push
