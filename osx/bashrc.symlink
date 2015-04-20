@@ -146,6 +146,10 @@ waterfall_noise () {
     gain -l
 }
 
+inspiration () {
+  fortune | cowsay | lolcat
+}
+
 # added by travis gem
 [ -f /Users/parker/.travis/travis.sh ] && source /Users/parker/.travis/travis.sh
 
