@@ -156,3 +156,7 @@ alias ptf='pt -f -g'
 alias curly='curl -w "@$HOME/.curl_format" -o /dev/null -s -v'
 
 alias t='git ls-files | grep'
+
+if [ -f "$HOME/.localrc" ]; then
+  source $HOME/.localrc
+fi
