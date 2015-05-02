@@ -13,5 +13,4 @@ GEMFILE="$REPO_DIR/Gemfile"
 JEKYLL="bundle exec $REPO_DIR/bin/jekyll"
 
 echo "Executing '$JEKYLL $@'..."
-export BUNDLE_GEMFILE="$GEMFILE"
-$JEKYLL $@
+BUNDLE_GEMFILE="$GEMFILE" $JEKYLL $@
