@@ -85,3 +85,6 @@
 [submodule "vim/vim.symlink/bundle/vim-go"]
 	path = vim/vim.symlink/bundle/vim-go
 	url = https://github.com/fatih/vim-go.git
+[submodule "emacs/emacs.d.symlink"]
+	path = emacs/emacs.d.symlink
+	url = git://github.com/xiaohanyu/oh-my-emacs
