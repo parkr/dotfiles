@@ -94,7 +94,7 @@ rserver(){
 }
 
 # Aliases for frequently-used commands
-alias t="ttytter"
+#alias t="ttytter"
 alias h="hk"
 alias d="dokku"
 alias b="bundle"
@@ -161,7 +161,7 @@ alias pt='papertrail'
 alias ptf='pt -f -g'
 alias curly='curl -w "@$HOME/.curl_format" -o /dev/null -s -v'
 
-alias t='git ls-files | grep'
+#alias t='git ls-files | grep'
 
 if [ -f "$HOME/.localrc" ]; then
   source $HOME/.localrc
