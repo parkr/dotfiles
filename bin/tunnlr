@@ -1,2 +1,0 @@
-#!/bin/bash
-ssh -nNt -g -R :12234:0.0.0.0:12234 tunnlr2816@ssh1.tunnlr.com

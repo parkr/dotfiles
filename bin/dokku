@@ -1,3 +1,0 @@
-#! /bin/bash
-
-ssh $DOKKU_HOST -t "dokku $@"
