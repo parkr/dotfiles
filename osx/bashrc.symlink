@@ -34,6 +34,7 @@ alias guit=git
 PATH="/usr/bin:/bin:/usr/sbin:/sbin"
 PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 PATH="/usr/local/lib/python2.7/site-packages:$PATH"
+PATH="/usr/local/opt/go/libexec/bin:$PATH"
 [[ -n "$(which npm)" ]]    && PATH="/usr/local/share/npm/bin:$PATH"
 [[ -d "$HOME/.dotfiles" ]] && PATH="$HOME/.dotfiles/bin:$PATH"
 [[ -z "$(which cn)" ]]     && [[ -d "$HOME/code/cn" ]] && eval "$($HOME/code/cn/bin/cn init -)"
