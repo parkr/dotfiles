@@ -62,6 +62,7 @@
 	co = checkout
 	ci = commit
 	st = status
+	s = status
 	br = branch
 	df = diff
 	dc = diff --cached
@@ -84,6 +85,7 @@
 	ll = log --pretty=oneline --abbrev-commit --max-count=15
 	stats = shortlog -sn
 	contribs = contributors
+	pr = pull-request
 
 # Git Applications
 #
