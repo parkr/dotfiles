@@ -128,7 +128,7 @@ brew_up () {
   brew cask cleanup
 }
 
-heroku_deploy () {
+hkdeploy () {
   git checkout master && \
     git pull origin master && \
     git push origin master && \
