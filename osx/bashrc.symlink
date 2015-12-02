@@ -192,3 +192,13 @@ function p(){
   shift
   remote prod-ore ${host} $@
 }
+
+function wait_on(){
+  local code=2;
+  until [ $code -eq 0 ]; do
+    $@
+    code=$?
+    sleep 5
+  done
+  say "Task is done."
+}
