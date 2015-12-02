@@ -97,7 +97,6 @@ rserver(){
 # Aliases for frequently-used commands
 #alias t="ttytter"
 alias h="hk"
-alias d="dokku"
 alias b="bundle"
 alias be="bundle exec"
 alias gh="hub"
@@ -167,3 +166,29 @@ alias curly='curl -w "@$HOME/.curl_format" -o /dev/null -s -v'
 if [ -f "$HOME/.localrc" ]; then
   source $HOME/.localrc
 fi
+
+function remote(){
+  local dc=$1
+  shift
+  local host=$1
+  shift
+  ssh ${dc}-${host}.${dc}.vsco.plumbing $@
+}
+
+function d(){
+  local host=$1
+  shift
+  remote dev-ore ${host} $@
+}
+
+function s(){
+  local host=$1
+  shift
+  remote preprod-ore ${host} $@
+}
+
+function p(){
+  local host=$1
+  shift
+  remote prod-ore ${host} $@
+}
