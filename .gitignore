@@ -1,6 +1,7 @@
 .DS_Store
 *~
 *#*
+bin/merge-pr
 mutt/mutt.symlink/certificates
 mutt/mutt.symlink/accounts
 mutt/mutt.symlink/cache
