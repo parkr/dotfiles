@@ -85,3 +85,6 @@
 [submodule "emacs/emacs.d.symlink"]
 	path = emacs/emacs.d.symlink
 	url = git://github.com/xiaohanyu/oh-my-emacs
+[submodule "vim/vim.symlink/bundle/vim-tcomment"]
+	path = vim/vim.symlink/bundle/vim-tcomment
+	url = https://github.com/tomtom/tcomment_vim.git
