@@ -202,3 +202,7 @@ function wait_on(){
   done
   say "Task is done."
 }
+
+function wait_on_ci() {
+  wait_on hub ci-status
+}
