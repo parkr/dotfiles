@@ -42,6 +42,7 @@ task :installforos do
         when 'O' then overwrite_all = true
         when 'B' then backup_all = true
         when 'S' then skip_all = true
+        when 's' then next
         end
       end
       FileUtils.rm_rf(target) if overwrite || overwrite_all
@@ -76,6 +77,7 @@ task :install do
         when 'O' then overwrite_all = true
         when 'B' then backup_all = true
         when 'S' then skip_all = true
+        when 's' then next
         end
       end
       FileUtils.rm_rf(target) if overwrite || overwrite_all

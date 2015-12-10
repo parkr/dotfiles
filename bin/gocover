@@ -1,0 +1,12 @@
+#!/bin/bash
+if [ `uname` = "Darwin" ]; then
+  user_root="Users"
+else
+  user_root="home"
+fi
+
+username=`whoami`
+
+sed -i.bak s/_\\/$user_root\\/$username/github.com/g $@
+rm $@.bak
+go tool cover -html=$@

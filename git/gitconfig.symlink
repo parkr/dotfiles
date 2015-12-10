@@ -50,7 +50,8 @@
 	editor = vim
 	whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
 	excludesfile = ~/.gitignore
-	precomposeunicode = false
+	precomposeunicode = true
+	precomposeUnicode = true
 
 # Useful aliases
 #
@@ -61,6 +62,7 @@
 	co = checkout
 	ci = commit
 	st = status
+	s = status
 	br = branch
 	df = diff
 	dc = diff --cached
@@ -83,6 +85,7 @@
 	ll = log --pretty=oneline --abbrev-commit --max-count=15
 	stats = shortlog -sn
 	contribs = contributors
+	pr = pull-request
 
 # Git Applications
 #
@@ -97,3 +100,7 @@
 	required = true
 	clean = git media clean %f
 	smudge = git media smudge %f
+[filter "lfs"]
+	clean = git lfs clean %f
+	smudge = git lfs smudge %f
+	required = true

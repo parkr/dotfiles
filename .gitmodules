@@ -1,9 +1,3 @@
-[submodule "emacs/emacs.d.symlink/vendor/coffee-mode"]
-    path = emacs/emacs.d.symlink/vendor/coffee-mode
-    url = git://github.com/defunkt/coffee-mode.git
-[submodule "emacs/emacs.d.symlink/vendor/textmate.el"]
-    path = emacs/emacs.d.symlink/vendor/textmate.el
-    url = git://github.com/defunkt/textmate.el.git
 [submodule "vim/vim.symlink/bundle/vim-colors-solarized"]
     path = vim/vim.symlink/bundle/vim-colors-solarized
     url = git://github.com/altercation/vim-colors-solarized.git
@@ -49,9 +43,6 @@
 [submodule "vim/vim.symlink/bundle/vim-slim"]
 	path = vim/vim.symlink/bundle/vim-slim
 	url = https://github.com/slim-template/vim-slim.git
-[submodule "vim/vim.symlink/bundle/vim-tcomment"]
-	path = vim/vim.symlink/bundle/vim-tcomment
-	url = https://github.com/jmartindf/vim-tcomment.git
 [submodule "vim/vim.symlink/bundle/vim-toml"]
 	path = vim/vim.symlink/bundle/vim-toml
 	url = https://github.com/cespare/vim-toml.git
@@ -91,3 +82,9 @@
 [submodule "vim/vim.symlink/bundle/vim-go"]
 	path = vim/vim.symlink/bundle/vim-go
 	url = https://github.com/fatih/vim-go.git
+[submodule "emacs/emacs.d.symlink"]
+	path = emacs/emacs.d.symlink
+	url = git://github.com/xiaohanyu/oh-my-emacs
+[submodule "vim/vim.symlink/bundle/vim-tcomment"]
+	path = vim/vim.symlink/bundle/vim-tcomment
+	url = https://github.com/tomtom/tcomment_vim.git

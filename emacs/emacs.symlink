@@ -3,16 +3,6 @@
 ;;
 ;; For more configs: http://homepages.inf.ed.ac.uk/s0243221/emacs/
 
-
-;; Added Textmate Minor Mode by Chris Wanstrath
-(add-to-list 'load-path "~/.emacs.d/vendor/textmate.el")
-(require 'textmate)
-(textmate-mode)
-
-;; Added Coffee-Mode by Chris Wanstrath
-(add-to-list 'load-path "~/.emacs.d/vendor/coffee-mode")
-(require 'coffee-mode)
-(add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
-(add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))
-(setq whitespace-action '(auto-cleanup)) ;; automatically clean up bad whitespace
-(setq whitespace-style '(trailing space-before-tab indentation empty space-after-tab)) ;; only show bad whitespace
+;; Vim.
+;; (require 'evil)
+;; (evil-mode 1)
