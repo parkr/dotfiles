@@ -107,7 +107,7 @@ alias ack="ag"
 export PATH="/usr/local/heroku/bin:$PATH"
 
 # Use curl-ca-bundle homebrew package on Mac OS X
-export SSL_CERT_FILE=/usr/local/opt/curl-ca-bundle/share/ca-bundle.crt
+# export SSL_CERT_FILE=/usr/local/opt/curl-ca-bundle/share/ca-bundle.crt
 
 # Handle the fact that this file will be used with multiple OSs
 platform=`uname`
