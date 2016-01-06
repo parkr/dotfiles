@@ -1,4 +1,4 @@
-all: submodules bin/merge-pr
+all: submodules bin/merge-pr bin/hk brew-bundle
 
 latest:
 	git checkout master
@@ -15,3 +15,9 @@ submodules:
 bin/merge-pr:
 	go get -u byparker.com/go/merge-pr
 	ln -s $(GOPATH)/bin/merge-pr bin/merge-pr
+
+bin/hk:
+	ln -sf bin/hk-$(shell uname -s | tr '[:upper:]' '[:lower:]') bin/hk
+
+brew-bundle:
+	cd osx && brew bundle
