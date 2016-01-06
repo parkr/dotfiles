@@ -12,9 +12,12 @@ submodules:
 	git submodule sync
 	git submodule update --init --recursive
 
-bin/merge-pr:
+bin/merge-pr: go
 	go get -u byparker.com/go/merge-pr
-	ln -s $(GOPATH)/bin/merge-pr bin/merge-pr
+	ln -sf $(GOPATH)/bin/merge-pr bin/merge-pr
+
+go:
+	brew install go
 
 bin/hk:
 	ln -sf bin/hk-$(shell uname -s | tr '[:upper:]' '[:lower:]') bin/hk
