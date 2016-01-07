@@ -1,4 +1,4 @@
-all: submodules bin/merge-pr bin/hk brew-bundle
+all: submodules bin/merge-pr bin/hk brew-bundle ruby-build-github
 
 latest:
 	git checkout master
@@ -20,7 +20,10 @@ go:
 	brew install go
 
 bin/hk:
-	ln -sf bin/hk-$(shell uname -s | tr '[:upper:]' '[:lower:]') bin/hk
+	ln -sf $(PWD)/bin/hk-$(shell uname -s | tr '[:upper:]' '[:lower:]') $(PWD)/bin/hk
 
 brew-bundle:
 	cd osx && brew bundle
+
+ruby-build-github: brew-bundle
+	git clone https://github.com/parkr/ruby-build-github.git $(shell rbenv root)/plugins/ruby-build-github
