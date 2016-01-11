@@ -88,6 +88,3 @@
 [submodule "vim/vim.symlink/bundle/vim-tcomment"]
 	path = vim/vim.symlink/bundle/vim-tcomment
 	url = https://github.com/tomtom/tcomment_vim.git
-[submodule "vim/vim.symlink/bundle/syntastic"]
-	path = vim/vim.symlink/bundle/syntastic
-	url = https://github.com/scrooloose/syntastic
