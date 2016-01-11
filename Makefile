@@ -26,4 +26,5 @@ brew-bundle:
 	cd osx && brew bundle
 
 ruby-build-github: brew-bundle
-	git clone https://github.com/parkr/ruby-build-github.git $(shell rbenv root)/plugins/ruby-build-github
+	test -d $(shell rbenv root)/plugins/ruby-build-github/.git || \
+		git clone https://github.com/parkr/ruby-build-github.git $(shell rbenv root)/plugins/ruby-build-github
