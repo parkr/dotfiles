@@ -1,4 +1,6 @@
-all: submodules bin/merge-pr bin/hk brew-bundle ruby-build-github
+TMBUNDLE_ROOT=$(HOME)/Library/Application Support/Avian/Bundles
+
+all: submodules bin/merge-pr bin/hk brew-bundle ruby-build-github textmate
 
 latest:
 	git checkout master
@@ -28,3 +30,13 @@ brew-bundle:
 ruby-build-github: brew-bundle
 	test -d $(shell rbenv root)/plugins/ruby-build-github/.git || \
 		git clone https://github.com/parkr/ruby-build-github.git $(shell rbenv root)/plugins/ruby-build-github
+
+textmate: kuroir/SCSS.tmbundle mads379/Whitespace.tmbundle
+	test -d "$(TMBUNDLE_ROOT)/Cucumber.tmbundle" || \
+	  git clone https://github.com/cucumber/cucumber-tmbundle "$(TMBUNDLE_ROOT)/Cucumber.tmbundle"
+
+%.tmbundle:
+	$(eval $@_bundlename := $(shell basename $*).tmbundle)
+	$(eval $@_repo := $*.tmbundle)
+	test -d "$(TMBUNDLE_ROOT)/$($@_bundlename)" || \
+	  git clone https://github.com/$($@_repo) "$(TMBUNDLE_ROOT)/$($@_bundlename)"
