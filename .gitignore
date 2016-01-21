@@ -7,3 +7,5 @@ mutt/mutt.symlink/certificates
 mutt/mutt.symlink/accounts
 mutt/mutt.symlink/cache
 vim/vim.symlink/.netrwhist
+vim/vim.symlink/init.vim
+vim/vim.symlink/vim.symlink
