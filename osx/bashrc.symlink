@@ -31,7 +31,6 @@ fi
 alias guit=git
 alias gut=git
 alias gity=git
-alias vim=nvim
 
 # Set new PATH
 PATH="/usr/bin:/bin:/usr/sbin:/sbin"
