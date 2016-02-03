@@ -33,6 +33,11 @@ alias guit=git
 alias gut=git
 alias gity=git
 
+alias gs='git status'
+alias gp='git pull'
+alias gd='git diff'
+alias ga='git add'
+
 # Set new PATH
 PATH="/usr/bin:/bin:/usr/sbin:/sbin"
 PATH="/usr/local/bin:/usr/local/sbin:$PATH"
