@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+
+def prompt(formula)
+  $stderr.print "Keep #{formula}? (y/n/i/h/?) >> "
+  case $stdin.gets.to_s.downcase
+  when /^y/
+    :yes
+  when /^h/
+    :home
+  when /^i/
+    :info
+  else
+    nil
+  end
+end
+
+kept = []
+File.open(ARGV[0]).readlines.each do |line|
+  formula = /brew '(\w+)'/ =~ line ? $1 : formula;
+  if formula
+    loop do
+      case prompt(formula)
+      when :yes
+        kept << formula
+        break
+      when :home
+        `brew home #{formula}`
+      when :info
+        $stderr.puts `brew info #{formula}`
+      when :uninstall
+        $stderr.puts `brew remove #{formula}`
+        break
+      else
+        break
+      end
+    end
+  end
+end
+
+puts kept

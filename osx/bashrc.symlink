@@ -28,6 +28,7 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
+alias gti=git
 alias guit=git
 alias gut=git
 alias gity=git
