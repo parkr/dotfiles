@@ -74,6 +74,7 @@
 	pyll = pull
 	pul = pull
     psh = push
+    pus = push
     psuh = push
     puysh = push
 	hist = "log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short"
