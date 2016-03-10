@@ -17,16 +17,42 @@ NGINX_CONF=/opt/nginx/conf
 usage() {
   echo "nginx <subcommand> <site_name>"
   echo
-  echo "Subcommands: status, stop, restart, conf, enable, disable, edit"
+  echo "Subcommands: status, stop, restart, conf, enable, disable, edit, enabled, available"
   echo "Sites:"
+  ls -1 $NGINX_CONF/sites-available | gawk -F" " '{ print "   " $1 }'
+}
+
+enabled_sites() {
+  echo "Enabled sites:"
+  ls -1 $NGINX_CONF/sites-enabled | gawk -F" " '{ print "   " $1 }'
+}
+
+available_sites() {
+  echo "Available sites:"
   ls -1 $NGINX_CONF/sites-available | gawk -F" " '{ print "   " $1 }'
 }
 
 [[ $# -lt 1 ]] && usage && exit 1
 
+if [[ "$1" == "available" ]]; then
+  available_sites
+  exit
+fi
+
+if [[ "$1" == "enabled" ]]; then
+  enabled_sites
+  exit
+fi
+
 if [[ "$1" == "restart" ]]; then
-  sudo service nginx reload
-  sudo service nginx restart
+  sudo service nginx stop || true
+  sleep 1
+  sudo service nginx start || true
+  exit 0
+fi
+
+if [[ "$1" == "start" ]]; then
+  sudo service nginx start
   exit 0
 fi
 
