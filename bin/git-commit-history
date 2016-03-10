@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+test -z "$1" && {
+  echo "usage: git commit-history NUM"
+  exit 1
+}
+git add History.markdown
+git commit -m "Update history to reflect resolution of #$1 [ci skip]"

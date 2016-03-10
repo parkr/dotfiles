@@ -1,0 +1,3 @@
+#!/bin/bash
+
+open https://github.com/jekyll/jekyll/issues/$1

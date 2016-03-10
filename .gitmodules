@@ -43,18 +43,12 @@
 [submodule "vim/vim.symlink/bundle/vim-slim"]
 	path = vim/vim.symlink/bundle/vim-slim
 	url = https://github.com/slim-template/vim-slim.git
-[submodule "vim/vim.symlink/bundle/vim-tcomment"]
-	path = vim/vim.symlink/bundle/vim-tcomment
-	url = https://github.com/jmartindf/vim-tcomment.git
 [submodule "vim/vim.symlink/bundle/vim-toml"]
 	path = vim/vim.symlink/bundle/vim-toml
 	url = https://github.com/cespare/vim-toml.git
 [submodule "vim/vim.symlink/bundle/vim-ack"]
 	path = vim/vim.symlink/bundle/vim-ack
 	url = git://github.com/mileszs/ack.vim.git
-[submodule "vim/vim.symlink/bundle/ooc.vim"]
-	path = vim/vim.symlink/bundle/ooc.vim
-	url = https://github.com/programble/ooc.vim.git
 [submodule "vim/vim.symlink/bundle/vim-liquid"]
 	path = vim/vim.symlink/bundle/vim-liquid
 	url = https://github.com/tpope/vim-liquid.git
@@ -88,3 +82,6 @@
 [submodule "emacs/emacs.d.symlink"]
 	path = emacs/emacs.d.symlink
 	url = git://github.com/xiaohanyu/oh-my-emacs
+[submodule "vim/vim.symlink/bundle/vim-tcomment"]
+	path = vim/vim.symlink/bundle/vim-tcomment
+	url = https://github.com/tomtom/tcomment_vim.git
