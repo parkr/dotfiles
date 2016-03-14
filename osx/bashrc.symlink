@@ -33,6 +33,12 @@ alias guit=git
 alias gut=git
 alias gity=git
 
+alias commit='git commit'
+alias push='git push'
+alias st='git st'
+alias status='git status'
+alias pull='git pull'
+
 alias gs='git status'
 alias gp='git pull'
 alias gd='git diff'
