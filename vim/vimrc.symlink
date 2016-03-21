@@ -1,6 +1,7 @@
+let g:ruby_path = '/Users/parkr/.rbenv/versions/2.3.0'
+
 set ttyfast
 set lazyredraw
-set re=1
 
 filetype off
 call pathogen#infect()
