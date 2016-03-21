@@ -7,9 +7,6 @@
 [submodule "vim/vim.symlink/bundle/vim-markdown"]
 	path = vim/vim.symlink/bundle/vim-markdown
 	url = https://github.com/tpope/vim-markdown.git
-[submodule "vim/vim.symlink/bundle/vim-commentary"]
-	path = vim/vim.symlink/bundle/vim-commentary
-	url = https://github.com/tpope/vim-commentary.git
 [submodule "vim/vim.symlink/bundle/vim-powerline"]
 	path = vim/vim.symlink/bundle/vim-powerline
 	url = https://github.com/Lokaltog/vim-powerline.git
@@ -31,12 +28,6 @@
 [submodule "vim/vim.symlink/bundle/vim-javascript"]
 	path = vim/vim.symlink/bundle/vim-javascript
 	url = https://github.com/pangloss/vim-javascript.git
-[submodule "vim/vim.symlink/bundle/vim-slim"]
-	path = vim/vim.symlink/bundle/vim-slim
-	url = https://github.com/slim-template/vim-slim.git
-[submodule "vim/vim.symlink/bundle/vim-toml"]
-	path = vim/vim.symlink/bundle/vim-toml
-	url = https://github.com/cespare/vim-toml.git
 [submodule "vim/vim.symlink/bundle/vim-liquid"]
 	path = vim/vim.symlink/bundle/vim-liquid
 	url = https://github.com/tpope/vim-liquid.git
@@ -46,9 +37,6 @@
 [submodule "vim/vim.symlink/bundle/vim-elixir"]
 	path = vim/vim.symlink/bundle/vim-elixir
 	url = https://github.com/elixir-lang/vim-elixir.git
-[submodule "vim/vim.symlink/bundle/vim-bundler"]
-	path = vim/vim.symlink/bundle/vim-bundler
-	url = git://github.com/tpope/vim-bundler.git
 [submodule "vim/vim.symlink/bundle/vim-less"]
 	path = vim/vim.symlink/bundle/vim-less
 	url = git://github.com/groenewege/vim-less.git
@@ -67,6 +55,3 @@
 [submodule "emacs/emacs.d.symlink"]
 	path = emacs/emacs.d.symlink
 	url = git://github.com/xiaohanyu/oh-my-emacs
-[submodule "vim/vim.symlink/bundle/vim-tcomment"]
-	path = vim/vim.symlink/bundle/vim-tcomment
-	url = https://github.com/tomtom/tcomment_vim.git
