@@ -3,7 +3,7 @@
 [user]
 	name = Parker Moore
 	email = parkrmoore@gmail.com
-	signingkey = 80993F1C
+	signingkey = 72063C58
 
 # Automatically track branches with the same name
 #
@@ -74,6 +74,7 @@
 	pyll = pull
 	pul = pull
     psh = push
+    pus = push
     psuh = push
     puysh = push
 	hist = "log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short"
@@ -110,3 +111,5 @@
 	clean = git lfs clean %f
 	smudge = git lfs smudge %f
 	required = true
+[commit]
+	gpgSign = true

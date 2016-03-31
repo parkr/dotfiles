@@ -1,0 +1,22 @@
+#!/bin/sh
+
+email="$LETSENCRYPT_EMAIL"
+test -z "$email" && {
+  echo 'fatal: no email. set $LETSENCRYPT_EMAIL and try again.' > /dev/stderr
+  exit 1
+}
+
+domain="$1"
+test -z "$domain" && {
+  echo "usage: $0 <domain>" > /dev/stderr
+  exit 1
+}
+
+sudo service nginx stop
+pushd $HOME/letsencrypt
+bash -x ./letsencrypt-auto certonly \
+  --standalone \
+  --domain $domain \
+  --email $email
+popd
+sudo service nginx start

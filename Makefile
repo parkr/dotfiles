@@ -35,9 +35,13 @@ ruby-build-github: brew-bundle
 	test -d $(shell rbenv root)/plugins/ruby-build-github/.git || \
 		git clone https://github.com/parkr/ruby-build-github.git $(shell rbenv root)/plugins/ruby-build-github
 
-textmate: kuroir/SCSS.tmbundle hajder/Ensure-New-Line-at-the-EOF.tmbundle bomberstudios/Strip-Whitespace-On-Save.tmbundle
+textmate: kuroir/SCSS.tmbundle \
+  hajder/Ensure-New-Line-at-the-EOF.tmbundle \
+  bomberstudios/Strip-Whitespace-On-Save.tmbundle
 	test -d "$(TMBUNDLE_ROOT)/Cucumber.tmbundle" || \
 	  git clone https://github.com/cucumber/cucumber-tmbundle "$(TMBUNDLE_ROOT)/Cucumber.tmbundle"
+	test -d "$(TMBUNDLE_ROOT)/rubocop.tmbundle" || \
+	  git clone https://github.com/mrdougal/textmate2-rubocop "$(TMBUNDLE_ROOT)/rubocop.tmbundle"
 
 %.tmbundle:
 	$(eval $@_bundlename := $(shell basename $*).tmbundle)

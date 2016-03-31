@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #
-# Usage: git shortlog
-#        git shortlog v1.0.0...HEAD
+# Usage: git contributors
+#        git contributors v1.0.0...HEAD
 #
 # Gets a newline-delimited list of committer names.
 # Can optionally specify ref constraints
 #
-# Author: Matt Rogers (@mattr-)
+# Author: Matt Rogers (@mattr-), updated by Parker Moore (@parkr)
 
-git shortlog -sn $1 | cut -d '	' -f2-
+git shortlog -sn $1 | cut -d '	' -f2- | sort --ignore-case | ruby -e 'puts $stdin.read.split("\n").join(", ")'
