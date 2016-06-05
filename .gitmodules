@@ -4,18 +4,9 @@
 [submodule "vim/vim.symlink/bundle/vim-coffee-script"]
 	path = vim/vim.symlink/bundle/vim-coffee-script
 	url = https://github.com/kchmck/vim-coffee-script.git
-[submodule "vim/vim.symlink/bundle/vim-ruby-sinatra"]
-	path = vim/vim.symlink/bundle/vim-ruby-sinatra
-	url = https://github.com/hallison/vim-ruby-sinatra.git
 [submodule "vim/vim.symlink/bundle/vim-markdown"]
 	path = vim/vim.symlink/bundle/vim-markdown
 	url = https://github.com/tpope/vim-markdown.git
-[submodule "vim/vim.symlink/bundle/mustache.vim"]
-	path = vim/vim.symlink/bundle/mustache.vim
-	url = https://github.com/juvenn/mustache.vim.git
-[submodule "vim/vim.symlink/bundle/vim-commentary"]
-	path = vim/vim.symlink/bundle/vim-commentary
-	url = https://github.com/tpope/vim-commentary.git
 [submodule "vim/vim.symlink/bundle/vim-powerline"]
 	path = vim/vim.symlink/bundle/vim-powerline
 	url = https://github.com/Lokaltog/vim-powerline.git
@@ -34,36 +25,18 @@
 [submodule "vim/vim.symlink/bundle/vim-fugitive"]
 	path = vim/vim.symlink/bundle/vim-fugitive
 	url = git://github.com/tpope/vim-fugitive.git
-[submodule "vim/vim.symlink/bundle/vim-golang"]
-	path = vim/vim.symlink/bundle/vim-golang
-	url = git://github.com/jnwhiteh/vim-golang.git
 [submodule "vim/vim.symlink/bundle/vim-javascript"]
 	path = vim/vim.symlink/bundle/vim-javascript
 	url = https://github.com/pangloss/vim-javascript.git
-[submodule "vim/vim.symlink/bundle/vim-slim"]
-	path = vim/vim.symlink/bundle/vim-slim
-	url = https://github.com/slim-template/vim-slim.git
-[submodule "vim/vim.symlink/bundle/vim-toml"]
-	path = vim/vim.symlink/bundle/vim-toml
-	url = https://github.com/cespare/vim-toml.git
-[submodule "vim/vim.symlink/bundle/vim-ack"]
-	path = vim/vim.symlink/bundle/vim-ack
-	url = git://github.com/mileszs/ack.vim.git
 [submodule "vim/vim.symlink/bundle/vim-liquid"]
 	path = vim/vim.symlink/bundle/vim-liquid
 	url = https://github.com/tpope/vim-liquid.git
-[submodule "vim/vim.symlink/bundle/vim-drake"]
-	path = vim/vim.symlink/bundle/vim-drake
-	url = https://bitbucket.org/larsyencken/vim-drake-syntax.git
 [submodule "tmux/tmux.symlink/tmux-powerline"]
 	path = tmux/tmux.symlink/tmux-powerline
 	url = git://github.com/erikw/tmux-powerline.git
 [submodule "vim/vim.symlink/bundle/vim-elixir"]
 	path = vim/vim.symlink/bundle/vim-elixir
 	url = https://github.com/elixir-lang/vim-elixir.git
-[submodule "vim/vim.symlink/bundle/vim-bundler"]
-	path = vim/vim.symlink/bundle/vim-bundler
-	url = git://github.com/tpope/vim-bundler.git
 [submodule "vim/vim.symlink/bundle/vim-less"]
 	path = vim/vim.symlink/bundle/vim-less
 	url = git://github.com/groenewege/vim-less.git
@@ -82,6 +55,6 @@
 [submodule "emacs/emacs.d.symlink"]
 	path = emacs/emacs.d.symlink
 	url = git://github.com/xiaohanyu/oh-my-emacs
-[submodule "vim/vim.symlink/bundle/vim-tcomment"]
-	path = vim/vim.symlink/bundle/vim-tcomment
-	url = https://github.com/tomtom/tcomment_vim.git
+[submodule "vim/vim.symlink/bundle/vim-ruby"]
+	path = vim/vim.symlink/bundle/vim-ruby
+	url = https://github.com/vim-ruby/vim-ruby.git
