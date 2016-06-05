@@ -45,20 +45,18 @@ if [[ "$1" == "enabled" ]]; then
 fi
 
 if [[ "$1" == "restart" ]]; then
-  sudo service nginx stop || true
-  sleep 1
-  sudo service nginx start || true
-  exit 0
+  sudo service nginx restart
+  exit $?
 fi
 
 if [[ "$1" == "start" ]]; then
   sudo service nginx start
-  exit 0
+  exit $?
 fi
 
 if [[ "$1" == "status" ]]; then
   sudo service nginx status
-  exit 0
+  exit $?
 fi
 
 if [[ "$1" == "stop" ]]; then
