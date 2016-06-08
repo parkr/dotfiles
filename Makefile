@@ -1,6 +1,21 @@
+UNAME := $(shell uname -s)
 TMBUNDLE_ROOT=$(HOME)/Library/Application Support/Avian/Bundles
 
-all: submodules bin/merge-pr bin/hk brew-bundle ruby-build-github textmate neovim_symlink
+foros:
+	echo $(UNAME)
+	$(MAKE) $(UNAME)
+
+Darwin: all bin/merge-pr textmate
+
+Darwin-deps:
+	cd osx && brew bundle
+
+Linux: all
+
+Linux-deps:
+	@true
+
+all: $(UNAME)-deps submodules ruby-build-github bin/letsencrypt.sh bin/hk
 
 latest:
 	git checkout master
@@ -18,6 +33,10 @@ submodules:
 	git submodule sync
 	git submodule update --init --recursive
 
+bin/letsencrypt.sh:
+	wget https://github.com/lukas2511/letsencrypt.sh/raw/master/letsencrypt.sh -O ./bin/letsencrypt.sh
+	chmod 755 ./bin/letsencrypt.sh
+
 bin/merge-pr: go
 	go get -u byparker.com/go/merge-pr
 	ln -sf $(GOPATH)/bin/merge-pr bin/merge-pr
@@ -28,10 +47,7 @@ go:
 bin/hk:
 	ln -sf $(PWD)/bin/hk-$(shell uname -s | tr '[:upper:]' '[:lower:]') $(PWD)/bin/hk
 
-brew-bundle:
-	cd osx && brew bundle
-
-ruby-build-github: brew-bundle
+ruby-build-github: $(UNAME)-deps
 	test -d $(shell rbenv root)/plugins/ruby-build-github/.git || \
 		git clone https://github.com/parkr/ruby-build-github.git $(shell rbenv root)/plugins/ruby-build-github
 

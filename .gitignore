@@ -2,6 +2,7 @@
 *~
 *#*
 bin/hk
+bin/letsencrypt.sh
 bin/merge-pr
 mutt/mutt.symlink/certificates
 mutt/mutt.symlink/accounts
