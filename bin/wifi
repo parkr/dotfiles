@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# get current wifi device
+CURRENT_DEVICE=$(networksetup -listallhardwareports | awk '$3=="Wi-Fi" {getline; print $2}')
+
+usage() {
+    echo "usage: $0 <on|off|toggle>" > /dev/stderr
+}
+
+test -z "$1" && {
+  usage
+  exit 1
+}
+
+case "$1" in
+  on*)
+    echo "Current Wi-Fi Device = '$CURRENT_DEVICE'"
+    networksetup -setairportpower $CURRENT_DEVICE on ;;
+  of*)
+    echo "Current Wi-Fi Device = '$CURRENT_DEVICE'"
+    networksetup -setairportpower $CURRENT_DEVICE off ;;
+  t*) # toggle
+    echo "Current Wi-Fi Device = '$CURRENT_DEVICE'"
+    networksetup -setairportpower $CURRENT_DEVICE off
+    networksetup -setairportpower $CURRENT_DEVICE on ;;
+  *)
+    echo "invalid command: \"$1\"" > /dev/stderr
+    usage
+    exit 1
+    ;;
+esac

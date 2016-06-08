@@ -30,6 +30,7 @@ fi
 
 alias gti=git
 alias guit=git
+alias giut=git
 alias gut=git
 alias gity=git
 
@@ -51,7 +52,6 @@ PATH="/usr/local/lib/python2.7/site-packages:$PATH"
 PATH="/usr/local/opt/go/libexec/bin:$PATH"
 [[ -n "$(which npm)" ]]    && PATH="/usr/local/share/npm/bin:$PATH"
 [[ -d "$HOME/.dotfiles" ]] && PATH="$HOME/.dotfiles/bin:$PATH"
-[[ -z "$(which cn)" ]]     && [[ -d "$HOME/code/cn" ]] && eval "$($HOME/code/cn/bin/cn init -)"
 PATH="$HOME/.bin:$PATH"
 PATH="$HOME/bin:$PATH"
 [[ -d "$HOME/.rbenv" ]]    && PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)" && alias r="rbenv" && alias re="rbenv exec"
@@ -109,7 +109,7 @@ rserver(){
 }
 
 # Aliases for frequently-used commands
-#alias t="ttytter"
+alias v="vagrant"
 alias h="hk"
 alias b="bundle"
 alias be="bundle exec"
@@ -181,42 +181,19 @@ if [ -f "$HOME/.localrc" ]; then
   source $HOME/.localrc
 fi
 
-function remote(){
-  local dc=$1
-  shift
-  local host=$1
-  shift
-  ssh ${dc}-${host}.${dc}.vsco.plumbing $@
-}
-
-function d(){
-  local host=$1
-  shift
-  remote dev-ore ${host} $@
-}
-
-function s(){
-  local host=$1
-  shift
-  remote preprod-ore ${host} $@
-}
-
-function p(){
-  local host=$1
-  shift
-  remote prod-ore ${host} $@
-}
-
 function wait_on(){
-  local code=2;
-  until [ $code -eq 0 ]; do
+  while true; do
     $@
     code=$?
+    test -n "$DEBUG" && echo "code=$code"
+    if [ $code -gt 5 ] || [ $code -lt 1 ]; then
+      break
+    fi
     sleep 5
   done
   say "Task is done."
 }
 
 function wait_on_ci() {
-  wait_on hub ci-status
+  wait_on hub ci-status $@
 }

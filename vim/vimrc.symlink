@@ -209,6 +209,14 @@ function! SetTestFile()
     let t:grb_test_file=@%
 endfunction
 
+
+function! SetTestFileFromTestedFile()
+    " Jekyll -- run the corresponding test file.
+    if match(expand("%"), '^lib\/jekyll\/\(.*\)') == 0
+      let t:grb_test_file = substitute(expand("%"), '^lib\/jekyll\/\(.*\)', 'test/test_\1', 'g')
+    end
+endfunction
+
 function! RunTestFile(...)
     if a:0
         let command_suffix = a:1
@@ -217,13 +225,20 @@ function! RunTestFile(...)
     endif
 
     " Run the tests for the previously-marked file.
-    let in_test_file = match(expand("%"), '\(.js\|.go\|.feature\|_spec.rb\|_test.rb\|test_*.rb\|Test\.php\)$') != -1 || match(expand("%"), '^test\/test_') == 0
+    let in_test_file = match(expand("%"), '\(.js\|.go\|.feature\|_spec.rb\)$') != -1 || match(expand("%"), '^test\/test_') == 0
+    let in_file_with_test_file = match(expand("%"), '.rb$') != -1
+
     if in_test_file
         call SetTestFile()
-    elseif !exists("t:grb_test_file")
+    elseif in_file_with_test_file
+        call SetTestFileFromTestedFile()
+    end
+
+    if !exists("t:grb_test_file")
         echo "No can do. You're not in a test file."
         return "not in a test file"
     end
+
     call RunTests(t:grb_test_file . command_suffix)
 endfunction
 
