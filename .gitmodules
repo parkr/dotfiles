@@ -58,3 +58,6 @@
 [submodule "vim/vim.symlink/bundle/vim-puppet"]
 	path = vim/vim.symlink/bundle/vim-puppet
 	url = https://github.com/rodjek/vim-puppet
+[submodule "vim/vim.symlink/bundle/vim-ruby"]
+	path = vim/vim.symlink/bundle/vim-ruby
+	url = https://github.com/vim-ruby/vim-ruby.git
