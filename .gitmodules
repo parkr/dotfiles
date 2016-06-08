@@ -55,3 +55,6 @@
 [submodule "emacs/emacs.d.symlink"]
 	path = emacs/emacs.d.symlink
 	url = git://github.com/xiaohanyu/oh-my-emacs
+[submodule "vim/vim.symlink/bundle/vim-puppet"]
+	path = vim/vim.symlink/bundle/vim-puppet
+	url = https://github.com/rodjek/vim-puppet
