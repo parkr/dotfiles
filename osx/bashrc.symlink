@@ -58,6 +58,7 @@ PATH="$HOME/bin:$PATH"
 [[ -d "$HOME/.pyenv" ]]    && PATH="$HOME/.pyenv/bin:$PATH" && eval "$(pyenv init -)" && alias p="pyenv" && alias pe="pyenv exec"
 [[ -d "$HOME/.go"    ]]    && PATH="$HOME/.go/bin:$PATH" && export GOPATH="$HOME/.go"
 [[ -d "$(brew --prefix)/Cellar/nvm" ]] && source $(brew --prefix nvm)/nvm.sh
+[[ -d "$HOME/.opam/opam-init" ]] && source $HOME/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
 for pkg in $(ls "$HOME/.dotfiles/pkg")
 do
 PATH="$HOME/.dotfiles/pkg/$pkg/bin:$PATH"
