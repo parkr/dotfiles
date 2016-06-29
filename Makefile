@@ -58,6 +58,9 @@ textmate: kuroir/SCSS.tmbundle \
 	  git clone https://github.com/cucumber/cucumber-tmbundle "$(TMBUNDLE_ROOT)/Cucumber.tmbundle"
 	test -d "$(TMBUNDLE_ROOT)/rubocop.tmbundle" || \
 	  git clone https://github.com/mrdougal/textmate2-rubocop "$(TMBUNDLE_ROOT)/rubocop.tmbundle"
+	test -d "$(TMBUNDLE_ROOT)/protobuf-tmbundle" || \
+	  git clone https://github.com/michaeledgar/protobuf-tmbundle "$(TMBUNDLE_ROOT)/protobuf-tmbundle"
+	ln -s "$(TMBUNDLE_ROOT)/protobuf-tmbundle/Protocol Buffers.tmbundle" "$(TMBUNDLE_ROOT)/Protocol Buffers.tmbundle"
 
 %.tmbundle:
 	$(eval $@_bundlename := $(shell basename $*).tmbundle)

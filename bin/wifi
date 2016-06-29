@@ -4,7 +4,7 @@
 CURRENT_DEVICE=$(networksetup -listallhardwareports | awk '$3=="Wi-Fi" {getline; print $2}')
 
 usage() {
-    echo "usage: $0 <on|off|toggle>" > /dev/stderr
+    echo "usage: $0 <on|off|kick|peers|toggle>" > /dev/stderr
 }
 
 test -z "$1" && {
@@ -12,17 +12,26 @@ test -z "$1" && {
   exit 1
 }
 
+echo "Current Wi-Fi Device = '$CURRENT_DEVICE'"
+
 case "$1" in
   on*)
-    echo "Current Wi-Fi Device = '$CURRENT_DEVICE'"
     networksetup -setairportpower $CURRENT_DEVICE on ;;
   of*)
-    echo "Current Wi-Fi Device = '$CURRENT_DEVICE'"
     networksetup -setairportpower $CURRENT_DEVICE off ;;
   t*) # toggle
-    echo "Current Wi-Fi Device = '$CURRENT_DEVICE'"
     networksetup -setairportpower $CURRENT_DEVICE off
     networksetup -setairportpower $CURRENT_DEVICE on ;;
+  k*) # kick
+    sudo dscacheutil -flushcache
+    sudo killall -HUP mDNSResponder ;;
+  p*) # peers
+    sudo /usr/local/bin/arp-scan \
+      --interface $CURRENT_DEVICE \
+      -q 192.168.0.0/24 \
+      | grep '^192\.168\.0' \
+      | awk '{print $2}' \
+      | uniq ;;
   *)
     echo "invalid command: \"$1\"" > /dev/stderr
     usage

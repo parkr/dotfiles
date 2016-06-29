@@ -10,6 +10,13 @@
 [branch]
 	autosetupmerge = true
 
+# Highlight additions/deletions inside a given line more noticeably.
+#
+[pager]
+    log = diff-highlight | less
+    show = diff-highlight | less
+    diff = diff-highlight | less
+
 # Pretty format
 #
 # [format]
@@ -113,3 +120,5 @@
 	required = true
 [commit]
 	gpgSign = true
+[interactive]
+	diffFilter = diff-highlight
