@@ -2,6 +2,8 @@
 
 NGX_VERSION="1.11.1"
 NGX_SRC="/tmp/nginx-${NGX_VERSION}"
+OPENSSL_VERSION="1.0.2h"
+OPENSSL_SRC="/tmp/openssl-${OPENSSL_VERSION}"
 
 [ -d "$NGX_SRC" ] || {
 	pushd $(dirname "$NGX_SRC");
@@ -10,9 +12,16 @@ NGX_SRC="/tmp/nginx-${NGX_VERSION}"
 	popd
 }
 
+[ -d "$OPENSSL_SRC" ] || {
+    pushd $(dirname "$OPENSSL_SRC");
+    wget "https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz";
+    tar xfz "openssl-${OPENSSL_VERSION}.tar.gz";
+    popd
+}
+
 passenger-install-nginx-module \
   --auto \
   --prefix=/opt/nginx \
   --nginx-source-dir="$NGX_SRC" \
-  --extra-configure-flags="--with-http_v2_module" \
+  --extra-configure-flags="--with-http_v2_module  --with-http_ssl_module --with-openssl=${OPENSSL_SRC}" \
   --languages ruby
