@@ -1,7 +1,8 @@
 # Basic Settings
 #
 # NEVER SET THE fontName ATTRIBUTE. EVER.
-fontName    = "Consolas for Powerline"
+#fontName    = "Consolas for Powerline"
+fontName    = ConsolasForPowerline
 fontSize	= 14
 # theme 	= "Resesif"
 
