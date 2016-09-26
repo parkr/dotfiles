@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+#/ Usage: checkout-latest-origin-master ~/path/to/repo
+#/ Update the local clone to point to the latest origin/master.
+#/ Effectively a local mirror.
+
+function usage() {
+  cat "$0" | grep ^#/ | cut -c4-
+}
+
+[ -z "$1" ] && {
+  echo "fatal: missing argument"
+  usage
+  exit 1
+}
+
+target_directory="$1"
+[ -d "$target_directory" ] || {
+  echo "fatal: \"$target_directory\" does not exist or is not a valid directory."
+  exit 1
+}
+
+[ -d "$target_directory/.git" ] || {
+  echo "fatal: $target_directory is not a valid git clone"
+  exit 1
+}
+
+cd $target_directory
+
+[ -n "$(git status -s | grep -v '??')" ] && {
+  echo "fatal: unsaved changes"
+  exit 1
+}
+
+set -e
+git fetch -q origin
+git checkout -q master
+git pull -q origin master
