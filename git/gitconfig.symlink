@@ -72,6 +72,7 @@
 	s = status
 	br = branch
 	df = diff
+	dif = diff
 	dc = diff --cached
 	ls = ls-files
 	aa = add --all
@@ -84,6 +85,7 @@
     pus = push
     psuh = push
     puysh = push
+    pushj = push
 	hist = "log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short"
 	lol = log --graph --decorate --pretty=oneline --abbrev-commit
 	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
@@ -94,6 +96,12 @@
 	stats = shortlog -sn
 	contribs = contributors
 	pr = pull-request
+
+[url "https://github.com/"]
+    # Use HTTP for GitHub instead of git:// or git@
+    # Enable this in networks where git:// or git@ are blocked.
+    insteadOf = git://github.com/
+    insteadOf = git@github.com:
 
 # Git Applications
 #
@@ -109,7 +117,7 @@
 	clean = git media clean %f
 	smudge = git media smudge %f
 [http]
-	cookiefile = /Users/parker/.gitcookies
+	cookiefile = ~/.gitcookies
 [filter "hawser"]
 	clean = git hawser clean %f
 	smudge = git hawser smudge %f
@@ -122,3 +130,5 @@
 	gpgSign = true
 [interactive]
 	diffFilter = diff-highlight
+[gpg]
+	program = /usr/local/bin/gpg
