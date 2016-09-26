@@ -1,0 +1,12 @@
+# Images
+image/jpeg; ~/.mutt/view_attachment.sh %s
+image/pjpeg; ~/.mutt/view_attachment.sh %s
+image/png; ~/.mutt/view_attachment.sh %s
+image/gif; ~/.mutt/view_attachment.sh %s
+
+# PDF
+application/pdf; ~/.mutt/view_attachment.sh %s pdf
+
+# HTML
+# -- always use lynx
+text/html; elinks -force-html %s
