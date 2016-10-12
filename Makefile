@@ -1,5 +1,5 @@
 UNAME := $(shell uname -s)
-TMBUNDLE_ROOT=$(HOME)/Library/Application Support/Avian/Bundles
+TMBUNDLE_ROOT=$(HOME)/Library/Application Support/Textmate/Bundles
 
 foros:
 	echo $(UNAME)
