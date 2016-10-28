@@ -8,4 +8,6 @@
 #
 # Author: Matt Rogers (@mattr-), updated by Parker Moore (@parkr)
 
-git shortlog -sn $1 | cut -d '	' -f2- | sort --ignore-case | ruby -e 'puts $stdin.read.split("\n").join(", ")'
+git shortlog -sn $1 | \
+  cut -d '	' -f2- | \
+  ruby -e 'puts $stdin.read.split("\n").sort.join(", ")'
