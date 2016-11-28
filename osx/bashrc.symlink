@@ -142,7 +142,7 @@ alias deploy="bundle exec cap production deploy"
 
 brew_up () {
   brew update -v
-  brew upgrade -v --all
+  brew upgrade -v
   brew cleanup
   brew cask cleanup
 }
@@ -195,9 +195,10 @@ function wait_on(){
     fi
     sleep 5
   done
-  say "Task is done."
+  say -v Fiona "Task is done."
 }
 
 function wait_on_ci() {
   wait_on hub ci-status $@
+  say -v Daniel "Your tests have all passed."
 }

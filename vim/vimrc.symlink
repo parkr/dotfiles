@@ -189,7 +189,9 @@ function! RunTests(filename)
     if match(a:filename, '\.feature') != -1
       exec ":!bundle exec cucumber " . a:filename
     else
-      if filereadable("script/test")
+      if filereadable("script/spec")
+        exec ":!script/spec " . a:filename
+      elseif filereadable("script/test")
         exec ":!script/test " . a:filename
       elseif filereadable("script/cibuild")
         exec ":!script/cibuild " . a:filename
