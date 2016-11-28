@@ -9,16 +9,19 @@ test -z "$email" && {
 domain="$1"
 shift
 test -z "$domain" && {
-  echo "usage: $0 <domain>" > /dev/stderr
+  echo "usage: $0 <domains_comma_separated>" > /dev/stderr
   exit 1
 }
 
 sudo service nginx stop
-pushd $HOME/letsencrypt
-bash -x ./letsencrypt-auto certonly \
-  --no-self-upgrade \
-  --standalone \
-  --domain $domain \
-  --email $email $@
-popd
+if [ "$domain" = "--all" ]; then
+  bash -x certbot-auto renew \
+    --no-self-upgrade
+else
+  bash -x certbot-auto certonly \
+    --no-self-upgrade \
+    --standalone \
+    --domain $domain \
+    --email $email $@
+fi
 sudo service nginx start
