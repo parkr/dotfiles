@@ -42,7 +42,7 @@ bin/merge-pr: go
 	ln -sf $(GOPATH)/bin/merge-pr bin/merge-pr
 
 go:
-	brew install go
+	go version
 
 bin/hk:
 	ln -sf $(PWD)/bin/hk-$(shell uname -s | tr '[:upper:]' '[:lower:]') $(PWD)/bin/hk
