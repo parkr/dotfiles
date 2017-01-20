@@ -10,7 +10,7 @@ set -e
 
 REPO_DIR="$HOME/jekyll/jekyll"
 GEMFILE="$REPO_DIR/Gemfile"
-JEKYLL="bundle exec $REPO_DIR/bin/jekyll"
+JEKYLL="bundle exec $REPO_DIR/exe/jekyll"
 
 echo "Executing '$JEKYLL $@'..."
 BUNDLE_GEMFILE="$GEMFILE" $JEKYLL $@
