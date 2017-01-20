@@ -1,10 +1,18 @@
 #!/bin/bash
 
+PATH=$PATH:/usr/sbin:/usr/bin:/usr/local/bin
+
 # get current wifi device
 CURRENT_DEVICE=$(networksetup -listallhardwareports | awk '$3=="Wi-Fi" {getline; print $2}')
 
 usage() {
-    echo "usage: $0 <on|off|kick|peers|toggle>" > /dev/stderr
+  echo "usage: $(dirname $0) <on|off|check|kick|peers|toggle>" > /dev/stderr
+}
+
+debug() {
+  if [ "$DEBUG" = "true" ]; then
+    echo $@
+  fi
 }
 
 test -z "$1" && {
@@ -12,7 +20,7 @@ test -z "$1" && {
   exit 1
 }
 
-echo "Current Wi-Fi Device = '$CURRENT_DEVICE'"
+debug "Current Wi-Fi Device = '$CURRENT_DEVICE'"
 
 case "$1" in
   on*)
@@ -32,6 +40,9 @@ case "$1" in
       | grep '^192\.168\.0' \
       | awk '{print $2}' \
       | uniq ;;
+  c*) # check
+    wget -q --tries=10 --timeout=20 --spider https://google.com
+    exit $? ;;
   *)
     echo "invalid command: \"$1\"" > /dev/stderr
     usage
