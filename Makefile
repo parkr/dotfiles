@@ -8,7 +8,7 @@ foros:
 Darwin: all bin/merge-pr textmate
 
 Darwin-deps:
-	cd osx && brew bundle
+	cd osx && brew bundle check || brew bundle
 
 Linux: all
 
