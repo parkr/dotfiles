@@ -3,6 +3,12 @@
 #/ Update the local clone to point to the latest origin/master.
 #/ Effectively a local mirror.
 
+if [ -L $0 ]; then
+  dotfiles_bin_dir=$(cd "$(dirname "$(readlink "$0")")" && pwd)
+else
+  dotfiles_bin_dir=$(cd "$(dirname "$0")" && pwd)
+fi
+
 function usage() {
   cat "$0" | grep ^#/ | cut -c4-
 }
