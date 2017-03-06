@@ -6,7 +6,7 @@ PATH=$PATH:/usr/sbin:/usr/bin:/usr/local/bin
 CURRENT_DEVICE=$(networksetup -listallhardwareports | awk '$3=="Wi-Fi" {getline; print $2}')
 
 usage() {
-  echo "usage: $(dirname $0) <on|off|check|kick|peers|toggle>" > /dev/stderr
+  echo "usage: $(dirname $0) <on|off|check|kick|info|ip|peers|toggle>" > /dev/stderr
 }
 
 debug() {
@@ -20,7 +20,8 @@ test -z "$1" && {
   exit 1
 }
 
-debug "Current Wi-Fi Device = '$CURRENT_DEVICE'"
+NETWORK_SERVICE="Wi-Fi"
+debug "Current $NETWORK_SERVICE Device = '$CURRENT_DEVICE'"
 
 case "$1" in
   on*)
@@ -33,6 +34,13 @@ case "$1" in
   k*) # kick
     sudo dscacheutil -flushcache
     sudo killall -HUP mDNSResponder ;;
+  ip*) # ip address
+    sudo networksetup -getinfo $NETWORK_SERVICE |
+      grep "^IP address" |
+      awk '{print $3}'
+    ;;
+  i*) # info
+    sudo networksetup -getinfo $NETWORK_SERVICE ;;
   p*) # peers
     sudo /usr/local/bin/arp-scan \
       --interface $CURRENT_DEVICE \
