@@ -38,7 +38,7 @@ bin/letsencrypt.sh:
 	chmod 755 ./bin/letsencrypt.sh
 
 bin/merge-pr: go
-	go get -u byparker.com/go/merge-pr
+	which merge-pr || go get -u byparker.com/go/merge-pr
 	ln -sf $(GOPATH)/bin/merge-pr bin/merge-pr
 
 go:
