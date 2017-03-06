@@ -8,7 +8,7 @@ foros:
 Darwin: all bin/merge-pr textmate
 
 Darwin-deps:
-	cd osx && brew bundle
+	cd osx && brew bundle check || brew bundle
 
 Linux: all
 
@@ -42,7 +42,7 @@ bin/merge-pr: go
 	ln -sf $(GOPATH)/bin/merge-pr bin/merge-pr
 
 go:
-	brew install go
+	go version
 
 bin/hk:
 	ln -sf $(PWD)/bin/hk-$(shell uname -s | tr '[:upper:]' '[:lower:]') $(PWD)/bin/hk
@@ -60,7 +60,8 @@ textmate: kuroir/SCSS.tmbundle \
 	  git clone https://github.com/mrdougal/textmate2-rubocop "$(TMBUNDLE_ROOT)/rubocop.tmbundle"
 	test -d "$(TMBUNDLE_ROOT)/protobuf-tmbundle" || \
 	  git clone https://github.com/michaeledgar/protobuf-tmbundle "$(TMBUNDLE_ROOT)/protobuf-tmbundle"
-	ln -s "$(TMBUNDLE_ROOT)/protobuf-tmbundle/Protocol Buffers.tmbundle" "$(TMBUNDLE_ROOT)/Protocol Buffers.tmbundle"
+	test -L "$(TMBUNDLE_ROOT)/Protocol Buffers.tmbundle" || \
+	  ln -s "$(TMBUNDLE_ROOT)/protobuf-tmbundle/Protocol Buffers.tmbundle" "$(TMBUNDLE_ROOT)/Protocol Buffers.tmbundle"
 
 %.tmbundle:
 	$(eval $@_bundlename := $(shell basename $*).tmbundle)

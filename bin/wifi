@@ -1,10 +1,18 @@
 #!/bin/bash
 
+PATH=$PATH:/usr/sbin:/usr/bin:/usr/local/bin
+
 # get current wifi device
 CURRENT_DEVICE=$(networksetup -listallhardwareports | awk '$3=="Wi-Fi" {getline; print $2}')
 
 usage() {
-    echo "usage: $0 <on|off|kick|peers|toggle>" > /dev/stderr
+  echo "usage: $(dirname $0) <on|off|check|kick|info|ip|peers|toggle>" > /dev/stderr
+}
+
+debug() {
+  if [ "$DEBUG" = "true" ]; then
+    echo $@
+  fi
 }
 
 test -z "$1" && {
@@ -12,7 +20,8 @@ test -z "$1" && {
   exit 1
 }
 
-echo "Current Wi-Fi Device = '$CURRENT_DEVICE'"
+NETWORK_SERVICE="Wi-Fi"
+debug "Current $NETWORK_SERVICE Device = '$CURRENT_DEVICE'"
 
 case "$1" in
   on*)
@@ -25,6 +34,13 @@ case "$1" in
   k*) # kick
     sudo dscacheutil -flushcache
     sudo killall -HUP mDNSResponder ;;
+  ip*) # ip address
+    sudo networksetup -getinfo $NETWORK_SERVICE |
+      grep "^IP address" |
+      awk '{print $3}'
+    ;;
+  i*) # info
+    sudo networksetup -getinfo $NETWORK_SERVICE ;;
   p*) # peers
     sudo /usr/local/bin/arp-scan \
       --interface $CURRENT_DEVICE \
@@ -32,6 +48,9 @@ case "$1" in
       | grep '^192\.168\.0' \
       | awk '{print $2}' \
       | uniq ;;
+  c*) # check
+    wget -q --tries=10 --timeout=20 --spider https://google.com
+    exit $? ;;
   *)
     echo "invalid command: \"$1\"" > /dev/stderr
     usage

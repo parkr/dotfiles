@@ -3,6 +3,12 @@
 #/ Update the local clone to point to the latest origin/master.
 #/ Effectively a local mirror.
 
+if [ -L $0 ]; then
+  dotfiles_bin_dir=$(cd "$(dirname "$(readlink "$0")")" && pwd)
+else
+  dotfiles_bin_dir=$(cd "$(dirname "$0")" && pwd)
+fi
+
 function usage() {
   cat "$0" | grep ^#/ | cut -c4-
 }
@@ -12,6 +18,12 @@ function usage() {
   usage
   exit 1
 }
+
+$dotfiles_bin_dir/wifi check
+if [ "$?" != "0" ]; then
+  echo "Your computer is not connected to the Internet."
+  exit 0
+fi
 
 target_directory="$1"
 [ -d "$target_directory" ] || {

@@ -8,6 +8,7 @@ tap 'neovim/neovim'
 brew 'ag'
 brew 'align'
 brew 'archey'
+brew 'autojump'
 brew 'bash'
 brew 'bazaar'
 brew 'center-im'
@@ -26,6 +27,7 @@ brew 'ghc'
 brew 'ghi'
 brew 'gist'
 brew 'git'
+brew 'gitup'
 brew 'gnupg2'
 brew 'go'
 brew 'godep'
@@ -51,7 +53,6 @@ brew 'pstree'
 brew 'q'
 brew 'rbenv'
 brew 'rbenv-default-gems'
-brew 'rbenv-readline'
 brew 'ruby-build'
 brew 'rust'
 brew 'siege'
@@ -75,3 +76,13 @@ cask 'screenhero'
 cask 'spotify'
 cask 'torbrowser'
 cask 'vlc'
+
+mas '1Password', id: 443987910
+mas 'DaisyDisk', id: 411643860
+mas 'Keynote', id: 409183694
+mas 'Numbers', id: 409203825
+mas 'Pages', id: 409201541
+mas 'Slack', id: 803453959
+mas 'StatusClock', id: 552792489
+mas 'Xcode', id: 497799835
+mas 'Wunderlist', id: 410628904

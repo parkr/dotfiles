@@ -63,6 +63,7 @@ add_to_path "$HOME/.dotfiles/bin"
 add_to_path "$HOME/.bin"
 add_to_path "$HOME/bin"
 add_to_path "/usr/local/heroku/bin"
+[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 [[ -d "$HOME/.rbenv" ]]  && eval "$(rbenv init -)"
 [[ -d "$HOME/.pyenv" ]]  && eval "$(pyenv init -)"
 [[ -d "$HOME/.go"    ]]  && PATH="$HOME/.go/bin:$PATH" && export GOPATH="$HOME/.go"
