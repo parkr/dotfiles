@@ -1,0 +1,6 @@
+# User information. Replace with your own data, obviously.
+#
+[user]
+	name = Parker Moore
+	email = parkr@github.com
+	signingkey = 72063C58

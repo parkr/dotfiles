@@ -5,6 +5,11 @@
 	email = parkrmoore@gmail.com
 	signingkey = 72063C58
 
+# Include work configuration for work product.
+#
+[includeIf "gitdir:~/github/"]
+	path = .gitconfig-work
+
 # Automatically track branches with the same name
 #
 [branch]
