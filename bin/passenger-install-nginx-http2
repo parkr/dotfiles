@@ -1,8 +1,8 @@
 #!/bin/bash -xe
 
-NGX_VERSION="1.11.1"
+NGX_VERSION="1.12.0"
 NGX_SRC="/tmp/nginx-${NGX_VERSION}"
-OPENSSL_VERSION="1.0.2h"
+OPENSSL_VERSION="1.0.2k"
 OPENSSL_SRC="/tmp/openssl-${OPENSSL_VERSION}"
 
 [ -d "$NGX_SRC" ] || {
