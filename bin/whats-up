@@ -1,0 +1,28 @@
+#!/bin/bash
+# A little command to help keep my work on track.
+# Displays PR's to be reviewed, deployed, & to fix/update.
+# Displays issues assigned to me.
+
+command -v unearth || go install github.com/parkr/auto-reply/cmd/unearth
+
+export GITHUB_ACCESS_TOKEN=$(cat ~/.token)
+
+echo "==> PR's to review:"
+unearth user:github type:pr is:open review-requested:parkr
+echo
+
+echo "==> Ready to deploy:"
+unearth user:github author:parkr type:pr is:open status:success review:approved
+echo
+
+echo "==> Needs review: CI passing but no reviews"
+unearth user:github author:parkr type:pr is:open status:success review:none
+echo
+
+echo "==> Needs work: CI failing or changes requested"
+unearth "user:github author:parkr type:pr is:open (status:failure OR review:changes_requested)"
+echo
+
+echo "==> Issues on your plate:"
+unearth assigned:parkr type:issue is:open
+echo
