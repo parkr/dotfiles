@@ -137,4 +137,4 @@
 [interactive]
 	diffFilter = diff-highlight
 [gpg]
-	program = /usr/local/bin/gpg
+	program = gpg1
