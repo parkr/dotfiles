@@ -1,0 +1,9 @@
+#!/bin/bash -x
+# Every time I reboot my machine, this apache http daemon starts up, which
+# binds to port 80 before launch_socket_server can, which means I can't
+# work on GitHub stuff without unloading it and rebooting
+# launch_socket_server. I should probably find a way to permanently shut
+# off this apache http daemon, but this works for now.
+
+sudo launchctl unload /System/Library/LaunchDaemons/org.apache.httpd.plist
+sudo brew services restart launch_socket_server
