@@ -1,12 +1,17 @@
 #! /bin/bash
 #
-# nginx
-#   conf: edits the main configuraton file
-#   enable: enables site
-#   disable: disables site
-#   edit: edits a site
-#   restart: restarts nginx using the init.d script
-#
+#/ Usage: nginx <subcommand> [site_name]
+#/
+#/ Commands:
+#/   conf: edits the main configuraton file
+#/   enable: enable site, requires site_name argument
+#/   disable: disable site, requires site_name argument
+#/   edit: edit a site configuration, requires site_name argument
+#/   restart: restart nginx
+#/   start: start nginx
+#/   status: print nginx process status
+#/   stop:  stop nginx & kill all processes with that name
+#/
 # Author: parkr
 # Source: https://github.com/parkr/dotfiles/blob/master/bin/nginx
 
@@ -15,11 +20,9 @@ set -e
 NGINX_CONF=/opt/nginx/conf
 
 usage() {
-  echo "nginx <subcommand> <site_name>"
-  echo
-  echo "Subcommands: status, stop, restart, conf, enable, disable, edit, enabled, available"
-  echo "Sites:"
-  ls -1 $NGINX_CONF/sites-available | gawk -F" " '{ print "   " $1 }'
+  info=$(usage-and-help $0)
+  sites=$(ls -1 $NGINX_CONF/sites-available | gawk -F" " '{ print "   " $1 }')
+  echo -e "$info\n\nSites:\n$sites" | less
 }
 
 enabled_sites() {
@@ -34,59 +37,58 @@ available_sites() {
 
 [[ $# -lt 1 ]] && usage && exit 1
 
-if [[ "$1" == "available" ]]; then
-  available_sites
-  exit
-fi
-
-if [[ "$1" == "enabled" ]]; then
-  enabled_sites
-  exit
-fi
-
-if [[ "$1" == "restart" ]]; then
-  sudo service nginx restart
-  exit $?
-fi
-
-if [[ "$1" == "start" ]]; then
-  sudo service nginx start
-  exit $?
-fi
-
-if [[ "$1" == "status" ]]; then
-  sudo service nginx status
-  exit $?
-fi
-
-if [[ "$1" == "stop" ]]; then
-  sudo service nginx stop
-  sudo killall nginx
-  exit 0
-fi
-
-if [[ "$1" == "conf" ]]; then
-  vim /opt/nginx/conf/nginx.conf -c "set syn=nginx"
-  exit 0
-fi
+case "$1" in
+  available)
+    available_sites
+    exit 0
+    ;;
+  enabled)
+    enabled_sites
+    exit 0
+    ;;
+  start|restart|status)
+    sudo service nginx "$1"
+    exit $?
+    ;;
+  stop)
+    sudo service nginx stop
+    sudo killall nginx
+    exit 0
+    ;;
+  conf)
+    vim /opt/nginx/conf/nginx.conf -c "set syn=nginx"
+    exit 0
+    ;;
+  enable|disable|edit)
+    # these happen later
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac
 
 [[ $# -lt 2 ]] && usage && exit 1
 
-if [[ "$1" == "enable" ]]; then
-  if [ -f "$NGINX_CONF/sites-enabled/$2" ]; then
-    echo "'$2' is already enabled."
-  else
-    sudo ln -s $NGINX_CONF/sites-available/$2 $NGINX_CONF/sites-enabled/$2
-    echo "Enabled '$2'."
-  fi
-fi
-
-if [[ "$1" == "disable" ]]; then
-  sudo rm $NGINX_CONF/sites-enabled/$2
-  echo "Disabled '$2'."
-fi
-
-if [[ "$1" == "edit" ]]; then
-  $EDITOR $NGINX_CONF/sites-available/$2 -c "set syn=nginx"
-  echo "$NGINX_CONF/sites-available/$2 successfully saved."
-fi
+case "$1" in
+  enable)
+    if [ -f "$NGINX_CONF/sites-enabled/$2" ]; then
+      echo "'$2' is already enabled."
+    else
+      sudo ln -s $NGINX_CONF/sites-available/$2 $NGINX_CONF/sites-enabled/$2
+      echo "Enabled '$2'."
+    fi
+    ;;
+  disable)
+    sudo rm $NGINX_CONF/sites-enabled/$2
+    echo "Disabled '$2'."
+    ;;
+  edit)
+    $EDITOR $NGINX_CONF/sites-available/$2 -c "set syn=nginx"
+    echo "$NGINX_CONF/sites-available/$2 successfully saved."
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac
