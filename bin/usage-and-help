@@ -1,0 +1,16 @@
+#!/bin/bash
+#/ Usage: usage-and-help <program>
+#/ Options: -h/--help, display usage information for this program.
+
+test -z "$1" && $0 $0 && exit 1
+
+case "$1" in
+  --help|-h)
+    $0 $0
+    exit 0
+    ;;
+  *)
+    path=$(which "$1")
+    grep "^#/" "$1" | cut -c4-
+    ;;
+esac
