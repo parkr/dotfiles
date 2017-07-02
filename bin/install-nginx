@@ -1,4 +1,3 @@
-#!/bin/bash
 #!/bin/bash -xe
 
 NGX_VERSION="1.13.2"
