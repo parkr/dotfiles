@@ -42,10 +42,11 @@ case "$1" in
   i*) # info
     sudo networksetup -getinfo $NETWORK_SERVICE ;;
   p*) # peers
+    IP_PREFIX=$($0 ip | awk -F. '{print $1 "." $2 "." $3}')
     sudo /usr/local/bin/arp-scan \
       --interface $CURRENT_DEVICE \
-      -q 192.168.0.0/24 \
-      | grep '^192\.168\.0' \
+      -q $IP_PREFIX.0/24 \
+      | grep "^$IP_PREFIX" \
       | awk '{print $2}' \
       | uniq ;;
   c*) # check
