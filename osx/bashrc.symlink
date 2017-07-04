@@ -194,6 +194,7 @@ function wait_on(){
     if [ $code -gt 5 ] || [ $code -lt 1 ]; then
       break
     fi
+    echo "--->"
     sleep 5
   done
   say -v Fiona "Task is done."
