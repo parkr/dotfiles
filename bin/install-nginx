@@ -2,10 +2,12 @@
 
 NGX_VERSION="1.13.2"
 NGX_SRC="/tmp/nginx-${NGX_VERSION}"
-OPENSSL_VERSION="1.0.2l"
+OPENSSL_VERSION="1.1.0f"
 OPENSSL_SRC="/tmp/openssl-${OPENSSL_VERSION}"
 PCRE_VERSION="8.40"
 PCRE_SRC="/tmp/pcre-${PCRE_VERSION}"
+ZLIB_VERSION="1.2.11"
+ZLIB_SRC="/tmp/zlib-${ZLIB_VERSION}"
 
 [ -d "$NGX_SRC" ] || {
 	pushd $(dirname "$NGX_SRC");
@@ -28,8 +30,16 @@ PCRE_SRC="/tmp/pcre-${PCRE_VERSION}"
     popd
 }
 
+[ -d "$ZLIB_SRC" ] || {
+    pushd $(dirname "$ZLIB_SRC");
+    wget "https://zlib.net/zlib-${ZLIB_VERSION}.tar.gz";
+    tar xfz "zlib-${ZLIB_VERSION}.tar.gz";
+    popd
+}
+
 cd $NGX_SRC
 sudo ./configure --prefix=/opt/nginx \
+  --with-ipv6 \
   --with-http_ssl_module \
   --with-http_v2_module \
   --with-http_realip_module \
@@ -41,5 +51,7 @@ sudo ./configure --prefix=/opt/nginx \
   --with-openssl=$OPENSSL_SRC \
   --with-pcre=$PCRE_SRC \
   --with-pcre-jit
-sudo make
-sudo make install
+sudo make -f "$NGX_SRC/objs/Makefile" binary modules
+sudo make -f "$NGX_SRC/objs/Makefile" install
+
+rm -r $NGX_SRC $OPENSSL_SRC $PCRE_SRC $ZLIB_SRC
