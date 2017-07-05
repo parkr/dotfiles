@@ -3,6 +3,7 @@
 #/ Usage: nginx <subcommand> [site_name]
 #/
 #/ Commands:
+#/   check: checks the configuration
 #/   conf: edits the main configuraton file
 #/   enable: enable site, requires site_name argument
 #/   disable: disable site, requires site_name argument
@@ -11,6 +12,7 @@
 #/   start: start nginx
 #/   status: print nginx process status
 #/   stop:  stop nginx & kill all processes with that name
+#/   security: generates security files for a site, requires site_name argument
 #/
 # Author: parkr
 # Source: https://github.com/parkr/dotfiles/blob/master/bin/nginx
@@ -59,7 +61,11 @@ case "$1" in
     vim /opt/nginx/conf/nginx.conf -c "set syn=nginx"
     exit 0
     ;;
-  enable|disable|edit)
+  check)
+    sudo /opt/nginx/sbin/nginx -t
+    exit $?
+    ;;
+  enable|disable|edit|security|dhparam)
     # these happen later
     ;;
   *)
@@ -86,6 +92,20 @@ case "$1" in
   edit)
     $EDITOR $NGINX_CONF/sites-available/$2 -c "set syn=nginx"
     echo "$NGINX_CONF/sites-available/$2 successfully saved."
+    ;;
+  dhparam)
+    DHPARAM_PATH="/opt/nginx/ssl/$2/dhparams.pem"
+    if [ -f "$DHPARAM_PATH" ]; then
+      echo "==> Failed: $DHPARAM_PATH already exists."
+      exit 1
+    fi
+    sudo mkdir -p "$(dirname "$DHPARAM_PATH")"
+    sudo openssl dhparam -dsaparam -out "$DHPARAM_PATH" 4096
+    echo "==> Written dhparam to $DHPARAM_PATH."
+    echo "==> Add ssl_dhparam $DHPARAM_PATH to your site's configuration."
+    ;;
+  security)
+    "$0" dhparam "$2"
     ;;
   *)
     usage
