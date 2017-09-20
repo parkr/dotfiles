@@ -34,6 +34,7 @@ fi
 
 alias bim=vim
 
+alias it=git
 alias gti=git
 alias guit=git
 alias giut=git
