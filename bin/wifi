@@ -42,7 +42,8 @@ case "$1" in
   i*) # info
     sudo networksetup -getinfo $NETWORK_SERVICE ;;
   p*) # peers
-    IP_PREFIX=$($0 ip | awk -F. '{print $1 "." $2 "." $3}')
+    IP_PREFIX=$(route -n get 0.0.0.0 | grep gateway: | awk '{ print $2 }' |
+      awk -F. '{ print $1 "." $2 "." $3 }' )
     sudo /usr/local/bin/arp-scan \
       --interface $CURRENT_DEVICE \
       -q $IP_PREFIX.0/24 \
