@@ -1,0 +1,19 @@
+#!/bin/bash
+# The Atom Rubocop linter cannot for the life of it figure out how best to
+# run Rubocop. This shim helps with the following situations:
+#   1. Rubocop is run in a directory without a Gemfile.
+#   2. Rubocop is run in a directory with binstubs.
+#   3. Rubocop is installed globally.
+#
+# We want the $@.
+# shellcheck disable=SC2068
+
+if [ -f "bin/rubocop" ]; then
+  exec "$(pwd)/bin/rubocop" $@
+fi
+
+if [ -f "Gemfile" ]; then
+  exec bundle exec rubocop $@
+fi
+
+exec rubocop $@
