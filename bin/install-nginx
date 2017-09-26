@@ -54,4 +54,4 @@ sudo ./configure --prefix=/opt/nginx \
 sudo make -f "$NGX_SRC/objs/Makefile" binary modules
 sudo make -f "$NGX_SRC/objs/Makefile" install
 
-rm -r $NGX_SRC $OPENSSL_SRC $PCRE_SRC $ZLIB_SRC
+sudo rm -r $NGX_SRC $OPENSSL_SRC $PCRE_SRC $ZLIB_SRC
