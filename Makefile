@@ -30,10 +30,6 @@ latest:
 symlink:
 	ls -1 **/*.symlink | grep symlink | grep -ve "^centos" | grep -ve "^osx" | grep -ve "^ubuntu" | cut -d: -f1 | cut -d"." -f1 | xargs -tI{} ln -s {}.symlink ~/.$(shell basename {})
 
-neovim_symlink:
-	ln -sf $(PWD)/vim/vim.symlink ~/.config/nvim
-	ln -sf $(PWD)/vim/vimrc.symlink ~/.config/nvim/init.vim
-
 submodules:
 	git submodule sync
 	git submodule update --init --recursive
