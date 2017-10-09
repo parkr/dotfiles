@@ -1,0 +1,32 @@
+"*":
+  core:
+    disabledPackages: [
+      "symbols-view"
+    ]
+    telemetryConsent: "no"
+    themes: [
+      "one-light-ui"
+      "one-light-syntax"
+    ]
+  editor:
+    fontSize: 12
+    invisibles: {}
+    preferredLineLength: 120
+    softWrap: true
+    softWrapAtPreferredLineLength: true
+  "exception-reporting":
+    userId: "fd4de55c-fb37-3abb-a377-d74aeac4b372"
+  "linter-puppet-lint":
+    executablePath: "/Users/parkr/github/puppet/bin/puppet-lint"
+    oldVersion: false
+  "linter-rubocop":
+    command: "/Users/parkr/.dotfiles/bin/atom-rubocop"
+    disableWhenNoConfigFile: true
+  "linter-shellcheck":
+    enableNotice: true
+    shellcheckExecutablePath: "/usr/local/bin/shellcheck"
+    userParameters: "-x"
+  "linter-ui-default":
+    showPanel: true
+  welcome:
+    showOnStartup: false
