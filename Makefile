@@ -1,5 +1,4 @@
 UNAME := $(shell uname -s)
-TMBUNDLE_ROOT=$(HOME)/Library/Application Support/Textmate/Bundles
 
 foros:
 	echo $(UNAME)
@@ -15,7 +14,13 @@ Linux: all
 Linux-deps:
 	@true
 
-all: $(UNAME)-deps submodules ruby-build-github bin/letsencrypt.sh bin/hk
+all: $(UNAME)-deps \
+	submodules \
+	ruby-build-github \
+	bin/letsencrypt.sh \
+	bin/hk \
+	submake-atom \
+	submake-textmate
 
 latest:
 	git checkout master
@@ -51,20 +56,5 @@ ruby-build-github: $(UNAME)-deps
 	test -d $(shell rbenv root)/plugins/ruby-build-github/.git || \
 		git clone https://github.com/parkr/ruby-build-github.git $(shell rbenv root)/plugins/ruby-build-github
 
-textmate: kuroir/SCSS.tmbundle \
-  hajder/Ensure-New-Line-at-the-EOF.tmbundle \
-  bomberstudios/Strip-Whitespace-On-Save.tmbundle
-	test -d "$(TMBUNDLE_ROOT)/Cucumber.tmbundle" || \
-	  git clone https://github.com/cucumber/cucumber-tmbundle "$(TMBUNDLE_ROOT)/Cucumber.tmbundle"
-	test -d "$(TMBUNDLE_ROOT)/rubocop.tmbundle" || \
-	  git clone https://github.com/mrdougal/textmate2-rubocop "$(TMBUNDLE_ROOT)/rubocop.tmbundle"
-	test -d "$(TMBUNDLE_ROOT)/protobuf-tmbundle" || \
-	  git clone https://github.com/michaeledgar/protobuf-tmbundle "$(TMBUNDLE_ROOT)/protobuf-tmbundle"
-	test -L "$(TMBUNDLE_ROOT)/Protocol Buffers.tmbundle" || \
-	  ln -s "$(TMBUNDLE_ROOT)/protobuf-tmbundle/Protocol Buffers.tmbundle" "$(TMBUNDLE_ROOT)/Protocol Buffers.tmbundle"
-
-%.tmbundle:
-	$(eval $@_bundlename := $(shell basename $*).tmbundle)
-	$(eval $@_repo := $*.tmbundle)
-	test -d "$(TMBUNDLE_ROOT)/$($@_bundlename)" || \
-	  git clone https://github.com/$($@_repo) "$(TMBUNDLE_ROOT)/$($@_bundlename)"
+submake-%:
+	make -C $(patsubst submake-%,%,$@)
