@@ -1,13 +1,12 @@
 UNAME := $(shell uname -s)
 
 foros:
-	echo $(UNAME)
 	$(MAKE) $(UNAME)
 
 Darwin: all bin/merge-pr textmate
 
 Darwin-deps:
-	cd osx && brew bundle check || brew bundle
+	brew bundle check --file=osx/Brewfile || brew bundle --file=osx/Brewfile
 
 Linux: all
 
