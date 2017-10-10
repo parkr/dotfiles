@@ -1,7 +1,8 @@
-tap 'caskroom/cask'
 tap 'homebrew/bundle'
 tap 'homebrew/dev-tools'
 tap 'homebrew/services'
+tap 'caskroom/cask'
+tap 'caskroom/versions'
 
 brew 'ag'
 brew 'align'
@@ -10,7 +11,6 @@ brew 'autojump'
 brew 'bash'
 brew 'bazaar'
 brew 'center-im'
-brew 'closure-compiler'
 brew 'cmus'
 brew 'ctags'
 brew 'elixir'
@@ -41,7 +41,7 @@ brew 'lua'
 brew 'lynx'
 brew 'moreutils'
 brew 'mr'
-brew 'mysql'
+brew 'mysql', conflicts_with: ["mysql@5.6"]
 brew 'neovim'
 brew 'nmap'
 brew 'nodenv'
@@ -64,9 +64,11 @@ brew 'youtube-dl'
 tap  'caskroom/fonts'
 cask 'font-inconsolata'
 
+cask 'atom-beta'
 cask 'dash'
 cask 'firefox'
 cask 'flux'
+cask 'iterm2'
 cask 'limechat'
 cask 'postgres'
 cask 'sequel-pro'
@@ -83,4 +85,3 @@ mas 'Pages', id: 409201541
 mas 'Slack', id: 803453959
 mas 'StatusClock', id: 552792489
 mas 'Xcode', id: 497799835
-mas 'Wunderlist', id: 410628904
