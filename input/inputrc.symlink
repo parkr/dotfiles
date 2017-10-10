@@ -1,6 +1,7 @@
 $include /etc/inputrc
 "\C-p":history-search-backward
 "\C-n":history-search-forward
+Tab: complete
 
 set colored-stats On
 set completion-ignore-case On
