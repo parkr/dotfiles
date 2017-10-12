@@ -205,3 +205,7 @@ function ci() {
   wait_on hub ci-status -v $@
   say -v Daniel "Your tests have all passed."
 }
+
+function config_value() {
+  cat ~/.config/"$1"
+}
