@@ -4,7 +4,8 @@ install: ~/.atom/config.cson install-packages
 	mkdir -p ~/.atom
 
 ~/.atom/config.cson: ~/.atom
-	ln -sf $(PWD)/config.cson ~/.atom/config.cson
+	ln -sf $(CURDIR)/config.cson ~/.atom/config.cson
 
 install-packages: ~/.atom
 	apm-beta install --package-file $(PWD)/packages-file.txt
+	apm-beta install --package-file $(CURDIR)/package-list.txt
