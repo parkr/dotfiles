@@ -104,6 +104,7 @@
 	pr = pull-request
 	branchdate = for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/heads
 	git = !exec git
+	appraise = !git-appraise
 
 [url "https://github.com/"]
     # Use HTTP for GitHub instead of git:// or git@
