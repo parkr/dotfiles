@@ -7,5 +7,5 @@ install: ~/.atom/config.cson install-packages
 	ln -sf $(CURDIR)/config.cson ~/.atom/config.cson
 
 install-packages: ~/.atom
-	apm-beta install --package-file $(PWD)/packages-file.txt
+	apm-beta install --check # for native build tools
 	apm-beta install --package-file $(CURDIR)/package-list.txt
