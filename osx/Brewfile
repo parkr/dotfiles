@@ -67,6 +67,7 @@ cask 'font-inconsolata'
 
 cask 'atom-beta'
 cask 'dash'
+cask 'encryptme'
 cask 'firefox'
 cask 'flux'
 cask 'iterm2'
