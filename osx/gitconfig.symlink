@@ -70,6 +70,7 @@
 [alias]
 	commti = commit
 	ocmmit = commit
+    comit = commit
 	undo = reset --soft HEAD^
 	co = checkout
 	ci = commit
