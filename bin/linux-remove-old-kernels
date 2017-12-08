@@ -1,0 +1,13 @@
+#!/bin/bash
+
+IMAGES_TO_REMOVE=$(sudo dpkg --list 'linux-image*' | \
+  grep ^ii | \
+  awk '{print $2}' | \
+  grep -v "$(uname -r)")
+
+if test -z "$IMAGES_TO_REMOVE"; then
+  echo "$(basename $0): nothing to remove"
+  exit 0
+fi
+
+sudo apt remove -y $IMAGES_TO_REMOVE
