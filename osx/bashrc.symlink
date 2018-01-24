@@ -39,6 +39,7 @@ alias gti=git
 alias guit=git
 alias giut=git
 alias gut=git
+alias ghit=git
 alias gity=git
 
 alias commit='git commit'
