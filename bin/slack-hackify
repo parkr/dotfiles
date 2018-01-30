@@ -1,0 +1,18 @@
+#!/bin/bash
+
+JS_SOURCE="https://raw.githubusercontent.com/openark/custom-slack-css/master/slack-hack.js"
+
+if [ -d "/Applications/Slack.app" ]; then
+  SSB_INTEROP_JS="/Applications/Slack.app/Contents/Resources/app.asar.unpacked/src/static/ssb-interop.js"
+else
+  SSB_INTEROP_JS="/usr/lib/slack/resources/app.asar.unpacked/src/static/ssb-interop.js"
+fi
+
+if cat "$SSB_INTEROP_JS" | grep "openark/custom-slack-css" > /dev/null; then
+  echo "Looks like it's already installed!"
+  exit 1
+fi
+
+curl "$JS_SOURCE" | sudo tee -a "$SSB_INTEROP_JS"
+
+echo "Written to $SSB_INTEROP_JS"
