@@ -1,3 +1,4 @@
+.bundle
 .DS_Store
 *~
 *#*
@@ -7,6 +8,7 @@ bin/merge-pr
 mutt/mutt.symlink/certificates
 mutt/mutt.symlink/accounts
 mutt/mutt.symlink/cache
+rubybin/
 vim/vim.symlink/.netrwhist
 vim/vim.symlink/init.vim
 vim/vim.symlink/vim.symlink

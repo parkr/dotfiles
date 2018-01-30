@@ -26,6 +26,20 @@ task :installforos do
   print "Which OS config files do you want to link? (#{operating_systems.join("/")}) "
   myos = STDIN.gets.chomp
 
+  case myos
+  when "Darwin"
+    myos = "osx"
+  when "Linux"
+    lsb_release = `lsb_release -a`.strip
+    if lsb_release =~ /Debian/
+      myos = "ubuntu"
+    else
+      myos = "centos"
+    end
+  else
+    abort "OS #{myos.inspect} is not supported."
+  end
+
   linkables.contain([myos]).each do |linkable|
     overwrite = false
     backup = false

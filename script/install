@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+script/bootstrap || exit 1
+
+rubybin/rake install
+uname -s | rubybin/rake installforos
