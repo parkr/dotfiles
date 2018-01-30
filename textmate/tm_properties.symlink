@@ -62,3 +62,6 @@ tabSize          = 2
 
 [ "{README,INSTALL,LICENSE,TODO}" ]
 fileType         = "text.plain"
+
+[ "*.gemfile" ]
+fileType         = "source.ruby.gemfile"
