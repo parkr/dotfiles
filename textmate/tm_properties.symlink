@@ -57,6 +57,9 @@ tabSize          = 2
 [ source.scss ]
 tabSize          = 2
 
+[ source.puppet ]
+tabSize          = 2
+
 [ text.html.erb.rails ]
 tabSize          = 2
 
