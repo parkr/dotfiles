@@ -1,0 +1,23 @@
+#!/bin/bash
+# Usage: xfer filename remote_host
+
+set -e
+
+usage() {
+  echo "usage: $0 <filename> <host>" >&2
+}
+
+filename="$1"
+if [ -z "$filename" ]; then
+  usage
+  exit 1
+fi
+
+host="$2"
+if [ -z "$host" ]; then
+  usage
+  exit 1
+fi
+
+tar cf - "$filename" | ssh "$host" tar xf - -C /tmp/
+echo "Written to /tmp/ on $host"
