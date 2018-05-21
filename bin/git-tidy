@@ -1,0 +1,14 @@
+#!/bin/bash
+# Delete merged local branches
+# Yoinked from @appleton:
+# https://github.com/appleton/dotfiles/blob/master/bin/git-tidy
+
+set -o pipefail
+
+branches=$(git branch --merged | grep -v "\*")
+if test -z "$branches"; then
+  echo "No more branches to tidy."
+  exit 0
+fi
+
+echo "$branches" | xargs -n 1 git branch -d
