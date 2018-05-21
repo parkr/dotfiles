@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -ex
+
+new_mac="$(openssl rand -hex 5 | sed 's/\(..\)/:\1/g')"
+
+sudo /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -z \
+  && sudo ifconfig en0 ether "a0${new_mac}" \
+  && networksetup -detectnewhardware
