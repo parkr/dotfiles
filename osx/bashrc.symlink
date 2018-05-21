@@ -41,6 +41,7 @@ alias giut=git
 alias gut=git
 alias ghit=git
 alias gity=git
+alias qgit=git
 
 alias commit='git commit'
 alias push='git push'
