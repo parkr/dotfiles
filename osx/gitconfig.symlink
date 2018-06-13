@@ -3,7 +3,6 @@
 [user]
 	name = Parker Moore
 	email = parkrmoore@gmail.com
-	signingkey = 72063C58
 
 # Include work configuration for work product.
 #
@@ -137,9 +136,5 @@
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
-[commit]
-	gpgSign = true
 [interactive]
 	diffFilter = diff-highlight
-[gpg]
-	program = gpg1
