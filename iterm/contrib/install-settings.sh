@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2059
 
+#
+# edits by parkr:
+# 1. instead of pulling from the web, pull from the local copy stored a
+#    directory away
+
 main() {
   set -eu
   if [ -n "${DEBUG:-}" ]; then set -x; fi
@@ -9,15 +14,13 @@ main() {
   need_cmd plutil
   check_for_iterm
 
-  local repo="https://raw.githubusercontent.com/fnichol/macosx-iterm2-settings"
-
   local plist="com.googlecode.iterm2.plist"
-  local plist_url="$repo/master/$plist"
+  local repo_prefs="$(dirname "$0")/../com.googlecode.iterm2.plist"
   local new_plist="/tmp/${plist}-$$"
   local installed_plist="$HOME/Library/Preferences/$plist"
 
-  header "Downloading plist from $plist_url"
-  if curl -sSf "$plist_url" | plutil -convert binary1 -o "$new_plist" -; then
+  header "Copying plist from $repo_prefs"
+  if cat "$repo_prefs" | plutil -convert binary1 -o "$new_plist" -; then
     cp -f "$new_plist" "$installed_plist"
     rm -f "$new_plist"
     info "iTerm preferences installed or updated in $installed_plist."
