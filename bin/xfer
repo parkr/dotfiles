@@ -20,4 +20,5 @@ if [ -z "$host" ]; then
 fi
 
 tar cf - "$filename" | ssh "$host" tar xf - -C /tmp/
-echo "Written to /tmp/ on $host"
+ssh "$host" -- mv "/tmp/$filename" "~/$filename"
+echo "Written to ~/$filename on $host"
