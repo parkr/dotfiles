@@ -3,7 +3,7 @@ UNAME := $(shell uname -s)
 foros:
 	$(MAKE) $(UNAME)
 
-Darwin: all bin/merge-pr textmate
+Darwin: all bin/merge-pr textmate hosts
 
 Darwin-deps:
 	brew bundle check --file=osx/Brewfile || brew bundle --file=osx/Brewfile
@@ -53,3 +53,6 @@ ruby-build-github: $(UNAME)-deps
 
 submake-%:
 	make -C $(patsubst submake-%,%,$@)
+
+hosts:
+	@./osx/install-hosts-file.sh
