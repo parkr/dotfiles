@@ -20,6 +20,7 @@
 set -e
 
 NGINX_CONF=/opt/nginx/conf
+: ${EDITOR:="vim"}
 
 usage() {
   info=$(usage-and-help $0)
