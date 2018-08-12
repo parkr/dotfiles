@@ -3,7 +3,9 @@
 # Displays PR's to be reviewed, deployed, & to fix/update.
 # Displays issues assigned to me.
 
-command -v unearth || go install github.com/parkr/auto-reply/cmd/unearth
+set -e
+
+command -v unearth || go get github.com/parkr/auto-reply/cmd/unearth
 
 export GITHUB_ACCESS_TOKEN=$(cat ~/.token)
 
