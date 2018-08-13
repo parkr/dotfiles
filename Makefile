@@ -3,10 +3,14 @@ UNAME := $(shell uname -s)
 foros:
 	$(MAKE) $(UNAME)
 
-Darwin: all bin/merge-pr textmate hosts
+Darwin: all \
+  bin/merge-pr \
+  hosts \
+  submake-atom \
+  submake-iterm \
+  submake-textmate
 
-Darwin-deps:
-	brew bundle check --file=osx/Brewfile || brew bundle --file=osx/Brewfile
+Darwin-deps: submake-osx
 
 Linux: all
 
@@ -14,12 +18,8 @@ Linux-deps:
 	@true
 
 all: $(UNAME)-deps \
-	submodules \
 	ruby-build-github \
-	bin/letsencrypt.sh \
-	bin/hk \
-	submake-atom \
-	submake-textmate
+	submodules
 
 latest:
 	git checkout master
@@ -32,10 +32,6 @@ symlink:
 submodules:
 	git submodule sync
 	git submodule update --init --recursive
-
-bin/letsencrypt.sh:
-	wget https://github.com/lukas2511/letsencrypt.sh/raw/master/letsencrypt.sh -O ./bin/letsencrypt.sh
-	chmod 755 ./bin/letsencrypt.sh
 
 bin/merge-pr: go
 	which merge-pr || go get -u byparker.com/go/merge-pr
