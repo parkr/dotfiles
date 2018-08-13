@@ -1,9 +1,15 @@
 bind '"\C-j": "\C-atime \C-m"'
 #export TIMEFORMAT='r: %R, u: %U, s: %S'
 
-source /usr/local/etc/bash_completion.d/git-completion.bash
-source /usr/local/etc/bash_completion.d/git-prompt.sh
-source /usr/local/etc/bash_completion.d/youtube-dl.bash-completion
+source_if_there() {
+  local file="$1"
+  if [ -f "$file" ]; then
+    source "$file"
+  fi
+}
+source_if_there /usr/local/etc/bash_completion.d/git-completion.bash
+source_if_there /usr/local/etc/bash_completion.d/git-prompt.sh
+source_if_there /usr/local/etc/bash_completion.d/youtube-dl.bash-completion
 
 # Customize terminal prompt
 # Set a fancy prompt (non-color, unless we know we "want" color)
