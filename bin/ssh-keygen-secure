@@ -1,0 +1,17 @@
+#!/bin/bash
+#/ Usage: ssh-keygen-secure <name>
+#/ Generates an asymmetric keypair based on the security of the day.
+
+main() {
+  local name="$1"
+  if [ -z "$name" ]; then
+    read -p "What would you like to name this key? (not a filename): " -r name
+  fi
+  if [ -z "$name" ]; then
+    echo "failure: empty name given, pass as first argument"
+    exit 1
+  fi
+  ssh-keygen -t ed25519 -o -a 100 -C "$name"
+}
+
+main "$@"
