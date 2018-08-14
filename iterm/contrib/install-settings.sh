@@ -10,14 +10,16 @@ main() {
   set -eu
   if [ -n "${DEBUG:-}" ]; then set -x; fi
 
-  need_cmd curl
   need_cmd plutil
-  check_for_iterm
 
   local plist="com.googlecode.iterm2.plist"
   local repo_prefs="$(dirname "$0")/../com.googlecode.iterm2.plist"
   local new_plist="/tmp/${plist}-$$"
   local installed_plist="$HOME/Library/Preferences/$plist"
+
+  check_if_update_needed "$repo_prefs" "$installed_plist"
+
+  check_for_iterm
 
   header "Copying plist from $repo_prefs"
   if cat "$repo_prefs" | plutil -convert binary1 -o "$new_plist" -; then
@@ -45,6 +47,30 @@ check_for_iterm() {
     warn "You appear to have iTerm.app currently running. Please quit the"
     warn "application so your updates won't get overridden on quit."
     exit_with "iTerm.app cannot be running" 4
+  fi
+}
+
+check_if_update_needed() {
+  header "Checking if update is necessary..."
+
+  need_cmd plutil
+  need_cmd xmllint
+
+  local repo_prefs="$1"
+  local installed_plist="$2"
+  local installed_prefs="/tmp/iterm2-installed-prefs.$$.xml"
+
+  if [ -f "$installed_plist" ]; then
+    if plutil -convert xml1 -o - "$installed_plist" \
+      | xmllint --format - > "$installed_prefs"; then
+      if diff "$repo_prefs" "$installed_prefs" > /dev/null 2>&1; then
+        exit_with "Installed settings match." 0
+      else
+        warn "Installed settings do not match."
+      fi
+    else
+      warn "Could not check $installed_plist."
+    fi
   fi
 }
 
