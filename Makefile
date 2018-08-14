@@ -40,9 +40,6 @@ bin/merge-pr: go
 go:
 	go version
 
-bin/hk:
-	ln -sf $(PWD)/bin/hk-$(shell uname -s | tr '[:upper:]' '[:lower:]') $(PWD)/bin/hk
-
 ruby-build-github: $(UNAME)-deps
 	test -d $(shell rbenv root)/plugins/ruby-build-github/.git || \
 		git clone https://github.com/parkr/ruby-build-github.git $(shell rbenv root)/plugins/ruby-build-github
