@@ -1,0 +1,7 @@
+{
+    "telemetry.enableTelemetry": false,
+    "terminal.external.osxExec": "iTerm2.app",
+    "workbench.startupEditor": "welcomePage",
+    "window.zoomLevel": 1,
+    "workbench.colorTheme": "GitHub Plus"
+}
