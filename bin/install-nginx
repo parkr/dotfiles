@@ -1,11 +1,18 @@
 #!/bin/bash -xe
 
-NGX_VERSION="1.13.5"
+# Latest versions shown on http://nginx.org/en/download.html
+NGX_VERSION="1.15.2"
 NGX_SRC="/tmp/nginx-${NGX_VERSION}"
-OPENSSL_VERSION="1.1.0f"
+
+# Latest versions shown on https://www.openssl.org/source/
+OPENSSL_VERSION="1.1.0i"
 OPENSSL_SRC="/tmp/openssl-${OPENSSL_VERSION}"
-PCRE_VERSION="8.40"
+
+# Latest versions shown on https://ftp.pcre.org/pub/pcre/
+PCRE_VERSION="8.42"
 PCRE_SRC="/tmp/pcre-${PCRE_VERSION}"
+
+# Latest versions shown on https://zlib.net
 ZLIB_VERSION="1.2.11"
 ZLIB_SRC="/tmp/zlib-${ZLIB_VERSION}"
 
