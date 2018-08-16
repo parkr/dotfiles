@@ -154,7 +154,6 @@ brew_up () {
   brew update -v
   brew upgrade -v
   brew cleanup
-  brew cask cleanup
 }
 
 hkdeploy () {
