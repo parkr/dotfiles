@@ -153,6 +153,7 @@ alias deploy="bundle exec cap production deploy"
 brew_up () {
   brew update -v
   brew upgrade -v
+  brew cask upgrade -v
   brew cleanup
 }
 
