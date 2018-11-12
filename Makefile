@@ -18,8 +18,8 @@ Linux-deps:
 	@true
 
 all: $(UNAME)-deps \
-	ruby-build-github \
-	submodules
+	submodules \
+	ruby-build-github
 
 latest:
 	git checkout master
