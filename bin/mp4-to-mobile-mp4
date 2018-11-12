@@ -1,0 +1,30 @@
+#!/bin/bash
+# Convert an mp4 into another mp4 but at a lower bitrate, capable of being
+# watched on a mobile device.
+# Thank you, Stack Overflow.
+# https://stackoverflow.com/questions/13560852/convert-mp4-to-maximum-mobile-supported-mp4-using-ffmpeg
+
+set -e
+
+input_file="$1"
+if [ -z "$input_file" ]; then
+  usage
+  exit 1
+fi
+
+output_file="$2"
+if [ -z "$output_file" ]; then
+  usage
+  exit 1
+fi
+
+ffmpeg -i "$input_file" \
+  -vcodec libx264 \
+  -vprofile high \
+  -preset slower \
+  -b:v 1000k \
+  -vf scale=-1:576 \
+  -threads 0 \
+  -acodec libvo_aacenc \
+  -ab 196k \
+  "$output_file"
