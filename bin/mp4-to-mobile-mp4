@@ -4,6 +4,10 @@
 # Thank you, Stack Overflow.
 # https://stackoverflow.com/questions/13560852/convert-mp4-to-maximum-mobile-supported-mp4-using-ffmpeg
 
+usage() {
+  echo "usage: $0 <input_file> <output_file>"
+}
+
 set -e
 
 input_file="$1"
