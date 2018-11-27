@@ -7,7 +7,11 @@ set -e
 
 command -v unearth || go get github.com/parkr/auto-reply/cmd/unearth
 
-export GITHUB_ACCESS_TOKEN=$(cat ~/.token)
+if [ -f "$HOME/.token" ]; then
+  export GITHUB_ACCESS_TOKEN=$(cat ~/.token)
+else
+  export GITHUB_ACCESS_TOKEN=$(grep oauth_token ~/.config/hub | awk '{print $2}')
+fi
 
 echo "==> PR's to review:"
 unearth user:github type:pr is:open review-requested:parkr
