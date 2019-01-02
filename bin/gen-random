@@ -1,0 +1,2 @@
+#!/bin/sh
+pwgen -0 -A -B 10 1
