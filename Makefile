@@ -18,8 +18,9 @@ Linux-deps:
 	@true
 
 all: $(UNAME)-deps \
-	submodules \
-	ruby-build-github
+	command-t \
+	ruby-build-github \
+	submodules
 
 latest:
 	git checkout master
@@ -49,3 +50,7 @@ submake-%:
 
 hosts:
 	@./osx/install-hosts-file.sh
+
+command-t: submodules
+	cd vim/vim.symlink/bundle/Command-T && bundle update
+	cd vim/vim.symlink/bundle/Command-T && bundle exec rake make
