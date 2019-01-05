@@ -1,0 +1,124 @@
+# User information. Replace with your own data, obviously.
+#
+[user]
+	name = Parker Moore
+	email = parkrmoore@gmail.com
+
+# Automatically track branches with the same name
+#
+[branch]
+	autosetupmerge = true
+
+# Highlight additions/deletions inside a given line more noticeably.
+#
+#[pager]
+#    log = diff-highlight | less
+#    show = diff-highlight | less
+#    diff = diff-highlight | less
+
+# Pretty format
+#
+# [format]
+#	pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
+
+# Push the current branch as the default behaviour
+#
+[push]
+	default = current
+
+# Include a summary of changes in merge commit messages.
+#
+[merge]
+	summary = true
+
+# Color configuration.
+#
+[color]
+	ui = true
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+
+# Whitespace handling, editor config, global excludes
+#
+[core]
+	editor = vim
+	whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
+	excludesfile = ~/.gitignore
+	precomposeunicode = true
+	precomposeUnicode = true
+
+# Useful aliases
+#
+[alias]
+	commti = commit
+	ocmmit = commit
+	undo = reset --soft HEAD^
+	co = checkout
+	ci = commit
+	st = status
+	s = status
+	br = branch
+	df = diff
+	dif = diff
+	dc = diff --cached
+	ls = ls-files
+	aa = add --all
+	type = cat-file -t
+	dump = cat-file -p
+	amend = commit --amend
+	pyll = pull
+	pul = pull
+    psh = push
+    pus = push
+    psuh = push
+    puysh = push
+    pushj = push
+	hist = "log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short"
+	lol = log --graph --decorate --pretty=oneline --abbrev-commit
+	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)%Creset' --abbrev-commit
+	l = log --graph --abbrev-commit --date=relative
+	count = shortlog -sn
+	ll = log --pretty=oneline --abbrev-commit --max-count=15
+	stats = shortlog -sn
+	contribs = contributors
+	pr = pull-request
+
+[url "https://github.com/"]
+    # Use HTTP for GitHub instead of git:// or git@
+    # Enable this in networks where git:// or git@ are blocked.
+    insteadOf = git://github.com/
+    #insteadOf = git@github.com:
+
+# Git Applications
+#
+[github]
+	user = parkr
+[filter "media"]
+	required = true
+	clean = git media clean %f
+	smudge = git media smudge %f
+[http]
+	cookiefile = ~/.gitcookies
+[filter "hawser"]
+	clean = git hawser clean %f
+	smudge = git hawser smudge %f
+	required = true
+[filter "lfs"]
+	clean = git lfs clean %f
+	smudge = git lfs smudge %f
+	required = true
+[interactive]
+	diffFilter = diff-highlight
