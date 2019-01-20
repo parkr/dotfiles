@@ -53,6 +53,7 @@ sudo ./configure --prefix=/opt/nginx \
   --with-http_gzip_static_module \
   --with-http_stub_status_module \
   --with-http_addition_module \
+  --with-http_mp4_module \
   --with-cc-opt=-Wno-error \
   --with-ld-opt= \
   --with-openssl=$OPENSSL_SRC \
