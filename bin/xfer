@@ -19,6 +19,10 @@ if [ -z "$host" ]; then
   exit 1
 fi
 
-tar cf - "$filename" | ssh "$host" tar xf - -C /tmp/
+set -o pipefail
+set -eu
+
+set -x
+tar cf - "$filename" | pv -pterab | ssh "$host" tar xf - -C /tmp/
 ssh "$host" -- mv "/tmp/$filename" "~/$filename"
 echo "Written to ~/$filename on $host"
