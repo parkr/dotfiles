@@ -8,11 +8,13 @@
 #/   enable: enable site, requires site_name argument
 #/   disable: disable site, requires site_name argument
 #/   edit: edit a site configuration, requires site_name argument
+#/   reload: reload nginx
 #/   restart: restart nginx
 #/   start: start nginx
 #/   status: print nginx process status
 #/   stop:  stop nginx & kill all processes with that name
 #/   security: generates security files for a site, requires site_name argument
+#/   version: print the nginx version and exit
 #/
 # Author: parkr
 # Source: https://github.com/parkr/dotfiles/blob/master/bin/nginx
@@ -49,7 +51,7 @@ case "$1" in
     enabled_sites
     exit 0
     ;;
-  start|restart|status)
+  start|reload|restart|status)
     sudo service nginx "$1"
     exit $?
     ;;
@@ -64,6 +66,10 @@ case "$1" in
     ;;
   check)
     sudo /opt/nginx/sbin/nginx -t
+    exit $?
+    ;;
+  version)
+    /opt/nginx/sbin/nginx -V
     exit $?
     ;;
   enable|disable|edit|security|dhparam)
@@ -106,7 +112,10 @@ case "$1" in
     echo "==> Add ssl_dhparam $DHPARAM_PATH to your site's configuration."
     ;;
   security)
+    set +e
+    renew-cert "$2"
     "$0" dhparam "$2"
+    set -e
     ;;
   *)
     usage

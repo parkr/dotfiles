@@ -18,7 +18,7 @@ end
 desc "Install OS-specific config files"
 task :installforos do
   linkables = Dir.glob('*/**{.symlink}')
-  operating_systems = ['centos', 'osx', 'ubuntu']
+  operating_systems = ['debian', 'centos', 'osx', 'ubuntu']
   skip_all = false
   overwrite_all = false
   backup_all = false
@@ -26,17 +26,18 @@ task :installforos do
   print "Which OS config files do you want to link? (#{operating_systems.join("/")}) "
   myos = STDIN.gets.chomp
 
-  case myos
-  when "Darwin"
-    myos = "osx"
-  when "Linux"
+  myos = "osx" if myos.eql?("Darwin")
+
+  if myos.eql?("Linux")
     lsb_release = `lsb_release -a`.strip
     if lsb_release =~ /Debian/
-      myos = "ubuntu"
+      myos = "debian"
     else
       myos = "centos"
     end
-  else
+  end
+
+  unless operating_systems.include?(myos)
     abort "OS #{myos.inspect} is not supported."
   end
 

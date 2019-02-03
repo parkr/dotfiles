@@ -1,0 +1,68 @@
+#!/bin/bash
+
+usage() {
+  echo "$0 <input> <output>"
+}
+
+file_exists_on_host () {
+  local host="$1"
+  local dest_dir="$2"
+  local file="$3"
+  local file_md5sum="$(md5sum "$file" | awk '{print $1}')"
+  local file_basename="$(basename "$file")"
+
+  (set -x; ssh "$host" -- "md5sum \"${dest_dir}/${file_basename}\" | grep -q \"${file_md5sum}\"")
+}
+
+transfer_file () {
+  local host="$1"
+  local dest_dir="$2"
+  local file="$3"
+  local file_dirname="$(dirname "$file")"
+  local file_basename="$(basename "$file")"
+  echo "Transferring $file ..."
+  pushd "$file_dirname"
+  (set -x; xfer "$file_basename" "$host")
+  popd
+  (set -x; ssh "$host" -- mv "$file_basename" "${dest_dir}/${file_basename}")
+}
+
+INPUT_DIR="$1"
+OUTPUT_DIR="$2"
+
+[ -z "$INPUT_DIR" ] && usage && exit 1
+[ -z "$OUTPUT_DIR" ] && usage && exit 1
+
+if echo "$OUTPUT_DIR" | grep -q :; then
+  host=$(echo "$OUTPUT_DIR" | cut -d : -f 1)
+  dest_dir=$(echo "$OUTPUT_DIR" | cut -d : -f 2)
+else
+  host="localhost"
+  dest_dir="$OUTPUT_DIR"
+fi
+
+set -eu
+
+if [ -f "$INPUT_DIR" ]; then
+  transfer_file "$host" "$dest_dir" "$INPUT_DIR"
+  exit $?
+fi
+
+counter=0
+for input_file in "${INPUT_DIR}"/*
+do
+  if [ -f "$input_file" ]; then
+    (file_exists_on_host "$host" "$dest_dir" "$input_file" \
+      && echo "$input_file already exists on $host") \
+      || transfer_file "$host" "$dest_dir" "$input_file"
+  fi
+
+  if [ -d "$input_file" ]; then
+    "$0" "$input_file" "${OUTPUT_DIR}/$(basename "$input_file")"
+  fi
+
+  ((counter++))
+  echo
+done
+
+echo "Transferred $counter files to $OUTPUT_DIR"
