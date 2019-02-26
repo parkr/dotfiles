@@ -4,5 +4,9 @@
         "key": "cmd+t",
         "command": "workbench.action.quickOpen",
         "when": "editorTextFocus"
+    },
+    {
+        "key": "shift+alt+up",
+        "command": "-editor.action.copyLinesUpAction"
     }
 ]
