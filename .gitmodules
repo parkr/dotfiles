@@ -67,3 +67,6 @@
 [submodule "vim/vim.symlink/bundle/ale"]
 	path = vim/vim.symlink/bundle/ale
 	url = https://github.com/w0rp/ale.git
+[submodule "vim/vim.symlink/bundle/vim-terraform"]
+	path = vim/vim.symlink/bundle/vim-terraform
+	url = https://github.com/hashivim/vim-terraform.git
