@@ -1,0 +1,8 @@
+#!/bin/bash
+set -ex
+
+pushd "$HOME/.dotfiles/vim/vim.symlink/bundle/Command-T"
+rbenv version
+bundle install
+bundle exec rake make
+popd
