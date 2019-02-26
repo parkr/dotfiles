@@ -1,4 +1,5 @@
 {
+    "editor.rulers": [80,120],
     "telemetry.enableTelemetry": false,
     "terminal.external.osxExec": "iTerm2.app",
     "workbench.startupEditor": "none",
@@ -6,5 +7,18 @@
     "workbench.colorTheme": "GitHub Plus",
     "window.nativeTabs": true,
     "editor.minimap.enabled": false,
-    "workbench.statusBar.feedback.visible": false
+    "workbench.statusBar.feedback.visible": false,
+    "[javascript]": {
+        "editor.tabSize": 2
+    },
+    "[json]": {
+        "editor.tabSize": 2
+    },
+    "[ruby]": {
+        "editor.tabSize": 2
+    },
+    "ruby.rubocop.executePath": "/Users/parkr/.dotfiles/bin/",
+    "trailing-spaces.trimOnSave": true,
+    "files.autoSave": "off",
+    "go.lintTool": "golangci-lint"
 }
