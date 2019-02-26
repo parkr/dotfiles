@@ -19,10 +19,18 @@ if [ -z "$host" ]; then
   exit 1
 fi
 
+if echo "$host" | grep -q :; then
+  dest_dir=$(echo "$host" | cut -d : -f 2)
+  host=$(echo "$host" | cut -d : -f 1)
+else
+  REMOTE_USERNAME=$(ssh "$host" -- whoami)
+  dest_dir="/home/${REMOTE_USERNAME}"
+fi
+
 set -o pipefail
 set -eu
 
 set -x
-tar cf - "$filename" | pv -pterab | ssh "$host" tar xf - -C /tmp/
-ssh "$host" -- mv "/tmp/$filename" "~/$filename"
+tar cf - "$filename" | pv -pterab | ssh "$host" tar xf - -C "$dest_dir"
+ssh "$host" -- "test -f \"${dest_dir}/$(basename "${filename}")\""
 echo "Written to ~/$filename on $host"
