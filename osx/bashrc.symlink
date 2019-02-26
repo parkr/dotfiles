@@ -203,7 +203,7 @@ function wait_on(){
     if [ $code -gt 5 ] || [ $code -lt 1 ]; then
       break
     fi
-    echo "---> (above printed at $(date +%Y-%m-%dT%H:%m:%S))"
+    echo "---> (above printed at $(date +%Y-%m-%dT%H:%M:%S))"
     sleep 5
   done
   say -v Fiona "Task is done."
