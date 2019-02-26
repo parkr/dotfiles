@@ -71,6 +71,7 @@
 	ocmmit = commit
     comimt = commit
     comit = commit
+  commt = commit
 	undo = reset --soft HEAD^
 	co = checkout
     oc = checkout
@@ -88,12 +89,14 @@
 	amend = commit --amend
 	pyll = pull
 	pul = pull
+    puill = pull
     psh = push
     puhs = push
     pus = push
     psuh = push
     puysh = push
     pushj = push
+    piush = push
 	hist = "log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short"
 	lol = log --graph --decorate --pretty=oneline --abbrev-commit
 	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
@@ -140,3 +143,5 @@
 	process = git-lfs filter-process
 [interactive]
 	diffFilter = diff-highlight
+[protocol]
+	version = 2
