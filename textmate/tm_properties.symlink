@@ -54,6 +54,9 @@ tabSize          = 2
 [ source.coffee ]
 tabSize          = 2
 
+[ source.js ]
+tabSize          = 2
+
 [ source.scss ]
 tabSize          = 2
 
