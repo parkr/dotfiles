@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ -x "/usr/local/bin/dive" ]; then
+  exec /usr/local/bin/dive "$@"
+else
+  docker run --rm \
+    -it \
+    -v /usr/local/bin/docker:/bin/docker \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    wagoodman/dive:latest \
+    "$@"
+fi
