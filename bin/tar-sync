@@ -21,10 +21,8 @@ transfer_file () {
   local file_dirname="$(dirname "$file")"
   local file_basename="$(basename "$file")"
   echo "Transferring $file ..."
-  pushd "$file_dirname"
-  (set -x; xfer "$file_basename" "$host")
-  popd
-  (set -x; ssh "$host" -- mv "$file_basename" "${dest_dir}/${file_basename}")
+  cd "$file_dirname"
+  (set -x; xfer "$file_basename" "${host}:${dest_dir}")
 }
 
 INPUT_DIR="$1"
