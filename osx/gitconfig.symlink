@@ -63,6 +63,8 @@
 	excludesfile = ~/.gitignore
 	precomposeunicode = true
 	precomposeUnicode = true
+	eol = lf
+	autocrlf = input
 
 # Useful aliases
 #
