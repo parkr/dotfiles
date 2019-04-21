@@ -4,7 +4,9 @@ install: textmate
 
 textmate: kuroir/SCSS.tmbundle \
   hajder/Ensure-New-Line-at-the-EOF.tmbundle \
-  bomberstudios/Strip-Whitespace-On-Save.tmbundle
+  bomberstudios/Strip-Whitespace-On-Save.tmbundle \
+  ravasthi/graphql.tmbundle \
+  aurynn/Terraform.tmbundle
 	test -d "$(TMBUNDLE_ROOT)/Cucumber.tmbundle" || \
 	  git clone https://github.com/cucumber/cucumber-tmbundle "$(TMBUNDLE_ROOT)/Cucumber.tmbundle"
 	test -d "$(TMBUNDLE_ROOT)/rubocop.tmbundle" || \
