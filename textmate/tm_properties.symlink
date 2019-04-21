@@ -14,7 +14,7 @@ include			= "{$include,$myExtraIncludes}"
 
 # Hide log, vendor and tmp directories from search popups.
 #
-myExtraExcludes			= "log,vendor,tmp,node_modules,_vendor"
+myExtraExcludes			= "log,vendor,tmp,node_modules,_vendor,public/packs"
 excludeInFileChooser	= "{$excludeInFileChooser,$myExtraExcludes}"
 excludeInFolderSearch	= "{$excludeInFolderSearch,$myExtraExcludes}"
 
