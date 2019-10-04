@@ -8,7 +8,7 @@ fontSize	= 14
 
 # Extra files to include
 #
-myExtraIncludes	= ".rubocop.yml,.tm_properties,.htaccess,.gitignore,.env"
+myExtraIncludes	= ".rubocop.yml,.tm_properties,.htaccess,.gitignore,.env,.github,.dockerignore"
 fileBrowserGlob	= "{*,$myExtraIncludes}"
 include			= "{$include,$myExtraIncludes}"
 
