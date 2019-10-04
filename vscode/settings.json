@@ -20,5 +20,8 @@
     "ruby.rubocop.executePath": "/Users/parkr/.dotfiles/bin/",
     "trailing-spaces.trimOnSave": true,
     "files.autoSave": "off",
-    "go.lintTool": "golangci-lint"
+    "go.lintTool": "golangci-lint",
+    "git.confirmSync": false,
+    "go.formatTool": "goimports",
+    "go.useLanguageServer": false
 }
