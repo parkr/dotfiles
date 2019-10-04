@@ -262,6 +262,7 @@ au BufRead,BufNewFile Brewfile setlocal ft=brewfile syntax=ruby
 au BufRead,BufNewFile Capfile setlocal ft=capfile syntax=ruby
 au BufRead,BufNewFile *.rs setlocal ft=rust syntax=rust
 au BufRead,BufNewFile Dockerfile* setlocal ft=dockerfile syntax=dockerfile
+au BufRead,BufNewFile *.workflow setlocal ft=terraform syntax=terraform
 
 " Disable ALE on every text change.
 let g:ale_lint_on_text_changed = 'never'
