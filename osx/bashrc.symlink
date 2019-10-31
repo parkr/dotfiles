@@ -195,25 +195,6 @@ if [ -f "$HOME/.localrc" ]; then
   source $HOME/.localrc
 fi
 
-function wait_on(){
-  while true; do
-    $@
-    code=$?
-    test -n "$DEBUG" && echo "code=$code"
-    if [ $code -gt 5 ] || [ $code -lt 1 ]; then
-      break
-    fi
-    echo "---> (above printed at $(date +%Y-%m-%dT%H:%M:%S))"
-    sleep 5
-  done
-  say -v Fiona "Task is done."
-}
-
-function ci() {
-  wait_on hub ci-status -v $@
-  say -v Daniel "Your tests have all passed."
-}
-
 function config_value() {
   cat ~/.config/"$1"
 }
