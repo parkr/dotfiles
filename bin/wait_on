@@ -1,0 +1,17 @@
+#!/bin/bash
+#/ Usage: wait_on long-running-script
+#/ Runs a given command in a loop with a five second delay between each
+#/ execution. If the exit code is greater than 5 or less  than 1, then it
+#/ halts and says to your speakers, "Task is done."
+
+while true; do
+    $@;
+    code=$?;
+    test -n "$DEBUG" && echo "code=$code";
+    if [ $code -gt 5 ] || [ $code -lt 1 ]; then
+        break;
+    fi;
+    echo "---> (above printed at $(date +%Y-%m-%dT%H:%M:%S))";
+    sleep 5;
+done;
+say -v Fiona "Task is done."

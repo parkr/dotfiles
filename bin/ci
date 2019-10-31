@@ -1,0 +1,7 @@
+#!/bin/bash
+#/ Usage: `ci`
+#/ Prints verbose CI status from GitHub, every 5 seconds, until it's passing.
+#/ Once complete, it will say "Your tests have all passed."
+
+wait_on hub ci-status -v "$@";
+say -v Daniel "Your tests have all passed."
