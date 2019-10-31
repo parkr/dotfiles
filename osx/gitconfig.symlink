@@ -147,3 +147,5 @@
 	diffFilter = diff-highlight
 [protocol]
 	version = 2
+[diff]
+	noprefix = true
