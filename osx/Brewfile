@@ -1,8 +1,7 @@
 tap 'homebrew/bundle'
-tap 'homebrew/dev-tools'
 tap 'homebrew/services'
-tap 'caskroom/cask'
-tap 'caskroom/versions'
+tap 'homebrew/cask-cask'
+tap 'homebrew/cask-versions'
 
 brew 'ag'
 brew 'align'
@@ -60,15 +59,13 @@ brew 'tmux'
 brew 'tree'
 brew 'vim'
 brew 'wget'
-brew 'wireshark'
 brew 'youtube-dl'
 
-tap  'caskroom/fonts'
+tap  'homebrew/cask-fonts'
 cask 'font-consolas-for-powerline'
 cask 'font-inconsolata'
 
 cask 'alfred'
-cask 'atom-beta'
 cask 'bartender'
 cask 'dash'
 cask 'docker'
@@ -88,14 +85,9 @@ cask 'textexpander'
 cask 'textmate'
 cask 'torbrowser'
 cask 'vlc'
-cask 'wireshark'
 
-mas '1Password', id: 443987910
+mas '1Password 7', id: 1333542190
 mas 'DaisyDisk', id: 411643860
-mas 'Keynote', id: 409183694
-mas 'Numbers', id: 409203825
-mas 'Pages', id: 409201541
-mas 'Slack', id: 803453959
 mas 'StatusClock', id: 552792489
 mas 'Things 3', id: 904280696
 mas 'ToothFairy', id: 1191449274
