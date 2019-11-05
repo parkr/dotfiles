@@ -1,6 +1,6 @@
 tap 'homebrew/bundle'
 tap 'homebrew/services'
-tap 'homebrew/cask-cask'
+tap 'homebrew/cask'
 tap 'homebrew/cask-versions'
 
 brew 'ag'
