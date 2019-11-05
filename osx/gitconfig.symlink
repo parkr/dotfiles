@@ -71,12 +71,12 @@
 [alias]
 	commti = commit
 	ocmmit = commit
-    comimt = commit
-    comit = commit
-  commt = commit
+	comimt = commit
+	comit = commit
+	commt = commit
 	undo = reset --soft HEAD^
 	co = checkout
-    oc = checkout
+	oc = checkout
 	ci = commit
 	st = status
 	s = status
@@ -91,14 +91,14 @@
 	amend = commit --amend
 	pyll = pull
 	pul = pull
-    puill = pull
-    psh = push
-    puhs = push
-    pus = push
-    psuh = push
-    puysh = push
-    pushj = push
-    piush = push
+	puill = pull
+	psh = push
+	puhs = push
+	pus = push
+	psuh = push
+	puysh = push
+	pushj = push
+	piush = push
 	hist = "log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short"
 	lol = log --graph --decorate --pretty=oneline --abbrev-commit
 	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
