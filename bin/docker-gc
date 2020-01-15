@@ -1,6 +1,4 @@
 #!/bin/sh
-docker run --rm \
-  --name docker-gc \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -v /etc:/etc \
-  spotify/docker-gc
+set -ex
+docker system prune --all --volumes
+docker builder prune --all
