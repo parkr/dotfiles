@@ -84,6 +84,7 @@ cask 'spotify'
 cask 'textexpander'
 cask 'textmate'
 cask 'tor-browser'
+cask 'tripmode'
 cask 'vlc'
 
 mas '1Password 7', id: 1333542190
