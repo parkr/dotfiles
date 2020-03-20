@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin
+brew update -v
+brew upgrade -v
+brew cask upgrade -v
+brew cleanup

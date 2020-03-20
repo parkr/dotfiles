@@ -150,13 +150,6 @@ fi
 alias most="history|awk '{a[\$2]++}END{for(i in a){print a[i] \" \" i }}'|sort -rn|head -20"
 alias deploy="bundle exec cap production deploy"
 
-brew_up () {
-  brew update -v
-  brew upgrade -v
-  brew cask upgrade -v
-  brew cleanup
-}
-
 hkdeploy () {
   git checkout master && \
     git pull origin master && \
