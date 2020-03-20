@@ -128,13 +128,13 @@ rserver(){
 }
 
 # Aliases for frequently-used commands
-alias v="vagrant"
 alias h="hk"
 alias b="bundle"
 alias be="bundle exec"
 alias gh="hub"
 alias numfiles="ls -1 | wc -l"
 alias ack="ag"
+alias dkc="docker-compose"
 
 # Use curl-ca-bundle homebrew package on Mac OS X
 # export SSL_CERT_FILE=/usr/local/opt/curl-ca-bundle/share/ca-bundle.crt
