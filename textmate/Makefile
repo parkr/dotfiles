@@ -5,7 +5,6 @@ install: textmate
 textmate: kuroir/SCSS.tmbundle \
   hajder/Ensure-New-Line-at-the-EOF.tmbundle \
   bomberstudios/Strip-Whitespace-On-Save.tmbundle \
-  ravasthi/graphql.tmbundle \
   aurynn/Terraform.tmbundle \
   jjeising/javascript-jsx.tmbundle
 	test -d "$(TMBUNDLE_ROOT)/Cucumber.tmbundle" || \
@@ -16,6 +15,8 @@ textmate: kuroir/SCSS.tmbundle \
 	  git clone https://github.com/michaeledgar/protobuf-tmbundle "$(TMBUNDLE_ROOT)/protobuf-tmbundle"
 	test -L "$(TMBUNDLE_ROOT)/Protocol Buffers.tmbundle" || \
 	  ln -s "$(TMBUNDLE_ROOT)/protobuf-tmbundle/Protocol Buffers.tmbundle" "$(TMBUNDLE_ROOT)/Protocol Buffers.tmbundle"
+	test -L "$(TMBUNDLE_ROOT)/GraphQL.tmbundle" || \
+	  git clone https://github.com/graphql-python/GraphQL-SublimeText "$(TMBUNDLE_ROOT)/GraphQL.tmbundle"
 
 %.tmbundle:
 	$(eval $@_bundlename := $(shell basename $*).tmbundle)
