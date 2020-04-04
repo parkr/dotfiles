@@ -70,3 +70,6 @@
 [submodule "vim/vim.symlink/bundle/ctrlp.vim"]
 	path = vim/vim.symlink/bundle/ctrlp.vim
 	url = https://github.com/ctrlpvim/ctrlp.vim
+[submodule "vim/vim.symlink/bundle/vim-jsonnet"]
+	path = vim/vim.symlink/bundle/vim-jsonnet
+	url = https://github.com/google/vim-jsonnet
