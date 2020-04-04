@@ -1,0 +1,9 @@
+#!/bin/bash
+
+domain="$1"
+if [ -z "$domain" ]; then
+  echo "usage: $0 <domain>"
+  exit 1
+fi
+
+echo | openssl s_client -connect "$domain:443" -servername "$domain" -showcerts | openssl x509 -text -noout
