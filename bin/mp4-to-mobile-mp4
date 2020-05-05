@@ -4,11 +4,11 @@
 # Thank you, Stack Overflow.
 # https://stackoverflow.com/questions/13560852/convert-mp4-to-maximum-mobile-supported-mp4-using-ffmpeg
 
-usage() {
-  echo "usage: $0 <input_file> <output_file>"
-}
-
 set -e
+
+usage() {
+  echo "$0 <infile> <outfile>"
+}
 
 input_file="$1"
 if [ -z "$input_file" ]; then
@@ -28,7 +28,10 @@ ffmpeg -i "$input_file" \
   -preset slower \
   -b:v 1000k \
   -vf scale=-1:576 \
+  -vf "pad=ceil(iw/2)*2:ceil(ih/2)*2" \
   -threads 0 \
-  -acodec libvo_aacenc \
+  -c:a aac \
   -ab 196k \
   "$output_file"
+
+#ffmpeg -y -i infile.mov -f mp4 -r 29.97 -vcodec libx264 -preset slow -b:v 3800k -flags +loop -cmp chroma -b:v 4000k -maxrate 4300k -bufsize 4M -bt 256k -refs 1 -bf 3 -coder 1 -me_method umh -me_range 16 -subq 7 -partitions +parti4x4+parti8x8+partp8x8+partb8x8 -g 250 -keyint_min 25 -level 30 -qmin 10 -qmax 51 -qcomp 0.6 -trellis 2 -sc_threshold 40 -i_qfactor 0.71 -c:a aac -b:a 125k -ar 48000 -ac 2 outfile.mp4
