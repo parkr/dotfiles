@@ -4,11 +4,20 @@
 #/          --all, renew all certificates
 #/          --upgrade, upgrade certbot-auto in-place
 
+if [ -z "$CERTBOT_BIN" ]; then
+  CERTBOT_BIN="$HOME/.dotfiles/bin/certbot"
+fi
+
 email="$LETSENCRYPT_EMAIL"
 test -z "$email" && {
   echo 'fatal: no email. set $LETSENCRYPT_EMAIL and try again.' > /dev/stderr
   exit 1
 }
+
+if [ $# -lt 1 ]; then
+  usage-and-help $0
+  exit 1
+fi
 
 domain="$1"
 shift
@@ -18,17 +27,10 @@ test -z "$domain" && {
   exit 1
 }
 
-run_certbot () {
-  sudo docker run -it --rm --net=host --name certbot \
-    -v "/etc/letsencrypt:/etc/letsencrypt" \
-    -v "/var/lib/letsencrypt:/var/lib/letsencrypt" \
-    certbot/certbot "$@"
-}
-
 case "$domain" in
   --all)
     sudo service nginx stop
-    run_certbot renew "$@"
+    "$CERTBOT_BIN" renew "$@"
     status=$?
     sudo service nginx start
     ;;
@@ -36,14 +38,14 @@ case "$domain" in
     sudo docker pull certbot/certbot
     ;;
   -v*|--v*)
-    run_certbot --version
+    "$CERTBOT_BIN" --version
     ;;
   -h*|--h*)
     usage-and-help $0
     ;;
   *)
     sudo service nginx stop
-    run_certbot certonly \
+    "$CERTBOT_BIN" certonly \
       --standalone \
       --domain "$domain" \
       --email "$email" $@
