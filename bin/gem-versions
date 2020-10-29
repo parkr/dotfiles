@@ -1,0 +1,13 @@
+#!/bin/bash
+#/ Usage: gem-versions <gem-name>
+#/ List all the versions of a gem and their ship dates.
+
+if [ $# -eq 0 ]; then
+  usage-and-help $0
+  exit 1
+fi
+
+for gem_name in $@; do
+  curl --silent --fail "https://api.rubygems.org/api/v1/versions/${gem_name}.json" | \
+    jq -r '.[] | [.number, .created_at] | @csv' | head -n 15
+done
