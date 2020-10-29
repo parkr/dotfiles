@@ -131,7 +131,6 @@ rserver(){
 alias h="hk"
 alias b="bundle"
 alias be="bundle exec"
-alias gh="hub"
 alias numfiles="ls -1 | wc -l"
 alias ack="ag"
 alias dkc="docker-compose"
