@@ -143,6 +143,7 @@ let g:Powerline_cache_enabled = 1
 
 let g:ctrlp_map = '<leader>t'
 let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_user_command = 'fd'
 
 " ---------------------------------------------------------------------------
 "  Strip all trailing whitespace in file
