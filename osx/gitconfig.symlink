@@ -149,3 +149,5 @@
 	version = 2
 [diff]
 	noprefix = true
+[pull]
+	rebase = true
