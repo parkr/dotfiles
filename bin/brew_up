@@ -2,7 +2,7 @@
 set -e
 
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin
-brew update -v
-brew upgrade -v
-brew cask upgrade -v
+brew update --verbose
+brew upgrade --verbose
+brew upgrade --cask --verbose
 brew cleanup
