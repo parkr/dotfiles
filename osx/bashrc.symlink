@@ -7,107 +7,37 @@ source_if_there() {
     source "$file"
   fi
 }
-source_if_there /usr/local/etc/bash_completion.d/git-completion.bash
-source_if_there /usr/local/etc/bash_completion.d/git-prompt.sh
-source_if_there /usr/local/etc/bash_completion.d/youtube-dl.bash-completion
 
-# Customize terminal prompt
-# Set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color) color_prompt=yes;;
-    xterm-256color) color_prompt=yes;;
-    screen-256color) color_prompt=yes;;
-esac
-export CLICOLOR=1
-if [ "$color_prompt" = yes ]; then
-  export PROMPT_COMMAND='__git_ps1 "\[\033]0;${PWD/#$HOME/~}\007\[\033[00m\]\[\033[01;35m\]\w\[\033[00m\]" "\[\033[01;32m\]\$\[\033[00m\] " "\[\033[01;34m\]#%s\[\033[00m\]"'
-else
-  export PS1='\w\$ '
-fi
-unset color_prompt
-
-# Enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    alias dir='dir --color=auto'
-    alias vdir='vdir --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-
-alias bim=vim
-
-alias it=git
-alias gti=git
-alias guit=git
-alias giut=git
-alias gut=git
-alias ghit=git
-alias gity=git
-alias qgit=git
-
-alias commit='git commit'
-alias push='git push'
-alias st='git st'
-alias status='git status'
-alias pull='git pull'
-
-alias gs='git status'
-alias gp='git pull'
-alias gd='git diff'
-alias ga='git add'
-
-# Set new PATH
-add_to_path() {
-  [[ -d "$1" ]] && PATH="$1:$PATH"
-}
-PATH="/usr/bin:/bin:/usr/sbin:/sbin"
-PATH="/usr/local/bin:/usr/local/sbin:$PATH"
-add_to_path "/usr/local/lib/python2.7/site-packages"
-add_to_path "/usr/local/opt/go/libexec/bin"
-add_to_path "$HOME/.dotfiles/bin"
-add_to_path "$HOME/.bin"
-add_to_path "$HOME/bin"
-add_to_path "/usr/local/heroku/bin"
-[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
-[[ -d "$HOME/.rbenv" ]]  && eval "$(rbenv init -)"
-[[ -d "$HOME/.pyenv" ]]  && eval "$(pyenv init -)"
-[[ -d "$HOME/go"     ]]  && PATH="$HOME/go/bin:$PATH" && export GOPATH="$HOME/go"
-[[ -d "$HOME/.opam/opam-init" ]] && source $HOME/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
-for pkg in $(ls "$HOME/.dotfiles/pkg")
-do
-  add_to_path "$HOME/.dotfiles/pkg/$pkg/bin"
-done
-export PATH
-
-export EDITOR="vim"
-
-# History modification
-shopt -s histappend
-export HISTSIZE=10000
-
-# Some good folders to keep handy
-export DROPBOX="$HOME/Dropbox"
-export CORNELL="$DROPBOX/Cornell"
-export CODE_PATH="$HOME/code"
-
-clean_jekyll(){
-  cd $CODE_PATH
-  rm -rf ./jekyll
-  git clone $JEKYLL_URL jekyll
-  cd jekyll
+source_sub_with_bench() {
+  local superfile="$1"
+  local file="$2"
+  if [[ $__bashrc_bench ]]; then
+    oldtimeformat="$TIMEFORMAT"
+		TIMEFORMAT="$superfile $file: %R"
+		time . "$file"
+    TIMEFORMAT="$oldtimeformat"
+    unset oldtimeformat
+	else
+		. "$file"
+	fi
 }
 
-gmail(){
-  VMAIL_HOME=$HOME/.vmail/Gmail vmail
+source_with_bench() {
+  local file="$1"
+  if [[ $__bashrc_bench ]]; then
+		oldtimeformat="$TIMEFORMAT"
+		TIMEFORMAT="$file: %R"
+		time . "$file"
+    TIMEFORMAT="$oldtimeformat"
+    unset oldtimeformat
+	else
+		. "$file"
+	fi
 }
 
-cmail(){
-  VMAIL_HOME=$HOME/.vmail/Cmail vmail
-}
+for i in ~/.bashrc.d/*.sh; do
+  source_with_bench "$i"
+done; unset i
 
 rconsole(){
   if [ -z "$1" ]; then
@@ -127,38 +57,12 @@ rserver(){
   RAILS_ENV="$environment" bash -c "bundle exec rails s"
 }
 
-# Aliases for frequently-used commands
-alias h="hk"
-alias b="bundle"
-alias be="bundle exec"
-alias numfiles="ls -1 | wc -l"
-alias ack="ag"
-alias dkc="docker-compose"
-
-# Use curl-ca-bundle homebrew package on Mac OS X
-# export SSL_CERT_FILE=/usr/local/opt/curl-ca-bundle/share/ca-bundle.crt
-
-# Handle the fact that this file will be used with multiple OSs
-platform=`uname -s`
-if [[ $platform == 'Linux' ]]; then
-  alias a='ls -lrth --color'
-elif [[ $platform == 'Darwin' ]]; then
-  alias a='ls -lrthG'
-fi
-
-alias most="history|awk '{a[\$2]++}END{for(i in a){print a[i] \" \" i }}'|sort -rn|head -20"
-alias deploy="bundle exec cap production deploy"
-
 hkdeploy () {
   git checkout master && \
     git pull origin master && \
     git push origin master && \
     git push heroku master && \
     heroku logs -t
-}
-
-octocat () {
-  curl http://ihmage.com/octocat
 }
 
 waterfall_noise () {
@@ -169,23 +73,6 @@ waterfall_noise () {
     -n 250 3000 tremolo 0.05 30 reverb 20 \
     gain -l
 }
-
-inspiration () {
-  fortune | cowsay | lolcat
-}
-
-# added by travis gem
-[ -f /Users/parker/.travis/travis.sh ] && source /Users/parker/.travis/travis.sh
-
-alias pt='papertrail'
-alias ptf='pt -f -g'
-alias curly='curl -w "@$HOME/.curl_format" -o /dev/null -s -v'
-
-#alias t='git ls-files | grep'
-
-if [ -f "$HOME/.localrc" ]; then
-  source $HOME/.localrc
-fi
 
 function config_value() {
   cat ~/.config/"$1"
