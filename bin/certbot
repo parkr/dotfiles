@@ -8,9 +8,11 @@ esac
 
 sudo mkdir -p /etc/letsencrypt
 sudo mkdir -p /var/lib/letsencrypt
+sudo mkdir -p /opt/nginx/acme-challenges
 
 sudo docker run -it --rm --net=host --name certbot \
   -v "/var/log/letsencrypt:/var/log/letsencrypt" \
   -v "/etc/letsencrypt:/etc/letsencrypt" \
   -v "/var/lib/letsencrypt:/var/lib/letsencrypt" \
+  -v "/opt/nginx/acme-challenges:/opt/nginx/acme-challenges" \
   certbot/dns-cloudflare "$@"
