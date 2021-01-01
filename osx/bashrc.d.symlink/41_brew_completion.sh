@@ -1,5 +1,5 @@
-if type brew &>/dev/null; then
-  HOMEBREW_PREFIX="/usr/local"
+HOMEBREW_PREFIX="/usr/local"
+if [ -d "$HOMEBREW_PREFIX/Cellar" ]; then
   declare -a BREW_COMPLETIONS
   BREW_COMPLETIONS=(bash brew cheat.bash fd.bash gh git-completion.bash git-prompt.sh rg.bash youtube-dl.bash-completion)
   for file in ${BREW_COMPLETIONS[@]}; do
