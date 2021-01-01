@@ -54,5 +54,6 @@
       "kubernetes": ["/config/kubernetes/*.yaml"]
     },
     "cmake.configureOnOpen": true,
-    "solargraph.checkGemVersion": false
+    "solargraph.checkGemVersion": false,
+    "extensions.ignoreRecommendations": true
 }
