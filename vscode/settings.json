@@ -55,5 +55,6 @@
     },
     "cmake.configureOnOpen": true,
     "solargraph.checkGemVersion": false,
+    "solargraph.useBundler": true,
     "extensions.ignoreRecommendations": true
 }
