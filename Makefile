@@ -4,9 +4,7 @@ foros:
 	$(MAKE) $(UNAME)
 
 Darwin: all \
-  bin/merge-pr \
   hosts \
-  submake-atom \
   submake-iterm \
   submake-textmate
 
@@ -18,8 +16,6 @@ Linux-deps:
 	@true
 
 all: $(UNAME)-deps \
-	command-t \
-	ruby-build-github \
 	submodules
 
 latest:
