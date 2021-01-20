@@ -5,8 +5,10 @@ foros:
 
 Darwin: all \
   hosts \
+  zoom-go \
   submake-iterm \
-  submake-textmate
+  submake-textmate \
+  submake-vscode
 
 Darwin-deps: submake-osx
 
@@ -30,23 +32,14 @@ submodules:
 	git submodule sync
 	git submodule update --init --recursive
 
-bin/merge-pr: go
-	which merge-pr || go get -u byparker.com/go/merge-pr
-	ln -sf $(GOPATH)/bin/merge-pr bin/merge-pr
+zoom-go: go
+	which zoom || go get -u github.com/benbalter/zoom-go
 
 go:
 	go version
-
-ruby-build-github: $(UNAME)-deps
-	test -d $(shell rbenv root)/plugins/ruby-build-github/.git || \
-		git clone https://github.com/parkr/ruby-build-github.git $(shell rbenv root)/plugins/ruby-build-github
 
 submake-%:
 	make -C $(patsubst submake-%,%,$@)
 
 hosts:
 	@./osx/install-hosts-file.sh
-
-command-t: submodules
-	cd vim/vim.symlink/bundle/Command-T && bundle update
-	cd vim/vim.symlink/bundle/Command-T && bundle exec rake make

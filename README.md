@@ -8,7 +8,7 @@ a fork of @holman's dotfiles.
 Your dotfiles are you personalised configuration files for UNIX-like systems,
 they usually reside in your home (`~`) directory.
 
-Like @tombell's and @holman's, my dotfiles are organised into topics (ruby, git, 
+Like @tombell's and @holman's, my dotfiles are organised into topics (ruby, git,
 zsh etc). For more information about dotfiles and @holman's specifically check out his
 [repo][holman-repo] and [blog post][holman-post] on the subject.
 
@@ -19,9 +19,7 @@ zsh etc). For more information about dotfiles and @holman's specifically check o
 
 * `git clone git://github.com/parkr/dotfiles ~/.dotfiles`
 * `cd ~/.dotfiles`
-* `git submodule init`
-* `git submodule update`
-* `rake install`
+* `make`
 
 The install rake task will symlink all the correct files from `~/.dotfiles` to
 your home directory. You will want to configure and tweak everything inside the
