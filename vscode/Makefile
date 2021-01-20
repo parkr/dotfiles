@@ -38,7 +38,6 @@ all: /Applications/Visual\ Studio\ Code.app \
 	install-extension-puppet.puppet-vscode \
 	install-extension-rebornix.ruby \
 	install-extension-redhat.vscode-yaml \
-	install-extension-robinbentley.sass-indented \
 	install-extension-shardulm94.trailing-spaces \
 	install-extension-thenikso.github-plus-theme \
 	install-extension-vortizhe.simple-ruby-erb \
