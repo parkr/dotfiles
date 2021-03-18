@@ -11,6 +11,14 @@ source_if_there /usr/local/etc/bash_completion.d/git-completion.bash
 source_if_there /usr/local/etc/bash_completion.d/git-prompt.sh
 source_if_there /usr/local/etc/bash_completion.d/youtube-dl.bash-completion
 
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+  SESSION_TYPE=remote/ssh
+else
+  case $(ps -o comm= -p $PPID) in
+    sshd|*/sshd) SESSION_TYPE=remote/ssh;;
+  esac
+fi
+
 # Customize terminal prompt
 # Set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
@@ -18,17 +26,21 @@ case "$TERM" in
     xterm-256color) color_prompt=yes;;
     screen-256color) color_prompt=yes;;
 esac
-export CLICOLOR=1
 if [ "$color_prompt" = yes ]; then
-  export PROMPT_COMMAND='__git_ps1 "\[\033]0;${PWD/#$HOME/~}\007\[\033[00m\]\[\033[01;35m\]\w\[\033[00m\]" "\[\033[01;32m\]\$\[\033[00m\] " "\[\033[01;34m\]#%s\[\033[00m\]"'
+  export CLICOLOR=1
+  export PROMPT_COMMAND='__git_ps1 "\[\033[01;34m\]\h\[\033[00m\] \[\033]0;${PWD/#$HOME/~}\007\[\033[00m\]\[\033[01;35m\]\w\[\033[00m\]" "\[\033[01;32m\]\$\[\033[00m\] " "\[\033[01;34m\]#%s\[\033[00m\]"'
 else
-  export PS1='\w\$ '
+  if [ "$SESSION_TYPE" = "remote/ssh" ]; then
+    export PS1='\h \w\$ '
+  else
+    export PS1='\w\$ '
+  fi
 fi
 unset color_prompt
 
 # Enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    (test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)") || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
