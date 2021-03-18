@@ -277,4 +277,15 @@ au BufRead,BufNewFile *.workflow setlocal ft=terraform syntax=terraform
 " Disable ALE on every text change.
 let g:ale_lint_on_text_changed = 'never'
 " Disable ALE when opening a file.
-let g:ale_lint_on_enter = 0
+" let g:ale_lint_on_enter = 0
+" Enable ALE completion
+let g:ale_completion_enabled = 1
+
+" Re-define the Ruby linter without -T flag
+call ale#linter#Define('ruby', {
+\   'name': 'ruby',
+\   'executable': {b -> ale#Var(b, 'ruby_ruby_executable')},
+\   'command': '%e -w -c %t',
+\   'output_stream': 'stderr',
+\   'callback': 'ale#handlers#ruby#HandleSyntaxErrors',
+\})
