@@ -1,10 +1,12 @@
 {
+    "window.autoDetectColorScheme": true,
+    "workbench.preferredLightColorTheme": "GitHub Plus",
+    "workbench.preferredDarkColorTheme": "One Dark Pro",
     "editor.rulers": [80,120],
     "telemetry.enableTelemetry": false,
     "terminal.external.osxExec": "iTerm2.app",
     "workbench.startupEditor": "none",
     "window.zoomLevel": 1,
-    "workbench.colorTheme": "GitHub Plus",
     "window.nativeTabs": true,
     "editor.minimap.enabled": false,
     "workbench.statusBar.feedback.visible": false,
@@ -56,5 +58,6 @@
     "cmake.configureOnOpen": true,
     "solargraph.checkGemVersion": false,
     "solargraph.useBundler": true,
-    "extensions.ignoreRecommendations": true
+    "extensions.ignoreRecommendations": true,
+    "workbench.colorTheme": "GitHub Plus"
 }
