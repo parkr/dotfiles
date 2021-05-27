@@ -4,6 +4,15 @@
 	name = Parker Moore
 	email = parkrmoore@gmail.com
 
+# Include machine-specific configuration
+[include]
+  path = .gitconfig-local
+
+# Include personal configuration for personal projects.
+#
+[includeIf "gitdir:~/code/"]
+	path = .gitconfig-personal
+
 # Include work configuration for work product.
 #
 [includeIf "gitdir:~/github/"]
@@ -153,3 +162,6 @@
 	rebase = true
 [init]
 	defaultBranch = main
+[commit]
+	sign = true
+	gpgSign = true

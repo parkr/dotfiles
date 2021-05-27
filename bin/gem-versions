@@ -2,6 +2,8 @@
 #/ Usage: gem-versions <gem-name>
 #/ List all the versions of a gem and their ship dates.
 
+set -o pipefail
+
 if [ $# -eq 0 ]; then
   usage-and-help $0
   exit 1
