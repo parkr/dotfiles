@@ -59,5 +59,6 @@
     "solargraph.checkGemVersion": false,
     "solargraph.useBundler": true,
     "extensions.ignoreRecommendations": true,
-    "workbench.colorTheme": "GitHub Plus"
+    "workbench.colorTheme": "GitHub Plus",
+    "redhat.telemetry.enabled": false
 }
