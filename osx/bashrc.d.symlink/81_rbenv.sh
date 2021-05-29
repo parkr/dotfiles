@@ -1,7 +1,9 @@
-if [[ -d "$HOME/.rbenv" ]]; then
+if [ -d "$HOME/.rbenv" ]; then
+    # Usually we'd use $(brew --prefix openssl) but it takes too long.
+    export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/usr/local/opt/openssl"
     export PATH="$HOME/.rbenv/shims:${PATH}"
     export RBENV_SHELL=bash
-    source '/usr/local/opt/rbenv/completions/rbenv.bash'
+    source_sub_with_bench "$HOME/.bashrc.d/81_rbenv.sh" "/usr/local/opt/rbenv/completions/rbenv.bash"
     # command rbenv rehash 2>/dev/null # skip this for now, since it's slow
     rbenv() {
         local command
