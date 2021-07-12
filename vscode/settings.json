@@ -29,15 +29,15 @@
     "[go]": {
       "editor.formatOnSave": true,
       "editor.codeActionsOnSave": {
-        "source.organizeImports": true,
+        "source.organizeImports": true
       },
-      "editor.snippetSuggestions": "none",
+      "editor.snippetSuggestions": "none"
     },
     "[go.mod]": {
       "editor.formatOnSave": true,
       "editor.codeActionsOnSave": {
-        "source.organizeImports": true,
-      },
+        "source.organizeImports": true
+      }
     },
     "gopls": {
       "usePlaceholders": true,
@@ -60,5 +60,11 @@
     "solargraph.useBundler": true,
     "extensions.ignoreRecommendations": true,
     "redhat.telemetry.enabled": false,
-    "terminal.integrated.shell.osx": "/bin/bash"
+    "terminal.integrated.shell.osx": "/bin/bash",
+    "workbench.colorTheme": "GitHub Plus",
+    "go.toolsManagement.autoUpdate": true,
+    "workbench.editorAssociations": {
+      "*.ipynb": "jupyter.notebook.ipynb"
+    },
+    "editor.inlineSuggest.enabled": true
 }
