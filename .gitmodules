@@ -58,3 +58,6 @@
 [submodule "vim/vim.symlink/bundle/vim-jsonnet"]
 	path = vim/vim.symlink/bundle/vim-jsonnet
 	url = https://github.com/google/vim-jsonnet
+[submodule "vim/vim.symlink/bundle/kotlin-vim"]
+	path = vim/vim.symlink/bundle/kotlin-vim
+	url = https://github.com/udalov/kotlin-vim
