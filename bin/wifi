@@ -42,6 +42,10 @@ case "$1" in
   i*) # info
     sudo networksetup -getinfo $NETWORK_SERVICE ;;
   p*) # peers
+    if ! command -v arp-scan; then
+      echo "arp-scan command missing; please install" > /dev/stderr
+      exit 1
+    fi
     IP_PREFIX=$(route -n get 0.0.0.0 | grep gateway: | awk '{ print $2 }' |
       awk -F. '{ print $1 "." $2 "." $3 }' )
     sudo /usr/local/bin/arp-scan \
