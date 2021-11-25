@@ -1,10 +1,12 @@
 {
+    "window.autoDetectColorScheme": true,
+    "workbench.preferredLightColorTheme": "GitHub Plus",
+    "workbench.preferredDarkColorTheme": "One Dark Pro",
     "editor.rulers": [80,120],
     "telemetry.enableTelemetry": false,
     "terminal.external.osxExec": "iTerm2.app",
     "workbench.startupEditor": "none",
     "window.zoomLevel": 1,
-    "workbench.colorTheme": "GitHub Plus",
     "window.nativeTabs": true,
     "editor.minimap.enabled": false,
     "workbench.statusBar.feedback.visible": false,
@@ -27,15 +29,15 @@
     "[go]": {
       "editor.formatOnSave": true,
       "editor.codeActionsOnSave": {
-        "source.organizeImports": true,
+        "source.organizeImports": true
       },
-      "editor.snippetSuggestions": "none",
+      "editor.snippetSuggestions": "none"
     },
     "[go.mod]": {
       "editor.formatOnSave": true,
       "editor.codeActionsOnSave": {
-        "source.organizeImports": true,
-      },
+        "source.organizeImports": true
+      }
     },
     "gopls": {
       "usePlaceholders": true,
@@ -56,5 +58,13 @@
     "cmake.configureOnOpen": true,
     "solargraph.checkGemVersion": false,
     "solargraph.useBundler": true,
-    "extensions.ignoreRecommendations": true
+    "extensions.ignoreRecommendations": true,
+    "redhat.telemetry.enabled": false,
+    "terminal.integrated.shell.osx": "/bin/bash",
+    "workbench.colorTheme": "GitHub Plus",
+    "go.toolsManagement.autoUpdate": true,
+    "workbench.editorAssociations": {
+      "*.ipynb": "jupyter.notebook.ipynb"
+    },
+    "editor.inlineSuggest.enabled": true
 }

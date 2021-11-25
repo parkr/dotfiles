@@ -39,7 +39,7 @@ alias be="bundle exec"
 alias numfiles="ls -1 | wc -l"
 alias ack="ag"
 alias dkc="docker-compose"
-alias rg="/usr/local/bin/rg"
+alias rg="${HOMEBREW_PREFIX:="/usr/local"}/bin/rg"
 
 # Handle the fact that this file will be used with multiple OSs
 platform=`uname -s`

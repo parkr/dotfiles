@@ -11,6 +11,7 @@ add_to_path "$HOME/.bin"
 add_to_path "$HOME/bin"
 [[ -d "$HOME/go" ]]  && PATH="$HOME/go/bin:$PATH" && export GOPATH="$HOME/go"
 [[ -d "$HOME/.cargo/bin" ]] && PATH="$HOME/.cargo/bin:$PATH"
+[[ -n "${HOMEBREW_PREFIX}" ]] && PATH="$HOMEBREW_PREFIX/bin:$PATH"
 
 for pkg in $HOME/.dotfiles/pkg/*; do
   add_to_path "$pkg/bin"
