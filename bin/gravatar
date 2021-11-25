@@ -1,0 +1,6 @@
+#!/bin/bash
+#/ Usage: gravatar <email>
+#/ Prints the URL of the gravatar image for the email
+
+EMAIL_HASH=$(php -r "echo md5( strtolower( trim( '$1' ) ) );")
+echo https://www.gravatar.com/avatar/${EMAIL_HASH}.jpg
