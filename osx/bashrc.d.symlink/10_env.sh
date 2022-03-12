@@ -1,4 +1,8 @@
 # Set new PATH
+if [ -d "/opt/homebrew" ] && [ ! -f "/usr/local/bin/brew" ]; then
+  export HOMEBREW_PREFIX="/opt/homebrew"
+fi
+
 add_to_path() {
   PATH="$1:$PATH"
 }
