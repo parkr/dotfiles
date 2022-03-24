@@ -151,7 +151,7 @@
 
 # Include machine-specific configuration
 [include]
-  path = .gitconfig-local
+	path = .gitconfig-local
 
 # Include personal configuration for personal projects.
 #
