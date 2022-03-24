@@ -1,3 +1,17 @@
 #!/bin/bash
 
-ffmpeg -i "$1.mp4" -f mp3 -ab 192000 -vn "$1.mp3"
+if [ -z "$1" ]; then
+  echo "usage: $0 <filename.mp4>"
+  exit 1
+fi
+
+if ! [ -f "$1" ]; then
+  echo "fatal: filename '$1' doesn't exist"
+  exit 1
+fi
+
+INPUT_FILENAME="$1"
+OUTPUT_FILENAME="${INPUT_FILENAME%.mp4}.mp3"
+echo "Converting $INPUT_FILENAME to $OUTPUT_FILENAME"
+
+ffmpeg -i "$INPUT_FILENAME" -f mp3 -ab 192000 -vn "$OUTPUT_FILENAME"
