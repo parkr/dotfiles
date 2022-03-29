@@ -4,13 +4,16 @@ if [ -d "/opt/homebrew" ] && [ ! -f "/usr/local/bin/brew" ]; then
 fi
 
 add_to_path() {
-  PATH="$1:$PATH"
+  if [ -d "$1" ]; then
+    PATH="$1:$PATH"
+  fi
 }
 
 PATH="/usr/bin:/bin:/usr/sbin:/sbin"
 PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 add_to_path "/usr/local/opt/go/libexec/bin"
 add_to_path "$HOME/.dotfiles/bin"
+add_to_path "$HOME/dotfiles/bin"
 add_to_path "$HOME/.bin"
 add_to_path "$HOME/bin"
 [[ -d "/usr/local/opt/openjdk/bin" ]] && add_to_path "/usr/local/opt/openjdk/bin"
