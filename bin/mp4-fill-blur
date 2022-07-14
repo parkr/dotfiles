@@ -1,0 +1,22 @@
+#!/bin/bash
+#/ Usage: mp4-fill-blur <filename.mp4>
+#/ Takes a vertical mp4 file and makes it vertical by making a blurry copy,
+#/ filling it to the full width, and placing it behind the original video.
+
+if [ -z "$1" ]; then
+  echo "usage: $0 <filename.mp4>"
+  exit 1
+fi
+
+if ! [ -f "$1" ]; then
+  echo "fatal: filename '$1' doesn't exist"
+  exit 1
+fi
+
+INPUT_FILENAME="$1"
+OUTPUT_FILENAME="${INPUT_FILENAME%.mp4}_fill_blur.mp4"
+echo "Converting $INPUT_FILENAME to $OUTPUT_FILENAME"
+
+ffmpeg -i "$INPUT_FILENAME" \
+  -vf 'split[original][copy];[copy]scale=ih*16/9:-1,crop=h=iw*9/16,gblur=sigma=20[blurred];[blurred][original]overlay=(main_w-overlay_w)/2:(main_h-overlay_h)/2' \
+  "$OUTPUT_FILENAME"
