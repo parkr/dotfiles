@@ -1,6 +1,6 @@
 #!/bin/bash
-# Usage: scan <output_filename>
-# Source: https://gist.github.com/jvns/b5651fd6272eddcd935e5e30874a935f
+#/ Usage: scan <output_filename>
+#/ Source: https://gist.github.com/jvns/b5651fd6272eddcd935e5e30874a935f
 DEST_FILENAME="$1"
 if [ -z "$DEST_FILENAME" ]; then
   echo "fatal: no output filename given" >&2
@@ -11,6 +11,11 @@ set -ex
 DIR=`mktemp -d`
 CUR="$PWD"
 cd "$DIR"
-scanimage -b --format tiff -d 'epjitsu' --resolution 300 --batch-prompt
-convert *.tif "$CUR/$DEST_FILENAME"
+scanimage \
+  --batch=page%04d.tiff \
+  --format tiff \
+  -d 'epjitsu' \
+  --resolution 300 \
+  --batch-prompt
+convert *.tiff "$CUR/$DEST_FILENAME"
 rm -r "$DIR"
