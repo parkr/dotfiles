@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+#/ Usage: install.sh
+#/ Provides a lite installation, used primarily by GitHub Codespaces.
+
+require 'fileutils'
+
+{
+  "git/gitconfig-core.symlink" => ".gitconfig",
+  "git/gitignore.symlink" => ".gitignore",
+}.each do |src, dst|
+  begin
+    FileUtils.ln_s(File.expand_path(src, __dir__), File.expand_path(dst, ENV["HOME"]))
+    puts "#{dst} symlinked"
+  rescue Errno::EEXIST
+    puts "#{dst} already exists, skipping"
+  end
+end
+
