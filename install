@@ -5,6 +5,7 @@
 
 require 'fileutils'
 
+# Install Git config
 {
   "git/gitconfig-core.symlink" => ".gitconfig",
   "git/gitignore.symlink" => ".gitignore",
@@ -17,3 +18,9 @@ require 'fileutils'
   end
 end
 
+# Add dotfiles/bin to PATH
+File.open(File.expand_path(".bashrc", ENV["HOME"]), "a") do |f|
+  f.puts
+  f.puts "# Add @parkr's dotfiles bin dir to PATH"
+  f.puts "export PATH=$PATH:\"#{File.expand_path("bin", __dir__)}\""
+end
