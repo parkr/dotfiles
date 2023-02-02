@@ -61,3 +61,6 @@
 [submodule "vim/vim.symlink/bundle/kotlin-vim"]
 	path = vim/vim.symlink/bundle/kotlin-vim
 	url = https://github.com/udalov/kotlin-vim
+[submodule "pkg/other_video_transcoding"]
+	path = pkg/other_video_transcoding
+	url = https://github.com/donmelton/other_video_transcoding
