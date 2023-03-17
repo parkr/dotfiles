@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+#/ Print netrc data.
+
+require 'json'
+require 'netrc'
+require 'optparse'
+
+options = {json: true}
+OptionParser.new do |opts|
+  opts.banner = "Usage: netrc [options]"
+
+  opts.on("-m", "--machine MACHINE", "Which machine to select") do |machine_name|
+    options[:machine_name] = machine_name
+  end
+
+  opts.on("-u", "--username", "Print username") do |v|
+    options[:username] = v
+  end
+
+  opts.on("-p", "--password", "Print password") do |v|
+    options[:password] = v
+  end
+end.parse!
+
+if options[:machine_name].nil? || options[:machine_name].empty?
+  abort "fatal: machine name required (-m MACHINE)"
+end
+
+n = Netrc.read
+
+login = n[options[:machine_name]]
+
+if options[:username]
+  puts login.login
+elsif options[:password]
+  puts login.password
+elsif options[:json]
+  puts JSON.generate({username: login.login, password: login.password})
+end
