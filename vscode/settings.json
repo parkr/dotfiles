@@ -43,7 +43,6 @@
       "usePlaceholders": true,
       "staticcheck": false,
     },
-    "ruby.rubocop.executePath": "/Users/parkr/.dotfiles/bin/",
     "ruby.rubocop.useBundler": true,
     "ruby.useLanguageServer": true,
     "ruby.lint": {
@@ -51,7 +50,7 @@
         "useBundler": true
       }
     },
-    "ruby.format": "rubocop",
+    "ruby.format": "standard",
     "yaml.schemas": {
       "kubernetes": ["/config/kubernetes/*.yaml"]
     },
@@ -61,10 +60,21 @@
     "extensions.ignoreRecommendations": true,
     "redhat.telemetry.enabled": false,
     "terminal.integrated.shell.osx": "/bin/bash",
-    "workbench.colorTheme": "GitHub Plus",
     "go.toolsManagement.autoUpdate": true,
     "workbench.editorAssociations": {
       "*.ipynb": "jupyter.notebook.ipynb"
     },
-    "editor.inlineSuggest.enabled": true
+    "editor.inlineSuggest.enabled": true,
+    "solargraph.bundlerPath": "/Users/parker/.rbenv/shims/bundler",
+    "hadolint.hadolintPath": "hadolint",
+    "hadolint.cliOptions": [
+      "--no-color"
+    ],
+    "npm.keybindingsChangedWarningShown": true,
+    "workbench.colorTheme": "GitHub Plus",
+    "[go][go.mod]": {
+      "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+      }
+    }
 }
