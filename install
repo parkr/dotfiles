@@ -3,7 +3,7 @@
 #/ Usage: install.sh
 #/ Provides a lite installation, used primarily by GitHub Codespaces.
 
-require 'fileutils'
+require "fileutils"
 
 # Install Git config
 {
