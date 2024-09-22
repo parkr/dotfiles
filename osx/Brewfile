@@ -41,7 +41,6 @@ brew 'tmux'
 brew 'tree'
 brew 'vim'
 brew 'wget'
-brew 'youtube-dl'
 
 tap  'homebrew/cask-fonts'
 cask 'font-consolas-for-powerline'

@@ -2,7 +2,7 @@
 #
 # Download a video and convert it to MP3 at the highest audio setting.
 
-youtube-dl \
+yt-dlp \
   --extract-audio \
   --audio-format mp3 \
   --audio-quality 0 \
