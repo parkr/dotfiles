@@ -14,6 +14,7 @@ set -ex
 DIR=`mktemp -d`
 CUR="$PWD"
 cd "$DIR"
+# Scan in from the scanner.
 scanimage \
   --mode Color \
   --batch=page%04d.tiff \
@@ -23,5 +24,6 @@ scanimage \
   --batch-prompt \
   --page-height 0 \
   $VERBOSE_FLAG
-convert *.tiff "$CUR/$DEST_FILENAME"
+# Take the tiff's and convert them into the output file requested.
+magick *.tiff "$CUR/$DEST_FILENAME"
 rm -r "$DIR"
