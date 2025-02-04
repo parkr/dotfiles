@@ -1,0 +1,15 @@
+#!/bin/bash
+#/ Usage: random-bytes [num_bytes]
+#/ Generates a string of random bytes, by default 10 bytes.
+
+# Define the number of bytes you need.
+num_bytes=10
+if [ -n "$1" ]; then
+  num_bytes="$1"
+fi
+
+# Read random bytes from /dev/urandom
+random_bytes=$(dd if=/dev/urandom bs=1 count="$num_bytes" 2>/dev/null | xxd -p -c "$num_bytes" | tr -d '\n')
+
+# Print the random ASCII string
+echo "$random_bytes"
