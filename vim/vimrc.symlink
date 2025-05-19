@@ -289,3 +289,10 @@ call ale#linter#Define('ruby', {
 \   'output_stream': 'stderr',
 \   'callback': 'ale#handlers#ruby#HandleSyntaxErrors',
 \})
+
+" Only run linters named in ale_linters settings.
+let g:ale_linters_explicit = 1
+let g:ale_linters = {
+\   'ruby': ['standardrb'],
+\}
+let g:ale_fixers = {'ruby': ['standardrb']}
