@@ -1,0 +1,11 @@
+#!/bin/bash
+# Usage: yt-archive <link>
+
+set -ex
+yt-dlp \
+  --embed-chapters \
+  --merge-output-format mkv \
+  --embed-subs \
+  --embed-thumbnail \
+  --embed-metadata \
+  "$@"
