@@ -20,7 +20,7 @@ scanimage \
   --batch=page%04d.tiff \
   --format tiff \
   -d 'epjitsu' \
-  --resolution 300 \
+  --resolution 1000 \
   --batch-prompt \
   --page-height 0 \
   $VERBOSE_FLAG

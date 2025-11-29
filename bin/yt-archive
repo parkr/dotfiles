@@ -3,6 +3,7 @@
 
 set -ex
 yt-dlp \
+  --compat-options filename-sanitization \
   --embed-chapters \
   --merge-output-format mkv \
   --embed-subs \

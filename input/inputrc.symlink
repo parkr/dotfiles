@@ -3,7 +3,7 @@ $include /etc/inputrc
 "\C-n":history-search-forward
 "\e\e[D": backward-word
 "\e\e[C": forward-word
-Tab: complete
+Tab: menu-complete
 
 set colored-stats On
 set completion-ignore-case On
@@ -12,3 +12,4 @@ set mark-symlinked-directories On
 set show-all-if-ambiguous On
 set show-all-if-unmodified On
 set visible-stats On
+set menu-complete-display-prefix On
