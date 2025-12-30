@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Usage: cmd | copy
+# Copied from https://codeberg.org/EvanHahn/dotfiles/raw/branch/main/home/bin/bin/copy
+set -e
+set -u
+set -o pipefail
+
+if hash pbcopy 2>/dev/null; then
+	cmd='pbcopy'
+elif hash xclip 2>/dev/null; then
+	cmd='xclip -selection clipboard'
+else
+	echo 'cannot find a copy program' >&2
+	exit 1
+fi
+
+exec perl -pe 'chomp if eof' | $cmd

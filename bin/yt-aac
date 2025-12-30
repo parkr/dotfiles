@@ -1,0 +1,6 @@
+#!/bin/bash
+yt-dlp \
+  -t aac \
+  -x \
+  --compat-options filename-sanitization \
+  "$@"
