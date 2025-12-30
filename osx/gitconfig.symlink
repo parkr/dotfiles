@@ -69,6 +69,7 @@
 	comimt = commit
 	comit = commit
 	commt = commit
+	commiot = commit
 	undo = reset --soft HEAD^
 	co = checkout
 	oc = checkout
