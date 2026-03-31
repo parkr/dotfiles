@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+#/ Usage: hl-each some series of bash commands
+#/ Executes a shell script on each homelab machine.
+#/ Homelab machines can be found in $HOME/code/puppet/code/hiera/hostname/*.yaml.
+#/ Each filename is a hostname.
+set -e
+set -u
+set -o pipefail
+
+# Print usage if no arguments
+if [[ $# -eq 0 ]]; then
+  echo "Usage: hl-each command [args...]"
+  exit 1
+fi
+
+HIERA_PATH="$HOME/code/puppet/code/hiera/hostname"
+
+# Check if directory exists
+if [[ ! -d "$HIERA_PATH" ]]; then
+  echo "Error: Directory $HIERA_PATH not found."
+  exit 1
+fi
+
+# Loop through each hostname YAML file
+for file in "$HIERA_PATH"/*.yaml; do
+  # Handle cases where no files match the glob
+  [[ -e "$file" ]] || continue
+
+  # Extract the hostname from the filename
+  hostname=$(basename "$file" .yaml)
+
+  echo -e "\n\033[35m==> Running on $hostname...\033[0m"
+  # Use ssh to run the command on each host
+  # We use BatchMode to avoid hangs and || true to continue even if one host fails
+  ssh -o BatchMode=yes -o ConnectTimeout=5 "$hostname" -- "$@" || true
+done
