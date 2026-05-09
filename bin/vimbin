@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#/ Usage: vimbin <executable>
+#/ Finds executable in PATH and opens the file in vim (or EDITOR).
+set -e
+set -u
+set -o pipefail
+
+if [[ $# != 1 ]]; then
+  echo 'usage: vimbin something_in_your_path' >&2
+  exit 1
+fi
+
+if hash "$EDITOR" 2>/dev/null; then
+  editor_command="$EDITOR"
+else
+  # shellcheck disable=SC2209
+  editor_command=vim
+fi
+
+exec "$editor_command" "$(command -v "$1")"

@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+#/ Usage: cody
+# Script to create and run Qwen3-Coder optimized model with Claude CLI
+set -e
+set -u
+set -o pipefail
+
+# Define paths
+MODEL_NAME="qwen3-coder-optimized"
+MODEL_PATH="$HOME/.ollama/Modelfiles/$MODEL_NAME"
+OLLAMA_MODEL_NAME="qwen3-coder-optimized"
+
+# Create the Modelfile content
+cat > "$MODEL_PATH" << 'EOF'
+FROM qwen3-coder:latest
+PARAMETER num_ctx 32768
+PARAMETER temperature 0.1
+PARAMETER top_p 0.3
+PARAMETER repeat_penalty 1.1
+EOF
+
+echo "Created Modelfile at $MODEL_PATH"
+
+# Create the model using ollama
+echo "Creating Ollama model: $OLLAMA_MODEL_NAME"
+ollama create "$OLLAMA_MODEL_NAME" -f "$MODEL_PATH"
+
+echo "Model created successfully!"
+
+# Set environment variables for Claude CLI
+export ANTHROPIC_BASE_URL="http://localhost:11434"
+export ANTHROPIC_API_KEY="ollama"
+export ANTHROPIC_DEFAULT_HAIKU_MODEL="$OLLAMA_MODEL_NAME"
+export ANTHROPIC_DEFAULT_SONNET_MODEL="$OLLAMA_MODEL_NAME"
+export ANTHROPIC_DEFAULT_OPUS_MODEL="$OLLAMA_MODEL_NAME"
+
+echo "Environment variables set:"
+echo "ANTHROPIC_BASE_URL: $ANTHROPIC_BASE_URL"
+echo "ANTHROPIC_API_KEY: $ANTHROPIC_API_KEY"
+echo "ANTHROPIC_DEFAULT_HAIKU_MODEL: $ANTHROPIC_DEFAULT_HAIKU_MODEL"
+echo "ANTHROPIC_DEFAULT_SONNET_MODEL: $ANTHROPIC_DEFAULT_SONNET_MODEL"
+echo "ANTHROPIC_DEFAULT_OPUS_MODEL: $ANTHROPIC_DEFAULT_OPUS_MODEL"
+
+# Verify the model is available
+echo "Verifying model availability..."
+ollama list | grep "$OLLAMA_MODEL_NAME"
+
+# Optional: Start ollama service if not running
+if ! pgrep -f "ollama serve" > /dev/null; then
+    echo "Starting Ollama service..."
+    ollama serve > /dev/null 2>&1 &
+    sleep 2
+fi
+
+exec claude

@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+#/ Usage: fj-mirror-parkr <repo_name>
+#/ Mirrors a repo from GitHub to forgejo
+set -e
+set -u
+set -o pipefail
+
+main() {
+  local FORGEJO_HOSTNAME
+  FORGEJO_HOSTNAME=$(cat "$HOME/.fj/hostname")
+  local GITHUB_USERNAME
+  GITHUB_USERNAME=$(cat "$HOME/.github/username")
+  if [ -z "$@" ]; then
+    echo "fatal: repo_name argument required" >> /dev/stderr
+    exit 1
+  fi
+  local repo_name
+  repo_name="$1"
+
+  set -x
+  cat "$HOME/.github/forgejo-gh-clone-token" | fj \
+    -H "$FORGEJO_HOSTNAME" \
+    repo \
+    migrate \
+    --mirror \
+    --token \
+    --include all \
+    --service github \
+    "https://github.com/$GITHUB_USERNAME/$repo_name" "$repo_name"
+}
+
+main "$@"
