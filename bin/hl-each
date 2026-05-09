@@ -7,9 +7,11 @@ set -e
 set -u
 set -o pipefail
 
+shift || true
+
 # Print usage if no arguments
 if [[ $# -eq 0 ]]; then
-  echo "Usage: hl-each command [args...]"
+  echo "Usage: hl-each -- command [args...]" > /dev/stderr
   exit 1
 fi
 

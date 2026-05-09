@@ -5,7 +5,7 @@ set -e
 set -u
 
 if [[ $# != 1 ]]; then
-  echo 'usage: echobin something_in_your_path' >&2
+  echo 'usage: catbin something_in_your_path' >&2
   exit 1
 fi
 
