@@ -23,6 +23,13 @@ if [[ ! -d "$HIERA_PATH" ]]; then
   exit 1
 fi
 
+# Prepare command escaping and a clean display name for safety and brevity
+cmd_escaped=$(printf '%q ' "$@")
+cmd_display=$(echo "$*" | tr -cd 'a-zA-Z0-9_./- ')
+if [[ ${#cmd_display} -gt 35 ]]; then
+  cmd_display="${cmd_display:0:32}..."
+fi
+
 # Loop through each hostname YAML file
 for file in "$HIERA_PATH"/*.yaml; do
   # Handle cases where no files match the glob
@@ -32,7 +39,22 @@ for file in "$HIERA_PATH"/*.yaml; do
   hostname=$(basename "$file" .yaml)
 
   echo -e "\n\033[35m==> Running on $hostname...\033[0m"
-  # Use ssh to run the command on each host
+
+  local_start=$(date +%s.%N 2>/dev/null || date +%s 2>/dev/null || echo 0)
+
+  # Use ssh to run the command on each host and print command latency
   # We use BatchMode to avoid hangs and || true to continue even if one host fails
-  ssh -o BatchMode=yes -o ConnectTimeout=5 "$hostname" -- "$@" || true
+  ssh -o BatchMode=yes -o ConnectTimeout=5 "$hostname" -- "
+    start=\$(date +%s.%N 2>/dev/null || date +%s 2>/dev/null || echo 0)
+    $cmd_escaped
+    exit_code=\$?
+    end=\$(date +%s.%N 2>/dev/null || date +%s 2>/dev/null || echo 0)
+    latency=\$(awk -v start=\"\$start\" -v end=\"\$end\" 'BEGIN { printf \"%.2f\", end - start }' 2>/dev/null || echo \"unknown\")
+    printf '\\033[36m%s took %ss\\033[0m\\n' \"$cmd_display\" \"\$latency\"
+    exit \$exit_code
+  " || true
+
+  local_end=$(date +%s.%N 2>/dev/null || date +%s 2>/dev/null || echo 0)
+  total_duration=$(awk -v start="$local_start" -v end="$local_end" 'BEGIN { printf "%.2f", end - start }' 2>/dev/null || echo "unknown")
+  echo -e "\033[32m$hostname completed in ${total_duration}s\033[0m"
 done
