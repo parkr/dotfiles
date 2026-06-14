@@ -1,0 +1,29 @@
+# Ghostty Color Theme: parkr
+# Converted from parkr.itermcolors
+
+# Core Terminal Canvas
+background = #001e26
+foreground = #708284
+cursor-color = #708284
+selection-background = #002731
+selection-foreground = #819090
+
+# Normal Colors (0 - 7)
+palette = 0=#002731
+palette = 1=#d11b24
+palette = 2=#728a05
+palette = 3=#a57705
+palette = 4=#2076c7
+palette = 5=#c61b6f
+palette = 6=#259186
+palette = 7=#e9e3cc
+
+# Bright Colors (8 - 15)
+palette = 8=#2e414c
+palette = 9=#bd3612
+palette = 10=#8eed1a
+palette = 11=#a47617
+palette = 12=#2677c4
+palette = 13=#c4206f
+palette = 14=#2b9186
+palette = 15=#fcf4dc

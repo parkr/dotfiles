@@ -1,0 +1,14 @@
+command = /bin/bash --login
+theme = parkr
+font-size = 18
+font-family = "SF Mono"
+
+# Use native macOS title bar and tab styling
+macos-titlebar-style = native
+
+# Adjust padding to give it that traditional window breathing room
+window-padding-x = 10
+window-padding-y = 10
+
+# Make Option key act as Alt (like Terminal.app/iTerm2 behavior)
+macos-option-as-alt = true
