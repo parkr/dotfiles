@@ -43,3 +43,8 @@ submake-%:
 
 hosts:
 	@./osx/install-hosts-file.sh
+
+.PHONY: ghostty
+ghostty:
+	mkdir -p $(HOME)/.config
+	[ -s "$(HOME)/.config/ghostty" ] || ln -s $(PWD)/ghostty $(HOME)/.config/ghostty
