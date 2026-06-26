@@ -8,3 +8,5 @@
 *.swp
 *.rbc
 .tags*
+
+**/.claude/settings.local.json

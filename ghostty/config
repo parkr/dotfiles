@@ -1,5 +1,6 @@
 command = /bin/bash --login
 theme = parkr
+bold-is-bright = true
 font-size = 18
 font-family = "SF Mono"
 
@@ -16,3 +17,5 @@ macos-option-as-alt = true
 shell-integration-features = ssh-terminfo
 # Force Ghostty to report itself as a standard 256-color terminal
 term = xterm-256color
+
+macos-icon = xray
