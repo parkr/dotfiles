@@ -1,0 +1,310 @@
+#!/usr/bin/env bash
+# Hardware validation script for new/second-hand machines.
+# Checks memory, disks, CPU, and system health on Debian/Ubuntu.
+# Run as root or with sudo.
+set -uo pipefail
+
+PASS=0
+FAIL=0
+WARN=0
+REPORT=()
+
+# ── helpers ──────────────────────────────────────────────────────────────────
+
+info()  { echo "  [INFO]  $*"; }
+ok()    { echo "  [ OK ]  $*"; PASS=$((PASS + 1)); REPORT+=("OK:   $*"); }
+warn()  { echo "  [WARN]  $*"; WARN=$((WARN + 1)); REPORT+=("WARN: $*"); }
+fail()  { echo "  [FAIL]  $*"; FAIL=$((FAIL + 1)); REPORT+=("FAIL: $*"); }
+
+require_root() {
+  if [ "$(id -u)" -ne 0 ]; then
+    echo "fatal: this script must be run as root (try: sudo $0)" >&2
+    exit 1
+  fi
+}
+
+install_if_missing() {
+  local pkg="$1"
+  local cmd="${2:-$1}"
+  if ! command -v "$cmd" &>/dev/null; then
+    info "Installing $pkg..."
+    apt-get install -y -q "$pkg" 2>&1 | tail -1
+  fi
+}
+
+section() {
+  echo
+  echo "════════════════════════════════════════"
+  echo "  $*"
+  echo "════════════════════════════════════════"
+}
+
+# ── system info ───────────────────────────────────────────────────────────────
+
+show_system_info() {
+  section "System Information"
+  info "Hostname:   $(hostname)"
+  info "Kernel:     $(uname -r)"
+  info "Distro:     $(cat /etc/os-release | grep PRETTY_NAME | cut -d= -f2 | tr -d '"')"
+  info "Uptime:     $(uptime -p)"
+  echo
+  info "CPU:"
+  lscpu | grep -E 'Model name|Socket|Core|Thread|MHz' | sed 's/^/    /'
+  echo
+  info "Memory (dmidecode):"
+  dmidecode -t memory 2>/dev/null | grep -E 'Size:|Type:|Speed:|Manufacturer:|Part Number:|Locator:' | grep -v 'No Module' | sed 's/^/    /'
+  echo
+  info "Storage devices:"
+  lsblk -d -o NAME,SIZE,MODEL,TRAN,ROTA | sed 's/^/    /'
+}
+
+# ── memory test ───────────────────────────────────────────────────────────────
+
+test_memory() {
+  section "Memory Test (memtester)"
+
+  local mem_mb
+  mem_mb=$(awk '/MemFree/ { printf "%d", $2/1024 }' /proc/meminfo)
+  # Use up to 80% of free memory, minimum 256 MB
+  local test_mb=$(( mem_mb * 80 / 100 ))
+  test_mb=$(( test_mb < 256 ? 256 : test_mb ))
+
+  info "Testing ${test_mb} MB of free memory (of ${mem_mb} MB available)..."
+  info "Note: For a full RAM test with no OS overhead, boot memtest86+ from a USB drive."
+
+  if memtester "${test_mb}M" 1 2>&1 | tee /tmp/memtester.log | grep -qE 'FAIL|ERROR'; then
+    fail "memtester reported errors — possible bad RAM"
+    grep -E 'FAIL|ERROR' /tmp/memtester.log | sed 's/^/    /'
+  else
+    ok "memtester found no errors in ${test_mb} MB"
+  fi
+}
+
+# ── disk tests ────────────────────────────────────────────────────────────────
+
+check_smart() {
+  local dev="$1"
+  local name
+  name=$(basename "$dev")
+
+  info "Checking SMART data for $dev..."
+
+  # Check if SMART is supported
+  if ! smartctl -i "$dev" 2>&1 | grep -q 'SMART support is: Enabled'; then
+    if smartctl -i "$dev" 2>&1 | grep -q 'SMART support is: Available'; then
+      info "SMART is available but not enabled on $dev — enabling..."
+      smartctl -s on "$dev" &>/dev/null
+    else
+      warn "$dev: SMART not supported or not available"
+      return
+    fi
+  fi
+
+  # Run a short self-test
+  info "Running SMART short self-test on $dev (takes ~2 minutes)..."
+  smartctl -t short "$dev" &>/dev/null
+  sleep 130
+  local result
+  result=$(smartctl -a "$dev" 2>&1)
+
+  # Check overall health
+  if echo "$result" | grep -q 'SMART overall-health self-assessment test result: PASSED'; then
+    ok "$dev: SMART overall health PASSED"
+  else
+    fail "$dev: SMART overall health FAILED or unknown"
+    echo "$result" | grep -E 'health|result|Error' | sed 's/^/    /'
+  fi
+
+  # Check for reallocated sectors and uncorrectable errors
+  local reallocated pending uncorrectable
+  reallocated=$(echo "$result" | awk '/Reallocated_Sector_Ct/ { print $10 }')
+  pending=$(echo "$result" | awk '/Current_Pending_Sector/ { print $10 }')
+  uncorrectable=$(echo "$result" | awk '/Offline_Uncorrectable/ { print $10 }')
+
+  if [ -n "$reallocated" ] && [ "$reallocated" -gt 0 ]; then
+    warn "$dev: $reallocated reallocated sectors (early sign of drive failure)"
+  fi
+  if [ -n "$pending" ] && [ "$pending" -gt 0 ]; then
+    warn "$dev: $pending pending sectors (potential bad blocks)"
+  fi
+  if [ -n "$uncorrectable" ] && [ "$uncorrectable" -gt 0 ]; then
+    fail "$dev: $uncorrectable offline uncorrectable sectors"
+  fi
+
+  # For NVMe, use nvme-cli
+  if echo "$dev" | grep -q 'nvme'; then
+    local nvme_health
+    nvme_health=$(nvme smart-log "$dev" 2>/dev/null)
+    if echo "$nvme_health" | grep -q 'critical_warning.*0x0'; then
+      ok "$dev: NVMe critical_warning is 0 (healthy)"
+    elif [ -n "$nvme_health" ]; then
+      warn "$dev: NVMe critical_warning is non-zero"
+      echo "$nvme_health" | grep critical_warning | sed 's/^/    /'
+    fi
+  fi
+}
+
+test_disks() {
+  section "Disk Health (SMART)"
+
+  local disks
+  mapfile -t disks < <(lsblk -d -n -o NAME,TYPE | awk '$2=="disk" { print "/dev/"$1 }')
+
+  if [ ${#disks[@]} -eq 0 ]; then
+    warn "No block devices found"
+    return
+  fi
+
+  for dev in "${disks[@]}"; do
+    check_smart "$dev"
+  done
+}
+
+# ── CPU stress test ───────────────────────────────────────────────────────────
+
+test_cpu() {
+  section "CPU Stress Test (stress-ng)"
+
+  local cores
+  cores=$(nproc)
+  info "Stressing $cores CPU cores for 60 seconds..."
+
+  if stress-ng --cpu "$cores" --timeout 60s --metrics-brief 2>&1 | tee /tmp/stress-ng.log | grep -qE 'fail|error'; then
+    fail "stress-ng reported failures during CPU stress test"
+  else
+    ok "CPU stress test passed (60s, $cores cores)"
+  fi
+
+  # Check thermal after stress
+  if command -v sensors &>/dev/null; then
+    info "CPU temperatures after stress:"
+    sensors 2>/dev/null | grep -E 'Core|Tdie|Tctl|Package' | sed 's/^/    /'
+  fi
+}
+
+# ── dmesg / kernel errors ─────────────────────────────────────────────────────
+
+check_kernel_log() {
+  section "Kernel Log Errors (dmesg)"
+
+  local errors
+  errors=$(dmesg --level=err,crit,alert,emerg 2>/dev/null || dmesg | grep -iE ' error| fault| fail| panic')
+
+  if [ -z "$errors" ]; then
+    ok "No errors found in kernel log"
+  else
+    local count
+    count=$(echo "$errors" | wc -l)
+    warn "Found $count error(s) in kernel log:"
+    echo "$errors" | head -20 | sed 's/^/    /'
+    if [ "$count" -gt 20 ]; then
+      info "    ... ($(( count - 20 )) more lines — run 'sudo dmesg --level=err,crit,alert,emerg' for full output)"
+    fi
+  fi
+}
+
+# ── network interfaces ────────────────────────────────────────────────────────
+
+check_network() {
+  section "Network Interfaces"
+
+  local ifaces
+  mapfile -t ifaces < <(ip -o link show | awk -F': ' '{print $2}' | grep -v '^lo$')
+
+  for iface in "${ifaces[@]}"; do
+    local state speed
+    state=$(cat "/sys/class/net/${iface}/operstate" 2>/dev/null || echo 'unknown')
+    speed=$(cat "/sys/class/net/${iface}/speed" 2>/dev/null || echo '?')
+    if [ "$state" = 'up' ]; then
+      ok "$iface: up at ${speed} Mbps"
+    else
+      info "$iface: $state (not connected or wireless)"
+    fi
+  done
+}
+
+# ── summary ───────────────────────────────────────────────────────────────────
+
+print_summary() {
+  section "Summary"
+  for line in "${REPORT[@]}"; do
+    echo "  $line"
+  done
+  echo
+  echo "  Passed: $PASS  |  Warnings: $WARN  |  Failed: $FAIL"
+  echo
+
+  if [ "$FAIL" -gt 0 ]; then
+    echo "  RESULT: ISSUES FOUND — review failures above before trusting this hardware."
+    return 1
+  elif [ "$WARN" -gt 0 ]; then
+    echo "  RESULT: WARNINGS — hardware may be okay but review warnings above."
+  else
+    echo "  RESULT: ALL CHECKS PASSED — hardware looks healthy."
+  fi
+}
+
+# ── main ──────────────────────────────────────────────────────────────────────
+
+usage() {
+  cat <<EOF
+Usage: $0 [options]
+
+Options:
+  --no-memtest     Skip memory test (fastest to run)
+  --no-stress      Skip CPU stress test
+  --no-smart       Skip disk SMART tests
+  -h, --help       Show this help
+
+Validates hardware on Debian/Ubuntu: memory, disk health, CPU, and kernel errors.
+Requires root. Installs missing tools via apt automatically.
+EOF
+}
+
+main() {
+  local skip_memtest=false
+  local skip_stress=false
+  local skip_smart=false
+
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --no-memtest) skip_memtest=true ;;
+      --no-stress)  skip_stress=true ;;
+      --no-smart)   skip_smart=true ;;
+      -h|--help)    usage; exit 0 ;;
+      *) echo "Unknown option: $1" >&2; usage; exit 1 ;;
+    esac
+    shift
+  done
+
+  require_root
+
+  section "Installing Required Tools"
+  apt-get update -qq
+  install_if_missing 'dmidecode'
+  install_if_missing 'smartmontools' 'smartctl'
+  install_if_missing 'memtester'
+  install_if_missing 'stress-ng'
+  install_if_missing 'lm-sensors' 'sensors'
+  install_if_missing 'nvme-cli' 'nvme'
+
+  show_system_info
+  check_kernel_log
+  check_network
+
+  if [ "$skip_smart" = false ]; then
+    test_disks
+  fi
+
+  if [ "$skip_memtest" = false ]; then
+    test_memory
+  fi
+
+  if [ "$skip_stress" = false ]; then
+    test_cpu
+  fi
+
+  print_summary
+}
+
+main "$@"
