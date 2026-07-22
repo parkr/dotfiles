@@ -1,4 +1,4 @@
-command = /bin/bash --login
+command = /opt/homebrew/bin/bash --login
 theme = parkr
 bold-is-bright = true
 font-size = 18
@@ -19,3 +19,7 @@ shell-integration-features = ssh-terminfo
 term = xterm-256color
 
 macos-icon = xray
+
+# Solid block cursor instead of a thin blinking line
+cursor-style = block
+cursor-style-blink = false
