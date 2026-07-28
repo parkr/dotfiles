@@ -1,7 +1,70 @@
 #!/bin/bash
-#/ Usage: `ci`
+#/ Usage: `ci [ref]`
 #/ Prints verbose CI status from GitHub, every 5 seconds, until it's passing.
 #/ Once complete, it will say "Your tests have all passed."
 
-wait_on hub ci-status -v "$@";
+ci_status() {
+  local ref="${1:-HEAD}"
+
+  # Try `gh pr checks` first (works for PRs and branches with PRs)
+  local pr_out pr_code
+  pr_out=$(gh pr checks "$ref" 2>&1)
+  pr_code=$?
+
+  if [ $pr_code -ne 1 ] || [[ ! "$pr_out" =~ "no pull requests found" ]]; then
+    echo "$pr_out"
+    if [ $pr_code -eq 8 ]; then
+      return 1
+    fi
+    return $pr_code
+  fi
+
+  # Fallback for arbitrary revisions without an open PR (e.g. main, commit SHAs)
+  local check_runs_json combined_status_json
+  check_runs_json=$(gh api "repos/{owner}/{repo}/commits/${ref}/check-runs" 2>/dev/null) || return 1
+  combined_status_json=$(gh api "repos/{owner}/{repo}/commits/${ref}/status" 2>/dev/null) || return 1
+
+  local pending_count=0
+  local fail_count=0
+  local total_count=0
+
+  while IFS=$'\t' read -r status conclusion name; do
+    [ -z "$name" ] && continue
+    total_count=$((total_count + 1))
+    if [ "$status" != "completed" ]; then
+      pending_count=$((pending_count + 1))
+      printf "%-12s %-12s %s\n" "$status" "${conclusion:-pending}" "$name"
+    else
+      if [ "$conclusion" = "failure" ] || [ "$conclusion" = "timed_out" ] || [ "$conclusion" = "action_required" ]; then
+        fail_count=$((fail_count + 1))
+      fi
+      printf "%-12s %-12s %s\n" "$status" "$conclusion" "$name"
+    fi
+  done < <(echo "$check_runs_json" | jq -r '.check_runs[]? | "\(.status)\t\(.conclusion // "")\t\(.name)"')
+
+  while IFS=$'\t' read -r state context; do
+    [ -z "$context" ] && continue
+    total_count=$((total_count + 1))
+    if [ "$state" = "pending" ]; then
+      pending_count=$((pending_count + 1))
+    elif [ "$state" = "error" ] || [ "$state" = "failure" ]; then
+      fail_count=$((fail_count + 1))
+    fi
+    printf "%-12s %-12s %s\n" "$state" "$state" "$context"
+  done < <(echo "$combined_status_json" | jq -r '.statuses[]? | "\(.state)\t\(.context)"')
+
+  if [ $total_count -eq 0 ]; then
+    echo "No checks or statuses found for $ref."
+    return 0
+  fi
+
+  if [ $pending_count -gt 0 ]; then
+    return 1
+  fi
+
+  return 0
+}
+
+export -f ci_status
+wait_on ci_status "$@"
 say -v Daniel "Your tests have all passed."
