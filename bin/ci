@@ -15,14 +15,24 @@ ci_status() {
     echo "$pr_out"
     if [ $pr_code -eq 8 ]; then
       return 1
+    elif [ $pr_code -eq 0 ]; then
+      return 0
+    else
+      return 6
     fi
-    return $pr_code
   fi
 
   # Fallback for arbitrary revisions without an open PR (e.g. main, commit SHAs)
-  local check_runs_json combined_status_json
-  check_runs_json=$(gh api "repos/{owner}/{repo}/commits/${ref}/check-runs" 2>/dev/null) || return 1
-  combined_status_json=$(gh api "repos/{owner}/{repo}/commits/${ref}/status" 2>/dev/null) || return 1
+  local check_runs_json combined_status_json check_code status_code
+  check_runs_json=$(gh api "repos/{owner}/{repo}/commits/${ref}/check-runs" 2>/dev/null)
+  check_code=$?
+  combined_status_json=$(gh api "repos/{owner}/{repo}/commits/${ref}/status" 2>/dev/null)
+  status_code=$?
+
+  if [ $check_code -ne 0 ] || [ $status_code -ne 0 ]; then
+    echo "Error querying GitHub API for ref $ref." >&2
+    return 6
+  fi
 
   local pending_count=0
   local fail_count=0
@@ -35,7 +45,7 @@ ci_status() {
       pending_count=$((pending_count + 1))
       printf "%-12s %-12s %s\n" "$status" "${conclusion:-pending}" "$name"
     else
-      if [ "$conclusion" = "failure" ] || [ "$conclusion" = "timed_out" ] || [ "$conclusion" = "action_required" ]; then
+      if [ "$conclusion" != "success" ] && [ "$conclusion" != "neutral" ] && [ "$conclusion" != "skipped" ]; then
         fail_count=$((fail_count + 1))
       fi
       printf "%-12s %-12s %s\n" "$status" "$conclusion" "$name"
@@ -47,7 +57,7 @@ ci_status() {
     total_count=$((total_count + 1))
     if [ "$state" = "pending" ]; then
       pending_count=$((pending_count + 1))
-    elif [ "$state" = "error" ] || [ "$state" = "failure" ]; then
+    elif [ "$state" != "success" ]; then
       fail_count=$((fail_count + 1))
     fi
     printf "%-12s %-12s %s\n" "$state" "$state" "$context"
@@ -55,16 +65,23 @@ ci_status() {
 
   if [ $total_count -eq 0 ]; then
     echo "No checks or statuses found for $ref."
-    return 0
+    return 6
   fi
 
   if [ $pending_count -gt 0 ]; then
     return 1
   fi
 
+  if [ $fail_count -gt 0 ]; then
+    return 6
+  fi
+
   return 0
 }
 
 export -f ci_status
-wait_on ci_status "$@"
-say -v Daniel "Your tests have all passed."
+if wait_on ci_status "$@"; then
+  say -v Daniel "Your tests have all passed."
+else
+  exit 1
+fi
