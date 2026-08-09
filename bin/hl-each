@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 #/ Usage: hl-each some series of bash commands
 #/ Executes a shell script on each homelab machine.
-#/ Homelab machines can be found in $HOME/code/puppet/code/hiera/hostname/*.yaml.
+#/ Homelab machines can be found in $HOME/code/puppet/code/hiera/hostname/*.yaml
+#/ and $HOME/code/puppet/nix/hosts/*.nix.
 #/ Each filename is a hostname.
 set -e
 set -u
@@ -16,6 +17,7 @@ if [[ $# -eq 0 ]]; then
 fi
 
 HIERA_PATH="$HOME/code/puppet/code/hiera/hostname"
+NIX_HOSTS_PATH="$HOME/code/puppet/nix/hosts"
 
 # Check if directory exists
 if [[ ! -d "$HIERA_PATH" ]]; then
@@ -30,14 +32,34 @@ if [[ ${#cmd_display} -gt 35 ]]; then
   cmd_display="${cmd_display:0:32}..."
 fi
 
-# Loop through each hostname YAML file
+# Gather hostnames from hiera YAML files and nix host files, then sort them
+# so we always execute in alphabetical order. Built up as a newline-delimited
+# string (rather than an array) and only converted to an array at the end,
+# since macOS's default bash (3.2) treats expanding an empty array as an
+# unbound-variable error under `set -u`.
+hostname_list=""
+
 for file in "$HIERA_PATH"/*.yaml; do
-  # Handle cases where no files match the glob
   [[ -e "$file" ]] || continue
+  hostname_list+="$(basename "$file" .yaml)"$'\n'
+done
 
-  # Extract the hostname from the filename
-  hostname=$(basename "$file" .yaml)
+if [[ -d "$NIX_HOSTS_PATH" ]]; then
+  for file in "$NIX_HOSTS_PATH"/*.nix; do
+    [[ -e "$file" ]] || continue
+    hostname_list+="$(basename "$file" .nix)"$'\n'
+  done
+fi
 
+hostnames=($(printf '%s' "$hostname_list" | sort -u))
+
+if [[ ${#hostnames[@]} -eq 0 ]]; then
+  echo "Error: No hosts found in $HIERA_PATH or $NIX_HOSTS_PATH." > /dev/stderr
+  exit 1
+fi
+
+# Loop through each hostname
+for hostname in "${hostnames[@]}"; do
   echo -e "\n\033[35m==> Running on $hostname...\033[0m"
 
   local_start=$(date +%s.%N 2>/dev/null || date +%s 2>/dev/null || echo 0)
