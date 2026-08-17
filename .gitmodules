@@ -64,6 +64,3 @@
 [submodule "pkg/other_video_transcoding/bin"]
 	path = pkg/other_video_transcoding/bin
 	url = https://github.com/lisamelton/other_video_transcoding
-[submodule "pkg/pa"]
-	path = pkg/pa/bin
-	url = https://github.com/biox/pa
