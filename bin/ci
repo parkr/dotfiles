@@ -3,6 +3,21 @@
 #/ Prints verbose CI status from GitHub, every 5 seconds, until it's passing.
 #/ Once complete, it will say "Your tests have all passed."
 
+status_emoji() {
+  case "$1" in
+    success) echo "✅" ;;
+    failure|error) echo "❌" ;;
+    cancelled) echo "🚫" ;;
+    skipped) echo "⏭️" ;;
+    neutral) echo "➖" ;;
+    timed_out) echo "⏱️" ;;
+    action_required) echo "⚠️" ;;
+    stale) echo "♻️" ;;
+    pending|"") echo "⏳" ;;
+    *) echo "$1" ;;
+  esac
+}
+
 ci_status() {
   local ref="${1:-HEAD}"
 
@@ -38,21 +53,21 @@ ci_status() {
   local fail_count=0
   local total_count=0
 
-  while IFS=$'\t' read -r status conclusion name; do
+  while IFS=$'\t' read -r status conclusion name html_url; do
     [ -z "$name" ] && continue
     total_count=$((total_count + 1))
     if [ "$status" != "completed" ]; then
       pending_count=$((pending_count + 1))
-      printf "%-12s %-12s %s\n" "$status" "${conclusion:-pending}" "$name"
+      printf "%-12s %-3s %-40s %s\n" "$status" "$(status_emoji "${conclusion:-pending}")" "$name" "$html_url"
     else
       if [ "$conclusion" != "success" ] && [ "$conclusion" != "neutral" ] && [ "$conclusion" != "skipped" ]; then
         fail_count=$((fail_count + 1))
       fi
-      printf "%-12s %-12s %s\n" "$status" "$conclusion" "$name"
+      printf "%-12s %-3s %-40s %s\n" "$status" "$(status_emoji "$conclusion")" "$name" "$html_url"
     fi
-  done < <(echo "$check_runs_json" | jq -r '.check_runs[]? | "\(.status)\t\(.conclusion // "")\t\(.name)"')
+  done < <(echo "$check_runs_json" | jq -r '.check_runs[]? | "\(.status)\t\(.conclusion // "")\t\(.name)\t\(.html_url // "")"')
 
-  while IFS=$'\t' read -r state context; do
+  while IFS=$'\t' read -r state context target_url; do
     [ -z "$context" ] && continue
     total_count=$((total_count + 1))
     if [ "$state" = "pending" ]; then
@@ -60,8 +75,8 @@ ci_status() {
     elif [ "$state" != "success" ]; then
       fail_count=$((fail_count + 1))
     fi
-    printf "%-12s %-12s %s\n" "$state" "$state" "$context"
-  done < <(echo "$combined_status_json" | jq -r '.statuses[]? | "\(.state)\t\(.context)"')
+    printf "%-12s %-3s %-40s %s\n" "$state" "$(status_emoji "$state")" "$context" "$target_url"
+  done < <(echo "$combined_status_json" | jq -r '.statuses[]? | "\(.state)\t\(.context)\t\(.target_url // "")"')
 
   if [ $total_count -eq 0 ]; then
     echo "No checks or statuses found for $ref."
@@ -79,6 +94,7 @@ ci_status() {
   return 0
 }
 
+export -f status_emoji
 export -f ci_status
 if wait_on ci_status "$@"; then
   say -v Daniel "Your tests have all passed."
