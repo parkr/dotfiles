@@ -1,5 +1,7 @@
-# shortcut to this dotfiles path is $ZSH
-export ZSH=$HOME/.dotfiles
+# shortcut to this dotfiles path is $DOTFILES (also exported as $ZSH)
+# ${...:A} resolves the ~/.zshrc symlink, so this works from any checkout location.
+export DOTFILES=${DOTFILES:-${${(%):-%x}:A:h:h}}
+export ZSH=$DOTFILES
 
 # your project folder that we can c [tab] to
 export PROJECTS=$HOME/Development

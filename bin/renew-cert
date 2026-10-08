@@ -5,7 +5,7 @@
 #/          --upgrade, upgrade certbot-auto in-place
 
 if [ -z "$CERTBOT_BIN" ]; then
-  CERTBOT_BIN="$HOME/.dotfiles/bin/certbot"
+  CERTBOT_BIN="$(cd "$(dirname "$0")" && pwd)/certbot"
 fi
 
 email="$LETSENCRYPT_EMAIL"

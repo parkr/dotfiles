@@ -1,7 +1,9 @@
 #!/bin/bash
 set -ex
 
-pushd "$HOME/.dotfiles/vim/vim.symlink/bundle/Command-T"
+DOTFILES="${DOTFILES:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+
+pushd "$DOTFILES/vim/vim.symlink/bundle/Command-T"
 rbenv version
 bundle install
 bundle exec rake make
