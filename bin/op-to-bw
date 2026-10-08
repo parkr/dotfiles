@@ -1,20 +1,25 @@
 #!/usr/bin/env python3
-"""Usage: op-to-bw [--dry-run] QUERY
+"""Usage: op-to-bw [--vault PATH] [--dry-run] QUERY
 
-Copies a Login from 1Password to Bitwarden (Vaultwarden), creating it or
-updating an existing entry of the same name.
+Copies a Login from a 1Password 7 vault file (.opvault) to Bitwarden
+(Vaultwarden), creating it or updating an existing entry of the same name.
 
-QUERY is matched case-insensitively against 1Password Login names and URLs.
+QUERY is matched case-insensitively against Login names and URLs. The vault
+is PATH, $OPVAULT, or found with Spotlight. $OPVAULT_PASSWORD skips the prompt.
 
-Requires: `brew install --cask 1password-cli` and `brew install bitwarden-cli`.
+Requires: `brew install bitwarden-cli` (and the system `openssl`).
 Bitwarden must already point at your server (`bw config server URL`) and be
-logged in (`bw login`). Unlocking and 1Password sign-in are prompted for.
+logged in (`bw login`); unlocking is prompted for.
 """
 import argparse
 import base64
+import datetime
+import getpass
+import hashlib
+import hmac
 import json
 import os
-import re
+import pathlib
 import subprocess
 import sys
 
@@ -25,20 +30,21 @@ def die(msg):
     sys.exit(f"error: {msg}")
 
 
-def run(cmd, stdin=None, interactive=False):
+def run(cmd, stdin=None, interactive=False, binary=False):
     """Runs cmd, returns stdout. Interactive keeps the tty for prompts."""
     try:
         p = subprocess.run(
             cmd,
             input=stdin,
-            text=True,
+            text=not binary,
             stdout=subprocess.PIPE,
             stderr=None if interactive else subprocess.PIPE,
         )
     except FileNotFoundError:
         die(f"`{cmd[0]}` not found; install it with Homebrew (see --help)")
     if p.returncode != 0:
-        die(f"`{' '.join(cmd[:3])}` failed: {(p.stderr or '').strip()}")
+        err = p.stderr.decode() if binary else p.stderr
+        die(f"`{' '.join(cmd[:3])}` failed: {(err or '').strip()}")
     return p.stdout
 
 
@@ -46,34 +52,121 @@ def run_json(cmd, **kw):
     return json.loads(run(cmd, **kw))
 
 
-# 1Password
+# 1Password (OPVault)
 
 
-def op_sign_in():
-    probe = subprocess.run(["op", "whoami"], capture_output=True)
-    if probe.returncode == 0:
-        return
-    # Without app integration, `op signin` prints `export OP_SESSION_x=...`.
-    out = run(["op", "signin"], interactive=True)
-    for name, value in re.findall(r'export (\w+)="?([^"\n]+)"?', out):
-        os.environ[name] = value
+def xor(a, b):
+    return (int.from_bytes(a, "big") ^ int.from_bytes(b, "big")).to_bytes(len(a), "big")
 
 
-def op_search(query):
+def cbc_decrypt(key, jobs):
+    """AES-256-CBC-decrypts [(iv, ciphertext)] with one openssl call.
+
+    Python has no AES, so decrypt as ECB and XOR with the previous block.
+    """
+    if not jobs:
+        return []
+    cmd = ["openssl", "enc", "-d", "-aes-256-ecb", "-nopad", "-K", key.hex()]
+    ecb = run(cmd, stdin=b"".join(ct for _, ct in jobs), binary=True)
+    out, pos = [], 0
+    for iv, ct in jobs:
+        out.append(xor(ecb[pos : pos + len(ct)], iv + ct[:-16]))
+        pos += len(ct)
+    return out
+
+
+def opdata_decrypt(blobs, enc, mac):
+    """Decrypts "opdata01" blobs (raw or base64): header, length, IV, data, HMAC."""
+    jobs, sizes = [], []
+    for blob in blobs:
+        raw = blob if blob.startswith(b"opdata01") else base64.b64decode(blob)
+        if not hmac.compare_digest(hmac.digest(mac, raw[:-32], "sha256"), raw[-32:]):
+            raise ValueError("bad HMAC")
+        jobs.append((raw[16:32], raw[32:-32]))
+        sizes.append(int.from_bytes(raw[8:16], "little"))
+    # Plaintext is prefixed with random padding.
+    return [p[len(p) - n :] for p, n in zip(cbc_decrypt(enc, jobs), sizes)]
+
+
+def split_keys(material):
+    return material[:32], material[32:]
+
+
+def read_js(path):
+    """Reads the JSON object out of `var x={...};` / `ld({...});` files."""
+    text = path.read_text()
+    return json.loads(text[text.index("{") : text.rindex("}") + 1])
+
+
+def find_vault(arg):
+    path = arg or os.environ.get("OPVAULT")
+    if not path:
+        try:  # Spotlight, on macOS
+            out = subprocess.run(["mdfind", "-name", ".opvault"], capture_output=True, text=True).stdout
+        except FileNotFoundError:
+            out = ""
+        found = [p for p in out.splitlines() if p.endswith(".opvault")]
+        if not found:
+            die("vault not found; pass --vault PATH or set $OPVAULT")
+        path = found[0] if len(found) == 1 else found[choose("Which vault?", found)]
+    root = pathlib.Path(path).expanduser()
+    for profile in (root / "default", root):
+        if (profile / "profile.js").exists():
+            return profile
+    die(f"{root} is not an OPVault (no profile.js)")
+
+
+class Vault:
+    def __init__(self, path):
+        self.path = path
+        profile = read_js(path / "profile.js")
+        password = os.environ.get("OPVAULT_PASSWORD") or getpass.getpass("1Password master password: ")
+        derived = hashlib.pbkdf2_hmac(
+            "sha512", password.encode(), base64.b64decode(profile["salt"]), profile["iterations"], 64
+        )
+        try:
+            self.master = self._unlock(profile["masterKey"], derived)
+            self.overview = self._unlock(profile["overviewKey"], derived)
+        except ValueError:
+            die("wrong 1Password master password")
+
+    @staticmethod
+    def _unlock(blob, derived):
+        material = opdata_decrypt([blob.encode()], *split_keys(derived))[0]
+        return split_keys(hashlib.sha512(material).digest())
+
+    def logins(self):
+        """Returns non-trashed Logins as {"item", "overview"} dicts."""
+        items = []
+        for band in sorted(self.path.glob("band_*.js")):
+            items += [i for i in read_js(band).values() if i["category"] == "001" and not i.get("trashed")]
+        overviews = opdata_decrypt([i["o"].encode() for i in items], *self.overview)
+        return [{"item": i, "overview": json.loads(o)} for i, o in zip(items, overviews)]
+
+    def details(self, item):
+        k = base64.b64decode(item["k"])
+        if not hmac.compare_digest(hmac.digest(self.master[1], k[:80], "sha256"), k[80:]):
+            die("bad item key HMAC")
+        (key,) = cbc_decrypt(self.master[0], [(k[:16], k[16:80])])
+        return json.loads(opdata_decrypt([item["d"].encode()], *split_keys(key))[0])
+
+
+def urls_of(overview):
+    urls = [overview.get("url")] + [u.get("u") for u in overview.get("URLs", [])]
+    return list(dict.fromkeys(u for u in urls if u))
+
+
+def search(logins, query):
     q = query.lower()
-    items = run_json(["op", "item", "list", "--categories", "Login", "--format", "json"])
     return [
-        i
-        for i in items
-        if q in i["title"].lower() or any(q in u.get("href", "").lower() for u in i.get("urls", []))
+        l for l in logins
+        if q in l["overview"].get("title", "").lower() or any(q in u.lower() for u in urls_of(l["overview"]))
     ]
 
 
-def describe(item):
-    urls = ", ".join(u["href"] for u in item.get("urls", [])[:2])
-    user = item.get("additional_information") or "-"
-    vault = item.get("vault", {}).get("name", "?")
-    return f"{item['title']}  ({user})  [{vault}]  {urls}".rstrip()
+def describe(login):
+    o = login["overview"]
+    return f"{o.get('title')}  ({o.get('ainfo') or '-'})  {', '.join(urls_of(o)[:2])}".rstrip()
 
 
 def choose(prompt, labels):
@@ -86,34 +179,36 @@ def choose(prompt, labels):
             return int(answer) - 1
 
 
-def to_bw_login(op_item):
-    """Maps a full 1Password item to the parts of a Bitwarden Login."""
+def field_text(kind, value):
+    if kind == "date" and isinstance(value, int):
+        return datetime.datetime.fromtimestamp(value, datetime.timezone.utc).strftime("%Y-%m-%d")
+    if isinstance(value, dict):
+        return ", ".join(f"{k}: {v}" for k, v in value.items() if v)
+    return str(value)
+
+
+def to_bw_login(overview, details):
+    """Maps decrypted 1Password Login data to Bitwarden login, notes and fields."""
     login = {"username": None, "password": None, "totp": None, "uris": []}
-    notes, fields = None, []
-    for f in op_item.get("fields", []):
-        value, purpose, ftype = f.get("value"), f.get("purpose"), f.get("type")
-        if value in (None, ""):
-            continue
-        if purpose == "USERNAME":
-            login["username"] = value
-        elif purpose == "PASSWORD":
-            login["password"] = value
-        elif purpose == "NOTES":
-            notes = value
-        elif ftype == "OTP":
-            login["totp"] = value
-        else:
-            label = f.get("label") or f.get("id")
-            if f.get("section", {}).get("label"):
-                label = f"{f['section']['label']}: {label}"
-            kind = BW_HIDDEN if ftype == "CONCEALED" else BW_TEXT
-            fields.append({"name": label, "value": str(value), "type": kind})
-    seen = set()
-    for u in sorted(op_item.get("urls", []), key=lambda u: not u.get("primary")):
-        if u["href"] not in seen:
-            seen.add(u["href"])
-            login["uris"].append({"match": None, "uri": u["href"]})
-    return op_item["title"], login, notes, fields
+    for f in details.get("fields", []):
+        if f.get("designation") in ("username", "password") and f.get("value"):
+            login[f["designation"]] = f["value"]
+    fields = []
+    for section in details.get("sections", []):
+        for f in section.get("fields", []):
+            value = f.get("v")
+            if value in (None, ""):
+                continue
+            if f["k"] == "totp":
+                login["totp"] = login["totp"] or value
+                continue
+            label = f.get("t") or f.get("n")
+            if section.get("title"):
+                label = f"{section['title']}: {label}"
+            kind = BW_HIDDEN if f["k"] == "concealed" else BW_TEXT
+            fields.append({"name": label, "value": field_text(f["k"], value), "type": kind})
+    login["uris"] = [{"match": None, "uri": u} for u in urls_of(overview)]
+    return overview["title"], login, details.get("notesPlain"), fields
 
 
 # Bitwarden
@@ -164,11 +259,12 @@ def build_payload(existing, name, login, notes, fields):
 def main():
     ap = argparse.ArgumentParser(description="Copy a 1Password Login to Bitwarden.")
     ap.add_argument("query")
+    ap.add_argument("--vault", help="path to the .opvault (default: $OPVAULT or Spotlight)")
     ap.add_argument("-n", "--dry-run", action="store_true", help="show the plan; write nothing")
     args = ap.parse_args()
 
-    op_sign_in()
-    matches = op_search(args.query)
+    vault = Vault(find_vault(args.vault))
+    matches = search(vault.logins(), args.query)
     if not matches:
         die(f"no 1Password Logins match {args.query!r}")
     if len(matches) == 1:
@@ -178,8 +274,7 @@ def main():
         print(f"{len(matches)} Logins match {args.query!r}:", file=sys.stderr)
         selected = matches[choose("Copy which?", [describe(m) for m in matches])]
 
-    full = run_json(["op", "item", "get", selected["id"], "--format", "json"])
-    name, login, notes, fields = to_bw_login(full)
+    name, login, notes, fields = to_bw_login(selected["overview"], vault.details(selected["item"]))
 
     bw_unlock()
     existing_matches = bw_find(name)
