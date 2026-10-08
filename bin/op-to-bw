@@ -7,7 +7,7 @@ Copies a Login from a 1Password 7 vault file (.opvault) to Bitwarden
 QUERY is matched case-insensitively against Login names and URLs. The vault
 is PATH, $OPVAULT, or found with Spotlight. $OPVAULT_PASSWORD skips the prompt.
 
-Requires: `brew install bitwarden-cli` (and the system `openssl`).
+Requires: `brew install bitwarden-cli`.
 Bitwarden must already point at your server (`bw config server URL`) and be
 logged in (`bw login`); unlocking is prompted for.
 """
@@ -20,31 +20,31 @@ import hmac
 import json
 import os
 import pathlib
+import struct
 import subprocess
 import sys
 
-BW_TEXT, BW_HIDDEN, BW_BOOL = 0, 1, 2
+BW_TEXT, BW_HIDDEN = 0, 1
 
 
 def die(msg):
     sys.exit(f"error: {msg}")
 
 
-def run(cmd, stdin=None, interactive=False, binary=False):
+def run(cmd, stdin=None, interactive=False):
     """Runs cmd, returns stdout. Interactive keeps the tty for prompts."""
     try:
         p = subprocess.run(
             cmd,
             input=stdin,
-            text=not binary,
+            text=True,
             stdout=subprocess.PIPE,
             stderr=None if interactive else subprocess.PIPE,
         )
     except FileNotFoundError:
-        die(f"`{cmd[0]}` not found; install it with Homebrew (see --help)")
+        die(f"`{cmd[0]}` not found; install it with Homebrew")
     if p.returncode != 0:
-        err = p.stderr.decode() if binary else p.stderr
-        die(f"`{' '.join(cmd[:3])}` failed: {(err or '').strip()}")
+        die(f"`{' '.join(cmd[:3])}` failed: {(p.stderr or '').strip()}")
     return p.stdout
 
 
@@ -55,23 +55,96 @@ def run_json(cmd, **kw):
 # 1Password (OPVault)
 
 
-def xor(a, b):
-    return (int.from_bytes(a, "big") ^ int.from_bytes(b, "big")).to_bytes(len(a), "big")
+class BadMAC(Exception):
+    pass
+
+
+def _aes_tables():
+    exp, log, x = [0] * 255, [0] * 256, 1
+    for i in range(255):
+        exp[i], log[x] = x, i
+        x ^= ((x << 1) ^ (0x1B if x & 0x80 else 0)) & 0xFF  # x *= 3
+    rotl = lambda v, n: ((v << n) | (v >> (8 - n))) & 0xFF
+    sbox = [0x63] * 256
+    for i in range(1, 256):
+        v = exp[(255 - log[i]) % 255]
+        sbox[i] = v ^ rotl(v, 1) ^ rotl(v, 2) ^ rotl(v, 3) ^ rotl(v, 4) ^ 0x63
+    inv = [0] * 256
+    for i, v in enumerate(sbox):
+        inv[v] = i
+
+    def mul(a, b):
+        return exp[(log[a] + log[b]) % 255] if a and b else 0
+
+    td0 = [
+        mul(v, 14) << 24 | mul(v, 9) << 16 | mul(v, 13) << 8 | mul(v, 11)
+        for v in inv
+    ]
+    ror8 = lambda w: (w >> 8) | ((w & 0xFF) << 24)
+    td1 = [ror8(w) for w in td0]
+    td2 = [ror8(w) for w in td1]
+    td3 = [ror8(w) for w in td2]
+    return sbox, inv, td0, td1, td2, td3
+
+
+SBOX, ISBOX, TD0, TD1, TD2, TD3 = _aes_tables()
+
+
+def _aes256_decrypt_keys(key):
+    """Expands a 32-byte key into round keys for the equivalent inverse cipher."""
+    w = list(struct.unpack(">8I", key))
+    rcon = 1
+    for i in range(8, 60):
+        t = w[i - 1]
+        if i % 8 == 0:
+            t = (t << 8 | t >> 24) & 0xFFFFFFFF
+            t = sum(SBOX[(t >> s) & 0xFF] << s for s in (24, 16, 8, 0)) ^ (rcon << 24)
+            rcon = ((rcon << 1) ^ (0x1B if rcon & 0x80 else 0)) & 0xFF
+        elif i % 8 == 4:
+            t = sum(SBOX[(t >> s) & 0xFF] << s for s in (24, 16, 8, 0))
+        w.append(w[i - 8] ^ t)
+    dk = []
+    for r in range(14, -1, -1):
+        words = w[4 * r : 4 * r + 4]
+        if 0 < r < 14:  # InvMixColumns
+            words = [
+                TD0[SBOX[x >> 24]] ^ TD1[SBOX[(x >> 16) & 0xFF]] ^ TD2[SBOX[(x >> 8) & 0xFF]] ^ TD3[SBOX[x & 0xFF]]
+                for x in words
+            ]
+        dk += words
+    return dk
+
+
+def _aes_decrypt_block(dk, block):
+    s0, s1, s2, s3 = (a ^ b for a, b in zip(struct.unpack(">4I", block), dk))
+    for r in range(4, 56, 4):
+        s0, s1, s2, s3 = (
+            TD0[s0 >> 24] ^ TD1[(s3 >> 16) & 255] ^ TD2[(s2 >> 8) & 255] ^ TD3[s1 & 255] ^ dk[r],
+            TD0[s1 >> 24] ^ TD1[(s0 >> 16) & 255] ^ TD2[(s3 >> 8) & 255] ^ TD3[s2 & 255] ^ dk[r + 1],
+            TD0[s2 >> 24] ^ TD1[(s1 >> 16) & 255] ^ TD2[(s0 >> 8) & 255] ^ TD3[s3 & 255] ^ dk[r + 2],
+            TD0[s3 >> 24] ^ TD1[(s2 >> 16) & 255] ^ TD2[(s1 >> 8) & 255] ^ TD3[s0 & 255] ^ dk[r + 3],
+        )
+    return struct.pack(
+        ">4I",
+        (ISBOX[s0 >> 24] << 24 | ISBOX[(s3 >> 16) & 255] << 16 | ISBOX[(s2 >> 8) & 255] << 8 | ISBOX[s1 & 255]) ^ dk[56],
+        (ISBOX[s1 >> 24] << 24 | ISBOX[(s0 >> 16) & 255] << 16 | ISBOX[(s3 >> 8) & 255] << 8 | ISBOX[s2 & 255]) ^ dk[57],
+        (ISBOX[s2 >> 24] << 24 | ISBOX[(s1 >> 16) & 255] << 16 | ISBOX[(s0 >> 8) & 255] << 8 | ISBOX[s3 & 255]) ^ dk[58],
+        (ISBOX[s3 >> 24] << 24 | ISBOX[(s2 >> 16) & 255] << 16 | ISBOX[(s1 >> 8) & 255] << 8 | ISBOX[s0 & 255]) ^ dk[59],
+    )
 
 
 def cbc_decrypt(key, jobs):
-    """AES-256-CBC-decrypts [(iv, ciphertext)] with one openssl call.
-
-    Python has no AES, so decrypt as ECB and XOR with the previous block.
-    """
-    if not jobs:
-        return []
-    cmd = ["openssl", "enc", "-d", "-aes-256-ecb", "-nopad", "-K", key.hex()]
-    ecb = run(cmd, stdin=b"".join(ct for _, ct in jobs), binary=True)
-    out, pos = [], 0
+    """AES-256-CBC-decrypts [(iv, ciphertext)]. Pure Python, so keys never hit argv."""
+    dk = _aes256_decrypt_keys(key)
+    out = []
     for iv, ct in jobs:
-        out.append(xor(ecb[pos : pos + len(ct)], iv + ct[:-16]))
-        pos += len(ct)
+        prev, plain = iv, []
+        for i in range(0, len(ct), 16):
+            block = ct[i : i + 16]
+            d = _aes_decrypt_block(dk, block)
+            plain.append((int.from_bytes(d, "big") ^ int.from_bytes(prev, "big")).to_bytes(16, "big"))
+            prev = block
+        out.append(b"".join(plain))
     return out
 
 
@@ -81,7 +154,7 @@ def opdata_decrypt(blobs, enc, mac):
     for blob in blobs:
         raw = blob if blob.startswith(b"opdata01") else base64.b64decode(blob)
         if not hmac.compare_digest(hmac.digest(mac, raw[:-32], "sha256"), raw[-32:]):
-            raise ValueError("bad HMAC")
+            raise BadMAC
         jobs.append((raw[16:32], raw[32:-32]))
         sizes.append(int.from_bytes(raw[8:16], "little"))
     # Plaintext is prefixed with random padding.
@@ -127,7 +200,7 @@ class Vault:
         try:
             self.master = self._unlock(profile["masterKey"], derived)
             self.overview = self._unlock(profile["overviewKey"], derived)
-        except ValueError:
+        except BadMAC:
             die("wrong 1Password master password")
 
     @staticmethod
@@ -146,7 +219,7 @@ class Vault:
     def details(self, item):
         k = base64.b64decode(item["k"])
         if not hmac.compare_digest(hmac.digest(self.master[1], k[:80], "sha256"), k[80:]):
-            die("bad item key HMAC")
+            raise BadMAC
         (key,) = cbc_decrypt(self.master[0], [(k[:16], k[16:80])])
         return json.loads(opdata_decrypt([item["d"].encode()], *split_keys(key))[0])
 
@@ -159,8 +232,9 @@ def urls_of(overview):
 def search(logins, query):
     q = query.lower()
     return [
-        l for l in logins
-        if q in l["overview"].get("title", "").lower() or any(q in u.lower() for u in urls_of(l["overview"]))
+        entry for entry in logins
+        if q in entry["overview"].get("title", "").lower()
+        or any(q in u.lower() for u in urls_of(entry["overview"]))
     ]
 
 
@@ -199,10 +273,10 @@ def to_bw_login(overview, details):
             value = f.get("v")
             if value in (None, ""):
                 continue
-            if f["k"] == "totp":
+            if f["k"] == "totp" or str(f.get("n", "")).startswith("TOTP_"):
                 login["totp"] = login["totp"] or value
                 continue
-            label = f.get("t") or f.get("n")
+            label = f.get("t") or f.get("n") or "Field"
             if section.get("title"):
                 label = f"{section['title']}: {label}"
             kind = BW_HIDDEN if f["k"] == "concealed" else BW_TEXT
@@ -215,14 +289,13 @@ def to_bw_login(overview, details):
 
 
 def bw_unlock():
-    if os.environ.get("BW_SESSION"):
-        return
+    # `bw status` honors $BW_SESSION, so a stale session reads as "locked".
     status = run_json(["bw", "status"]).get("status")
     if status == "unauthenticated":
         die("not logged in to Bitwarden; run `bw config server URL && bw login`")
     if status == "locked":
         os.environ["BW_SESSION"] = run(["bw", "unlock", "--raw"], interactive=True).strip()
-    run(["bw", "sync"])
+    run(["bw", "sync"])  # so existing entries are found
 
 
 def bw_find(name):
@@ -246,7 +319,10 @@ def build_payload(existing, name, login, notes, fields):
         "login": {},
     }
     item["name"] = name
+    uris = login.pop("uris")
     item["login"].update({k: v for k, v in login.items() if v})
+    known = {u["uri"] for u in item["login"].get("uris") or []}
+    item["login"]["uris"] = (item["login"].get("uris") or []) + [u for u in uris if u["uri"] not in known]
     if notes:
         item["notes"] = notes
     # 1Password wins on name clashes; other existing custom fields are kept.
@@ -301,3 +377,5 @@ if __name__ == "__main__":
         main()
     except (KeyboardInterrupt, EOFError):
         sys.exit(130)
+    except BadMAC:
+        die("vault data failed its integrity check; the vault may be corrupt")
