@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Usage: op-to-bw [--vault PATH] [--dry-run] QUERY
 
-Copies a Login from a 1Password 7 vault file (.opvault) to Bitwarden
-(Vaultwarden), creating it or updating an existing entry of the same name.
+Copies a Login from 1Password 7 to Bitwarden (Vaultwarden), creating it or
+updating an existing entry of the same name.
 
-QUERY is matched case-insensitively against Login names and URLs. The vault
-is PATH, $OPVAULT, or found with Spotlight. $OPVAULT_PASSWORD skips the prompt.
+QUERY is matched case-insensitively against Login names and URLs. The source
+is PATH or $OPVAULT: either an .opvault vault file (prompts for the master
+password; $OPVAULT_PASSWORD skips the prompt) or a 1Password 7 .1pif export
+(File > Export > 1PIF; unencrypted, so delete it afterwards).
 
 Requires: `brew install bitwarden-cli`.
 Bitwarden must already point at your server (`bw config server URL`) and be
@@ -171,7 +173,8 @@ def read_js(path):
     return json.loads(text[text.index("{") : text.rindex("}") + 1])
 
 
-def find_vault(arg):
+def open_source(arg):
+    """Opens a 1Password 7 .opvault, or an unencrypted .1pif export (file or folder)."""
     path = arg or os.environ.get("OPVAULT")
     if not path:
         try:  # Spotlight, on macOS
@@ -180,13 +183,17 @@ def find_vault(arg):
             out = ""
         found = [p for p in out.splitlines() if p.endswith(".opvault")]
         if not found:
-            die("vault not found; pass --vault PATH or set $OPVAULT")
+            die("no vault found; pass --vault PATH (an .opvault or .1pif) or set $OPVAULT")
         path = found[0] if len(found) == 1 else found[choose("Which vault?", found)]
     root = pathlib.Path(path).expanduser()
+    if root.is_dir() and (root / "data.1pif").exists():
+        return Pif(root / "data.1pif")
+    if root.is_file() and root.suffix == ".1pif":
+        return Pif(root)
     for profile in (root / "default", root):
         if (profile / "profile.js").exists():
-            return profile
-    die(f"{root} is not an OPVault (no profile.js)")
+            return Vault(profile)
+    die(f"{root} is not an .opvault or .1pif export")
 
 
 class Vault:
@@ -209,19 +216,51 @@ class Vault:
         return split_keys(hashlib.sha512(material).digest())
 
     def logins(self):
-        """Returns non-trashed Logins as {"item", "overview"} dicts."""
+        """Returns non-trashed Logins as {"overview", "item"} dicts."""
         items = []
         for band in sorted(self.path.glob("band_*.js")):
             items += [i for i in read_js(band).values() if i["category"] == "001" and not i.get("trashed")]
         overviews = opdata_decrypt([i["o"].encode() for i in items], *self.overview)
         return [{"item": i, "overview": json.loads(o)} for i, o in zip(items, overviews)]
 
-    def details(self, item):
+    def details(self, entry):
+        item = entry["item"]
         k = base64.b64decode(item["k"])
         if not hmac.compare_digest(hmac.digest(self.master[1], k[:80], "sha256"), k[80:]):
             raise BadMAC
         (key,) = cbc_decrypt(self.master[0], [(k[:16], k[16:80])])
         return json.loads(opdata_decrypt([item["d"].encode()], *split_keys(key))[0])
+
+
+class Pif:
+    """A 1Password Interchange Format export: JSON items split by a marker line."""
+
+    SEPARATOR = "***5642bee8-a5ff-11dc-8314-0800200c9a66***"
+
+    def __init__(self, path):
+        self.path = path
+
+    def logins(self):
+        entries = []
+        for chunk in self.path.read_text().split(self.SEPARATOR):
+            if not chunk.strip():
+                continue
+            item = json.loads(chunk)
+            if item.get("typeName") != "webforms.WebForm" or item.get("trashed"):
+                continue
+            details = item.get("secureContents", {})
+            username = next((f.get("value") for f in details.get("fields", []) if f.get("designation") == "username"), None)
+            overview = {
+                "title": item.get("title"),
+                "url": item.get("location"),
+                "URLs": [{"u": u.get("url")} for u in details.get("URLs", [])],
+                "ainfo": username,
+            }
+            entries.append({"overview": overview, "details": details})
+        return entries
+
+    def details(self, entry):
+        return entry["details"]
 
 
 def urls_of(overview):
@@ -240,7 +279,8 @@ def search(logins, query):
 
 def describe(login):
     o = login["overview"]
-    return f"{o.get('title')}  ({o.get('ainfo') or '-'})  {', '.join(urls_of(o)[:2])}".rstrip()
+    url = (urls_of(o) or [""])[0]
+    return f"{o.get('title')}  ({o.get('ainfo') or '-'})  {url[:60]}".rstrip()
 
 
 def choose(prompt, labels):
@@ -335,11 +375,11 @@ def build_payload(existing, name, login, notes, fields):
 def main():
     ap = argparse.ArgumentParser(description="Copy a 1Password Login to Bitwarden.")
     ap.add_argument("query")
-    ap.add_argument("--vault", help="path to the .opvault (default: $OPVAULT or Spotlight)")
+    ap.add_argument("--vault", help=".opvault or .1pif export (default: $OPVAULT, else Spotlight)")
     ap.add_argument("-n", "--dry-run", action="store_true", help="show the plan; write nothing")
     args = ap.parse_args()
 
-    vault = Vault(find_vault(args.vault))
+    vault = open_source(args.vault)
     matches = search(vault.logins(), args.query)
     if not matches:
         die(f"no 1Password Logins match {args.query!r}")
@@ -350,7 +390,7 @@ def main():
         print(f"{len(matches)} Logins match {args.query!r}:", file=sys.stderr)
         selected = matches[choose("Copy which?", [describe(m) for m in matches])]
 
-    name, login, notes, fields = to_bw_login(selected["overview"], vault.details(selected["item"]))
+    name, login, notes, fields = to_bw_login(selected["overview"], vault.details(selected))
 
     bw_unlock()
     existing_matches = bw_find(name)
