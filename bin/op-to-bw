@@ -1,0 +1,208 @@
+#!/usr/bin/env python3
+"""Usage: op-to-bw [--dry-run] QUERY
+
+Copies a Login from 1Password to Bitwarden (Vaultwarden), creating it or
+updating an existing entry of the same name.
+
+QUERY is matched case-insensitively against 1Password Login names and URLs.
+
+Requires: `brew install --cask 1password-cli` and `brew install bitwarden-cli`.
+Bitwarden must already point at your server (`bw config server URL`) and be
+logged in (`bw login`). Unlocking and 1Password sign-in are prompted for.
+"""
+import argparse
+import base64
+import json
+import os
+import re
+import subprocess
+import sys
+
+BW_TEXT, BW_HIDDEN, BW_BOOL = 0, 1, 2
+
+
+def die(msg):
+    sys.exit(f"error: {msg}")
+
+
+def run(cmd, stdin=None, interactive=False):
+    """Runs cmd, returns stdout. Interactive keeps the tty for prompts."""
+    try:
+        p = subprocess.run(
+            cmd,
+            input=stdin,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=None if interactive else subprocess.PIPE,
+        )
+    except FileNotFoundError:
+        die(f"`{cmd[0]}` not found; install it with Homebrew (see --help)")
+    if p.returncode != 0:
+        die(f"`{' '.join(cmd[:3])}` failed: {(p.stderr or '').strip()}")
+    return p.stdout
+
+
+def run_json(cmd, **kw):
+    return json.loads(run(cmd, **kw))
+
+
+# 1Password
+
+
+def op_sign_in():
+    probe = subprocess.run(["op", "whoami"], capture_output=True)
+    if probe.returncode == 0:
+        return
+    # Without app integration, `op signin` prints `export OP_SESSION_x=...`.
+    out = run(["op", "signin"], interactive=True)
+    for name, value in re.findall(r'export (\w+)="?([^"\n]+)"?', out):
+        os.environ[name] = value
+
+
+def op_search(query):
+    q = query.lower()
+    items = run_json(["op", "item", "list", "--categories", "Login", "--format", "json"])
+    return [
+        i
+        for i in items
+        if q in i["title"].lower() or any(q in u.get("href", "").lower() for u in i.get("urls", []))
+    ]
+
+
+def describe(item):
+    urls = ", ".join(u["href"] for u in item.get("urls", [])[:2])
+    user = item.get("additional_information") or "-"
+    vault = item.get("vault", {}).get("name", "?")
+    return f"{item['title']}  ({user})  [{vault}]  {urls}".rstrip()
+
+
+def choose(prompt, labels):
+    """Prints a numbered menu and returns the 0-based index chosen."""
+    for n, label in enumerate(labels, 1):
+        print(f"  {n}) {label}", file=sys.stderr)
+    while True:
+        answer = input(f"{prompt} [1-{len(labels)}]: ").strip()
+        if answer.isdigit() and 1 <= int(answer) <= len(labels):
+            return int(answer) - 1
+
+
+def to_bw_login(op_item):
+    """Maps a full 1Password item to the parts of a Bitwarden Login."""
+    login = {"username": None, "password": None, "totp": None, "uris": []}
+    notes, fields = None, []
+    for f in op_item.get("fields", []):
+        value, purpose, ftype = f.get("value"), f.get("purpose"), f.get("type")
+        if value in (None, ""):
+            continue
+        if purpose == "USERNAME":
+            login["username"] = value
+        elif purpose == "PASSWORD":
+            login["password"] = value
+        elif purpose == "NOTES":
+            notes = value
+        elif ftype == "OTP":
+            login["totp"] = value
+        else:
+            label = f.get("label") or f.get("id")
+            if f.get("section", {}).get("label"):
+                label = f"{f['section']['label']}: {label}"
+            kind = BW_HIDDEN if ftype == "CONCEALED" else BW_TEXT
+            fields.append({"name": label, "value": str(value), "type": kind})
+    seen = set()
+    for u in sorted(op_item.get("urls", []), key=lambda u: not u.get("primary")):
+        if u["href"] not in seen:
+            seen.add(u["href"])
+            login["uris"].append({"match": None, "uri": u["href"]})
+    return op_item["title"], login, notes, fields
+
+
+# Bitwarden
+
+
+def bw_unlock():
+    if os.environ.get("BW_SESSION"):
+        return
+    status = run_json(["bw", "status"]).get("status")
+    if status == "unauthenticated":
+        die("not logged in to Bitwarden; run `bw config server URL && bw login`")
+    if status == "locked":
+        os.environ["BW_SESSION"] = run(["bw", "unlock", "--raw"], interactive=True).strip()
+    run(["bw", "sync"])
+
+
+def bw_find(name):
+    items = run_json(["bw", "list", "items", "--search", name])
+    return [i for i in items if i["type"] == 1 and i["name"].lower() == name.lower()]
+
+
+def bw_save(payload, existing_id=None):
+    """Writes the item; the JSON goes over stdin to keep secrets out of `ps`."""
+    encoded = base64.b64encode(json.dumps(payload).encode()).decode()
+    cmd = ["bw", "edit", "item", existing_id] if existing_id else ["bw", "create", "item"]
+    run(cmd + ["--raw"], stdin=encoded)
+
+
+def build_payload(existing, name, login, notes, fields):
+    item = existing or {
+        "type": 1,
+        "organizationId": None,
+        "folderId": None,
+        "favorite": False,
+        "login": {},
+    }
+    item["name"] = name
+    item["login"].update({k: v for k, v in login.items() if v})
+    if notes:
+        item["notes"] = notes
+    # 1Password wins on name clashes; other existing custom fields are kept.
+    new_names = {f["name"] for f in fields}
+    kept = [f for f in item.get("fields") or [] if f["name"] not in new_names]
+    item["fields"] = kept + fields
+    return item
+
+
+def main():
+    ap = argparse.ArgumentParser(description="Copy a 1Password Login to Bitwarden.")
+    ap.add_argument("query")
+    ap.add_argument("-n", "--dry-run", action="store_true", help="show the plan; write nothing")
+    args = ap.parse_args()
+
+    op_sign_in()
+    matches = op_search(args.query)
+    if not matches:
+        die(f"no 1Password Logins match {args.query!r}")
+    if len(matches) == 1:
+        selected = matches[0]
+        print(f"Found: {describe(selected)}", file=sys.stderr)
+    else:
+        print(f"{len(matches)} Logins match {args.query!r}:", file=sys.stderr)
+        selected = matches[choose("Copy which?", [describe(m) for m in matches])]
+
+    full = run_json(["op", "item", "get", selected["id"], "--format", "json"])
+    name, login, notes, fields = to_bw_login(full)
+
+    bw_unlock()
+    existing_matches = bw_find(name)
+    existing = None
+    if len(existing_matches) == 1:
+        existing = existing_matches[0]
+    elif existing_matches:
+        print(f"{len(existing_matches)} Bitwarden Logins are named {name!r}:", file=sys.stderr)
+        labels = [f"update: {e['name']} ({e['login'].get('username') or '-'})" for e in existing_matches]
+        i = choose("Which?", labels + ["create a new entry"])
+        existing = existing_matches[i] if i < len(existing_matches) else None
+
+    action = "Update" if existing else "Create"
+    summary = f"{action} {name!r}: {len(login['uris'])} URI(s), {len(fields)} custom field(s)"
+    if args.dry_run:
+        print(f"[dry run] {summary}", file=sys.stderr)
+        return
+    bw_save(build_payload(existing, name, login, notes, fields), existing and existing["id"])
+    print(f"{summary} -- done", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (KeyboardInterrupt, EOFError):
+        sys.exit(130)
