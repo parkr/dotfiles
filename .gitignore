@@ -14,5 +14,3 @@ vim/vim.symlink/.netrwhist
 vim/vim.symlink/init.vim
 vim/vim.symlink/vim.symlink
 vendor/
-__pycache__/
-*.pyc

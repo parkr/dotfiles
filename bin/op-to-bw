@@ -22,6 +22,7 @@ import hmac
 import json
 import os
 import pathlib
+import shutil
 import struct
 import subprocess
 import sys
@@ -169,7 +170,7 @@ def split_keys(material):
 
 def read_js(path):
     """Reads the JSON object out of `var x={...};` / `ld({...});` files."""
-    text = path.read_text()
+    text = path.read_text(encoding="utf-8")
     return json.loads(text[text.index("{") : text.rindex("}") + 1])
 
 
@@ -177,10 +178,7 @@ def open_source(arg):
     """Opens a 1Password 7 .opvault, or an unencrypted .1pif export (file or folder)."""
     path = arg or os.environ.get("OPVAULT")
     if not path:
-        try:  # Spotlight, on macOS
-            out = subprocess.run(["mdfind", "-name", ".opvault"], capture_output=True, text=True).stdout
-        except FileNotFoundError:
-            out = ""
+        out = run(["mdfind", "-name", ".opvault"]) if shutil.which("mdfind") else ""  # Spotlight
         found = [p for p in out.splitlines() if p.endswith(".opvault")]
         if not found:
             die("no vault found; pass --vault PATH (an .opvault or .1pif) or set $OPVAULT")
@@ -221,7 +219,12 @@ class Vault:
         for band in sorted(self.path.glob("band_*.js")):
             items += [i for i in read_js(band).values() if i["category"] == "001" and not i.get("trashed")]
         overviews = opdata_decrypt([i["o"].encode() for i in items], *self.overview)
-        return [{"item": i, "overview": json.loads(o)} for i, o in zip(items, overviews)]
+        entries = []
+        for item, raw in zip(items, overviews):
+            overview = json.loads(raw)
+            overview["title"] = overview.get("title") or "Untitled"
+            entries.append({"item": item, "overview": overview})
+        return entries
 
     def details(self, entry):
         item = entry["item"]
@@ -242,16 +245,20 @@ class Pif:
 
     def logins(self):
         entries = []
-        for chunk in self.path.read_text().split(self.SEPARATOR):
+        for chunk in self.path.read_text(encoding="utf-8").split(self.SEPARATOR):
             if not chunk.strip():
                 continue
-            item = json.loads(chunk)
-            if item.get("typeName") != "webforms.WebForm" or item.get("trashed"):
+            try:
+                item = json.loads(chunk)
+            except ValueError:
+                print("warning: skipping an unreadable item in the export", file=sys.stderr)
+                continue
+            if not isinstance(item, dict) or item.get("typeName") != "webforms.WebForm" or item.get("trashed"):
                 continue
             details = item.get("secureContents", {})
             username = next((f.get("value") for f in details.get("fields", []) if f.get("designation") == "username"), None)
             overview = {
-                "title": item.get("title"),
+                "title": item.get("title") or "Untitled",
                 "url": item.get("location"),
                 "URLs": [{"u": u.get("url")} for u in details.get("URLs", [])],
                 "ainfo": username,
@@ -359,13 +366,15 @@ def build_payload(existing, name, login, notes, fields):
         "login": {},
     }
     item["name"] = name
+    login = dict(login)
     uris = login.pop("uris")
     item["login"].update({k: v for k, v in login.items() if v})
     known = {u["uri"] for u in item["login"].get("uris") or []}
     item["login"]["uris"] = (item["login"].get("uris") or []) + [u for u in uris if u["uri"] not in known]
-    if notes:
-        item["notes"] = notes
+    if notes and notes not in (item.get("notes") or ""):
+        item["notes"] = f"{item['notes']}\n\n{notes}" if item.get("notes") else notes
     # 1Password wins on name clashes; other existing custom fields are kept.
+    # (Existing notes are kept too; 1Password notes are appended.)
     new_names = {f["name"] for f in fields}
     kept = [f for f in item.get("fields") or [] if f["name"] not in new_names]
     item["fields"] = kept + fields
