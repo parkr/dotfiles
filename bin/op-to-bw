@@ -95,9 +95,11 @@ class Entry(TypedDict, total=False):
 
 
 class Source(Protocol):
-    def logins(self) -> list[Entry]: ...
+    def logins(self) -> list[Entry]:
+        """Non-trashed Logins, with overviews (enough to search and list)."""
 
-    def details(self, entry: Entry) -> Details: ...
+    def details(self, entry: Entry) -> Details:
+        """The full contents of one Login from logins()."""
 
 
 # Bitwarden: what we build. Existing items from `bw` stay as Json.
@@ -288,7 +290,7 @@ def open_source(arg: Optional[str]) -> Source:
     for profile in (root / "default", root):
         if (profile / "profile.js").exists():
             return Vault(profile)
-    die(f"{root} is not an .opvault or .1pif export")
+    return die(f"{root} is not an .opvault or .1pif export")
 
 
 class Vault:
