@@ -1,7 +1,18 @@
 #!/bin/bash
 set -ex
 
-DOTFILES="${DOTFILES:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+if [ -z "$DOTFILES" ]; then
+  # Follow symlinks so we find the real checkout.
+  self="${BASH_SOURCE[0]}"
+  while [ -L "$self" ]; do
+    link="$(readlink "$self")"
+    case "$link" in
+      /*) self="$link" ;;
+      *) self="$(dirname "$self")/$link" ;;
+    esac
+  done
+  DOTFILES="$(cd "$(dirname "$self")/.." && pwd)"
+fi
 
 pushd "$DOTFILES/vim/vim.symlink/bundle/Command-T"
 rbenv version
