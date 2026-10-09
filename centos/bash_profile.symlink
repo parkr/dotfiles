@@ -9,7 +9,21 @@ fi
 PATH="/usr/local/go/bin:$PATH"
 PATH="/usr/local/lib/python2.7/site-packages:$PATH"
 [[ -n "$(which npm)" ]]    && PATH="/usr/local/share/npm/bin:$PATH"
-[[ -d "$HOME/.dotfiles" ]] && PATH="$HOME/.dotfiles/bin:$PATH"
+# ~/.bash_profile is a symlink to <dotfiles>/centos/bash_profile.symlink; follow it to find the checkout.
+if [ -z "$DOTFILES" ]; then
+  _dotfiles_src="${BASH_SOURCE[0]}"
+  while [ -L "$_dotfiles_src" ]; do
+    _dotfiles_link="$(readlink "$_dotfiles_src")"
+    case "$_dotfiles_link" in
+      /*) _dotfiles_src="$_dotfiles_link" ;;
+      *) _dotfiles_src="$(dirname "$_dotfiles_src")/$_dotfiles_link" ;;
+    esac
+  done
+  DOTFILES="$(cd -P "$(dirname "$_dotfiles_src")/.." 2>/dev/null && pwd -P)"
+  unset _dotfiles_src _dotfiles_link
+fi
+export DOTFILES
+[[ -d "$DOTFILES/bin" ]] && PATH="$DOTFILES/bin:$PATH"
 PATH="$HOME/.bin:$PATH"
 PATH="$HOME/bin:$PATH"
 [[ -d "$HOME/.rbenv" ]]    && PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)" && alias r="rbenv" && alias re="rbenv exec"

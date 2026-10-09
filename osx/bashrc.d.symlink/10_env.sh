@@ -1,3 +1,10 @@
+# Locate this checkout of the dotfiles. ~/.bashrc.d is a symlink into
+# <dotfiles>/osx/bashrc.d.symlink, so resolve it physically and walk up.
+if [ -z "$DOTFILES" ]; then
+  DOTFILES="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/../.." 2>/dev/null && pwd -P)"
+fi
+export DOTFILES
+
 # Set new PATH
 if [ -d "/opt/homebrew" ] && [ ! -f "/usr/local/bin/brew" ]; then
   export HOMEBREW_PREFIX="/opt/homebrew"
@@ -23,8 +30,7 @@ add_to_path "/usr/local/bin"
 
 # Go, Java, Dotfiles, etc.
 add_to_path "/usr/local/opt/go/libexec/bin"
-add_to_path "$HOME/.dotfiles/bin"
-add_to_path "$HOME/dotfiles/bin"
+add_to_path "$DOTFILES/bin"
 add_to_path "$HOME/.bin"
 add_to_path "$HOME/bin"
 add_to_path "$HOME/.local/bin"
@@ -39,7 +45,7 @@ if [[ -n "${HOMEBREW_PREFIX}" ]]; then
   add_to_path "$HOMEBREW_PREFIX/bin"
 fi
 
-for pkg in $HOME/.dotfiles/pkg/*; do
+for pkg in "$DOTFILES"/pkg/*; do
   add_to_path "$pkg/bin"
 done
 

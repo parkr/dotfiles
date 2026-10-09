@@ -17,13 +17,15 @@ zsh etc). For more information about dotfiles and @holman's specifically check o
 
 ## Install
 
-* `git clone git://github.com/parkr/dotfiles ~/.dotfiles`
+* `git clone git://github.com/parkr/dotfiles ~/.dotfiles` (or anywhere else you like)
 * `cd ~/.dotfiles`
 * `make`
 
-The install rake task will symlink all the correct files from `~/.dotfiles` to
+The install rake task will symlink all the correct files from the checkout to
 your home directory. You will want to configure and tweak everything inside the
-`~/.dotfiles` directory though.
+checkout though. `~/.dotfiles` is only a suggestion: the shell configs work out
+where the checkout lives by following their own symlinks and export it as
+`$DOTFILES`, which scripts can use to refer to other files in the repo.
 
 ## Components
 

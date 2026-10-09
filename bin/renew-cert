@@ -5,7 +5,16 @@
 #/          --upgrade, upgrade certbot-auto in-place
 
 if [ -z "$CERTBOT_BIN" ]; then
-  CERTBOT_BIN="$HOME/.dotfiles/bin/certbot"
+  # Follow symlinks so certbot is found next to the real script.
+  self="$0"
+  while [ -L "$self" ]; do
+    link="$(readlink "$self")"
+    case "$link" in
+      /*) self="$link" ;;
+      *) self="$(dirname "$self")/$link" ;;
+    esac
+  done
+  CERTBOT_BIN="$(cd "$(dirname "$self")" && pwd)/certbot"
 fi
 
 email="$LETSENCRYPT_EMAIL"

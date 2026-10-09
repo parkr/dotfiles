@@ -20,7 +20,7 @@
     executablePath: "/Users/parkr/github/puppet/bin/puppet-lint"
     oldVersion: false
   "linter-rubocop":
-    command: "/Users/parkr/.dotfiles/bin/atom-rubocop"
+    command: "atom-rubocop"
     disableWhenNoConfigFile: true
   "linter-shellcheck":
     enableNotice: true
